@@ -8,3 +8,4 @@ class Tokenizer:
   self.stoi = {t:i for i,t in enumerate(self.itos)}
   self.pad_id,self.bos_id,self.eos_id = (self.stoi[x] for x in SPECIAL)
  def encode(self,s): return [self.bos_id]+[self.stoi[t] for t in tokenize(s)]+[self.eos_id]
+ def decode(self,ids): return ''.join(self.itos[i] for i in ids if i not in (self.pad_id,self.bos_id,self.eos_id))
