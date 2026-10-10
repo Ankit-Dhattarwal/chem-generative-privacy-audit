@@ -5,3 +5,5 @@ def tokenize(s): return TOKEN_RE.findall(s)
 class Tokenizer:
  def __init__(self, smiles):
   self.itos = SPECIAL + sorted({t for s in smiles for t in tokenize(s)})
+  self.stoi = {t:i for i,t in enumerate(self.itos)}
+  self.pad_id,self.bos_id,self.eos_id = (self.stoi[x] for x in SPECIAL)
