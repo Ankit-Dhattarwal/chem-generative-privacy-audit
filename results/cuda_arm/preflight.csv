@@ -1,0 +1,8 @@
+check,status,detail
+cuda,pass,Tesla T4
+torch,pass,2.11.0+cu130
+opacus,pass,1.6.0
+opacus_dp_model_backward,pass,synthetic backward only; optimizer.step was not called
+dataset_pool,pass,35000
+dataset_val,pass,5000
+pool_val_disjoint,pass,zero overlap

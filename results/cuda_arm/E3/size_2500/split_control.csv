@@ -1,0 +1,10 @@
+check,model,pool_size,member_count,overlap_count,pass
+pool_val_disjoint,,5000,,0,True
+balanced_member_mask,0,5000,2500,0,True
+balanced_member_mask,1,5000,2500,0,True
+balanced_member_mask,2,5000,2500,0,True
+balanced_member_mask,3,5000,2500,0,True
+balanced_member_mask,4,5000,2500,0,True
+balanced_member_mask,5,5000,2500,0,True
+balanced_member_mask,6,5000,2500,0,True
+balanced_member_mask,7,5000,2500,0,True

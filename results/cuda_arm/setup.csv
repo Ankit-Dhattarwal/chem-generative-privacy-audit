@@ -1,0 +1,14 @@
+field,value
+experiment_arm,CUDA
+compute_device,cuda
+cuda_device_name,Tesla T4
+pool_molecules,20000
+validation_molecules,5000
+shadow_models_baseline,32
+epochs_baseline,60
+model_layers,2
+model_width,128
+heads,4
+context_tokens,128
+batch_size,32
+seed_scheme,stage-specific fixed seed; shadow k membership seeded by k

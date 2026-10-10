@@ -1,0 +1,28 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.DS_Store
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Large datasets and downloads
+data/moses.csv
+data/*.tmp
+*.partial
+*.parquet.tmp
+*.tmp
+
+# Heavy model checkpoints and evaluation caches
+runs/
+*.pt
+*.pt.tmp
+*.parquet
+*.parquet.tmp
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/

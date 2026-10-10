@@ -1,0 +1,72 @@
+{
+  "arm": "CUDA",
+  "device": "Tesla T4",
+  "stages": {
+    "preflight": {
+      "state": "complete",
+      "updated_utc": "2026-10-13T16:15:38Z",
+      "device": "Tesla T4",
+      "opacus": "1.6.0",
+      "pool": 35000,
+      "val": 5000,
+      "dp_smoke": "passed_without_optimizer_step"
+    },
+    "environment": {
+      "state": "ready",
+      "updated_utc": "2026-10-13T16:48:27Z",
+      "device": "Tesla T4",
+      "torch": "2.11.0+cu130"
+    },
+    "cuda_baseline": {
+      "state": "running",
+      "updated_utc": "2026-10-13T16:16:37Z"
+    },
+    "baseline": {
+      "state": "complete",
+      "updated_utc": "2026-10-13T16:23:42Z",
+      "shadows": 32,
+      "pool": 20000,
+      "epochs": 60
+    },
+    "E3": {
+      "state": "complete",
+      "updated_utc": "2026-10-13T16:25:22Z",
+      "member_sizes": [
+        1000,
+        2500,
+        5000,
+        10000
+      ],
+      "shadows_per_size": 8
+    },
+    "E5a": {
+      "state": "complete",
+      "updated_utc": "2026-10-13T16:32:26Z",
+      "shadows": 32,
+      "epochs": 60,
+      "training": "randomized-SMILES augmentation"
+    },
+    "pretrain_ft": {
+      "state": "complete",
+      "updated_utc": "2026-10-13T16:50:17Z",
+      "pretraining_molecules": 10000,
+      "private_pool": 20000,
+      "shadows": 8
+    },
+    "DP_SGD": {
+      "state": "complete",
+      "updated_utc": "2026-10-13T18:49:26Z",
+      "error": "ImportError(\"cannot import name 'DPCausalGPT' from 'src.dp_model' (/content/drive/MyDrive/smiles_mia_colab/src/dp_model.py)\")",
+      "epsilon_targets": [
+        8,
+        3
+      ],
+      "shadows_per_epsilon": 8
+    },
+    "E6": {
+      "state": "error",
+      "updated_utc": "2026-10-13T18:49:28Z",
+      "error": "RuntimeError('Parent directory /content/drive/MyDrive/smiles_mia_colab/runs/cuda_arm/E6 does not exist.')"
+    }
+  }
+}
