@@ -1,3 +1,9 @@
-torch
+rdkit
 pandas
-numpy
+scikit-learn
+scipy
+pyarrow
+matplotlib
+tqdm
+opacus
+requests
