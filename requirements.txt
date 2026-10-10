@@ -1,9 +1,3 @@
-rdkit
+torch
 pandas
-scikit-learn
-scipy
-pyarrow
-matplotlib
-tqdm
-opacus
-requests
+numpy
