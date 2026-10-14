@@ -368,11 +368,13 @@ def run_dp_sgd(pool,val,tok):
 
 def _generate(model,tok,n,batch_size=128,temperature=1.0,max_len=128,checkpoint_dir=None):
     out=[]; cp=Path(checkpoint_dir) if checkpoint_dir else None
+    if cp: cp.parent.mkdir(parents=True, exist_ok=True)
     if cp and cp.exists():
         saved=torch.load(cp,map_location='cpu',weights_only=False); out=saved['smiles']; start=len(out)
     else: start=0
+    dev = next(model.parameters()).device
     while start<n:
-        b=min(batch_size,n-start); seq=torch.full((b,1),tok.bos_id,dtype=torch.long,device='cuda'); done=torch.zeros(b,dtype=torch.bool,device='cuda')
+        b=min(batch_size,n-start); seq=torch.full((b,1),tok.bos_id,dtype=torch.long,device=dev); done=torch.zeros(b,dtype=torch.bool,device=dev)
         for _ in range(max_len-1):
             logits=model(seq[:,-model.context:])[:,-1,:]/temperature
             nxt=torch.multinomial(torch.softmax(logits,dim=-1),1).squeeze(1)
@@ -387,10 +389,11 @@ def _generate(model,tok,n,batch_size=128,temperature=1.0,max_len=128,checkpoint_
 
 def run_e6(pool,tok):
     stage='E6'; root=ROOT/'results'/'cuda_arm'/stage; root.mkdir(parents=True,exist_ok=True); summaries=[]
+    dev = 'cuda' if torch.cuda.is_available() else ('mps' if torch.backends.mps.is_available() else 'cpu')
     for k in (0,15,31):
         d=ROOT/'runs'/'cuda_arm'/'baseline'/f'model_{k}'
-        state=torch.load(d/'epoch60.pt',map_location='cuda',weights_only=False)
-        model=GPT(len(tok.itos),n_layer=2,d_model=128).cuda(); model.load_state_dict(state['model']); model.eval()
+        state=torch.load(d/'epoch60.pt',map_location=dev,weights_only=False)
+        model=GPT(len(tok.itos),n_layer=2,d_model=128).to(dev); model.load_state_dict(state['model']); model.eval()
         mask=np.load(d/'membership_mask.npy'); member={pool[i] for i in np.flatnonzero(mask)}; out={pool[i] for i in np.flatnonzero(~mask)}
         generations=_generate(model,tok,50000,temperature=1.0,checkpoint_dir=ROOT/'runs'/'cuda_arm'/stage/f'model_{k}_generated.pt')
         canonical=[]; valid=[]
@@ -406,7 +409,8 @@ def run_e6(pool,tok):
             'exact_member_copy_fraction_all_samples':member_hits/len(generations),
             'exact_out_copy_fraction_all_samples':out_hits/len(generations)})
         pd.DataFrame({'smiles':generations,'canonical':canonical,'valid':valid}).to_parquet(root/f'model_{k}_samples.parquet',index=False)
-        del model; torch.cuda.empty_cache()
+        del model
+        if dev == 'cuda': torch.cuda.empty_cache()
     pd.DataFrame(summaries).to_csv(root/'summary.csv',index=False)
     _stage_status(stage,'complete',models=[0,15,31],samples_per_model=50000)
 
