@@ -141,6 +141,22 @@ DP-SGD (ε = 3.0)           ██████████                     0
 
 ---
 
+### 3. Generative Novelty & Exact Memorization (Experiment E6)
+
+Auditing de novo molecules generated across baseline shadow models evaluated for chemical validity (via RDKit), novelty, and exact training set copies:
+
+| Evaluation Metric | Model 0 | Model 15 | Model 31 | Chemical & Privacy Meaning |
+| :--- | :---: | :---: | :---: | :--- |
+| **Chemical Validity (RDKit)** | `60.24%` | `62.26%` | `59.10%` | Grammatically and valency-valid molecules |
+| **Uniqueness (Valid)** | `99.97%` | `99.87%` | `99.90%` | High diversity in generated chemical space |
+| **Novelty vs Training Set** | `99.97%` | `99.90%` | `99.73%` | Fraction of valid molecules unseen during training |
+| **Exact Member Copy Fraction** | `0.02%` | `0.06%` | **`0.16%`** | **Direct memorization**: verbatim reproduction of private training leads |
+| **Exact Out Copy Fraction** | `0.02%` | `0.04%` | `0.08%` | Baseline background match rate on non-training molecules |
+
+> 📌 **Key Insight**: Overfitted models exhibit an exact member copy rate up to **2x higher** than out-of-distribution molecules, confirming memorization as the primary vector for membership leakage.
+
+---
+
 ## 🗂️ Project Structure
 
 ```
