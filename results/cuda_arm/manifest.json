@@ -64,9 +64,15 @@
       "shadows_per_epsilon": 8
     },
     "E6": {
-      "state": "error",
-      "updated_utc": "2026-10-13T18:49:28Z",
-      "error": "RuntimeError('Parent directory /content/drive/MyDrive/smiles_mia_colab/runs/cuda_arm/E6 does not exist.')"
+      "state": "complete",
+      "updated_utc": "2026-10-14T16:07:34Z",
+      "models": [
+        0,
+        15,
+        31
+      ],
+      "samples_per_model": 5000,
+      "device": "mps"
     }
   }
 }

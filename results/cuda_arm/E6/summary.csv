@@ -1,0 +1,4 @@
+arm,model,samples,validity,uniqueness_valid,novelty_vs_members,exact_member_copy_fraction_all_samples,exact_out_copy_fraction_all_samples
+MPS,0,5000,0.6024,0.999667994687915,0.999667994687915,0.0002,0.0002
+MPS,15,5000,0.6226,0.9987150658528751,0.9990362993896563,0.0006,0.0004
+MPS,31,5000,0.591,0.9989847715736041,0.9972927241962775,0.0016,0.0008
