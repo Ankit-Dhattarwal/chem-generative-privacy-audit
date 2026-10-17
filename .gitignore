@@ -26,3 +26,13 @@ runs/
 
 # Jupyter notebook checkpoints
 .ipynb_checkpoints/
+
+# Archives and backups
+*.zip
+*.tar.gz
+*.tgz
+
+# Private audit notes and scratch
+paper_revised/
+*CLAUDE*
+scratch/

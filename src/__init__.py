@@ -1,4 +1,4 @@
-"""ChemMIA-Bench: Auditing and Defending Molecular Generative Models Against Membership Inference Attacks."""
+"""Auditing and Defending Molecular Generative Models Against Membership Inference Attacks."""
 
 from .data import load_dataset
 from .tokenizer import Tokenizer, tokenize
