@@ -5,13 +5,24 @@ for baseline epoch-60 online LiRA on three target models (0, 1, 2).
 Uses the raw per-molecule scoring parquets from results/cuda_arm/baseline/.
 """
 
+import argparse
 from pathlib import Path
 import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score, roc_curve
 
-BASE_PARQUETS = Path("/Users/ankit/Downloads/smiles_mia_colab/results/cuda_arm/baseline")
+DEFAULT_PARQUETS = Path(__file__).resolve().parent.parent / "results" / "cuda_arm" / "baseline"
 OUT_CSV = Path(__file__).resolve().parent.parent / "results_summary" / "bootstrap_ci.csv"
+
+parser = argparse.ArgumentParser(description="Compute bootstrap CIs for baseline online LiRA.")
+parser.add_argument(
+    "--parquet-dir",
+    type=Path,
+    default=DEFAULT_PARQUETS,
+    help="Path to directory containing per-molecule scoring parquets (model_{k}_epoch60.parquet)",
+)
+args = parser.parse_args()
+BASE_PARQUETS = args.parquet_dir
 
 N_SHADOWS = 32
 POOL_N = 20000
@@ -26,6 +37,12 @@ def _membership(n, k):
 masks = np.stack([_membership(POOL_N, k) for k in range(N_SHADOWS)])
 
 # Load nll_sum from parquets
+if not (BASE_PARQUETS / "model_0_epoch60.parquet").exists():
+    raise FileNotFoundError(
+        f"Parquets not found at {BASE_PARQUETS}. Raw per-molecule scoring parquets are omitted from "
+        "the release repository due to storage constraints and are available on request."
+    )
+
 parquets = [pd.read_parquet(BASE_PARQUETS / f'model_{k}_epoch60.parquet') for k in range(N_SHADOWS)]
 nll = np.stack([p['nll_sum'].to_numpy() for p in parquets])
 K, N = nll.shape

@@ -5,7 +5,7 @@ This document tracks identified methodological, statistical, and computational e
 ---
 
 ### 1. Differential Privacy (DP-SGD) Rerun with Utility Preservation & Accounting Verification
-- **Issue:** The DP arm represents a preliminary run with utility collapse: chemical validity evaluations for DP-SGD were not recorded in the released summary; preliminary runs suffered severe utility degradation and generated strings failed standard valence checks. Furthermore, serialized accountant state was not independently verified. An attack AUC of $\sim 0.5$ for a model that does not generate valid molecules is not evidence of a useful defense, and no privacy-utility conclusion can be drawn.
+- **Issue:** The DP arm represents a preliminary run with utility collapse: chemical validity evaluations for DP-SGD were not recorded in the released summary, and we did not evaluate the generative utility of the DP models. Furthermore, serialized accountant state was not independently verified. An attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense, and no privacy-utility conclusion can be drawn.
 - **Action for v2:**
   - Implement adaptive gradient clipping and tune learning rate schedules with larger batch sizes or gradient accumulation to preserve generative validity.
   - Track and verify RDP privacy accountant state steps continuously across checkpoints without reset on resume.

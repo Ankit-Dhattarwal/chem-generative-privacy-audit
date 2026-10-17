@@ -4,6 +4,50 @@ All modifications to the repository, manuscript, scripts, and tables are logged 
 
 ---
 
+### [2026-10-18] - Pre-Release Cleanup & Reviewer Audit Verification (v1.0.0)
+
+#### 1. Randomized SMILES Variants Terminology (V1 / F1)
+- **File**: `paper/make_tables.py`, `paper/tables/table1_baseline.{tex,md}`, `paper/tables/table3_defenses.{tex,md}`, `paper/main.tex`, `paper/MANUSCRIPT.md`, `README.md`, `REPRODUCE.md`, `results_summary/README.md`
+- **Old -> New**: Replaced all remaining occurrences of "$K=10$" with "up to 10 distinct SMILES strings per molecule (the canonical form plus randomized forms), mean NLL".
+- **Reason**: Aligns with `src/data.py` where variants start with canonical SMILES and molecules with high symmetry produce fewer than 10 distinct strings.
+
+#### 2. Removal of Unsupported Valence Checks Phrasing (V2 / F2)
+- **File**: `README.md`, `TODO_for_v2.md`, `CHANGELOG.md`
+- **Old -> New**: Deleted all mentions of "failed standard valence checks". Replaced with: "we did not evaluate the generative utility of the DP models; an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense."
+- **Reason**: No valence check logs or generation outputs exist for DP models in the repository.
+
+#### 3. Stray Table Fragment Deletion (V3 / F3)
+- **File**: `README.md`
+- **Old -> New**: Removed duplicated Markdown table block following Table 3. Synchronized Table 1 and Table 3 blocks directly from `paper/tables/*.md`.
+- **Reason**: Clean up typographical duplication.
+
+#### 4. Claims Checker Scope & Mutation Testing (V4 / F4)
+- **File**: `README.md`, `REPRODUCE.md`, `scripts/mutation_test_checker.py`
+- **Old -> New**: Added dedicated documentation section "What `check_claims.py` Does and Does Not Verify". Created `scripts/mutation_test_checker.py` proving that swapping metrics across arms still exits 0, demonstrating set-membership verification vs semantic context. Audited whitelist-only numbers.
+- **Reason**: Transparently document the verification boundaries and limitations of automated token checking.
+
+#### 5. Defense Range & Statistical Non-Significance Phrasing (V5, V6 / F5)
+- **File**: `paper/main.tex`, `paper/MANUSCRIPT.md`
+- **Old -> New**: Updated Conclusion defense range from "$0.51 - 0.55$" to "$0.51 - 0.56$" (matching baseline variants offline LiRA AUC $0.560 \pm 0.007$). In Limitations #5, replaced "confirm that verbatim replication differences are not statistically significant" with "tests do not show a significant difference at this sample size ($p > 0.05$)".
+- **Reason**: Precision in empirical ranges and formal statistical hypothesis testing terminology.
+
+#### 6. Cross-Entropy Reduction & LiRA Invariance Justification (V7 / F6)
+- **File**: `paper/main.tex`, `paper/MANUSCRIPT.md`
+- **Old -> New**: Updated Section 2.1 to clarify that token-mean vs token-sum cross-entropy yields identical LiRA z-scores across all epochs due to per-target sequence length normalization.
+- **Reason**: Accurately explain why `nll_sum` and `nll_mean` yield identical LiRA attack metrics.
+
+#### 7. Parquet Directory CLI Parameter (V8 / F7)
+- **File**: `scripts/make_bootstrap_ci.py`
+- **Old -> New**: Replaced hardcoded absolute path `/Users/ankit/...` with `--parquet-dir` CLI argument defaulting to relative repository path. Added raw scoring parquet omission note to Limitations #4.
+- **Reason**: Ensure script executes on any environment and document parquet omission.
+
+#### 8. Table & Manuscript Synchronization (V11 / F10)
+- **File**: `paper/MANUSCRIPT.md`, `README.md`, `paper/tables/*.md`
+- **Old -> New**: Regenerated all tables via `paper/make_tables.py` and synchronized markdown tables across documents.
+- **Reason**: Guarantee byte-for-byte consistency across all table representations.
+
+---
+
 ### [2026-10-18] - Final Correctness & General Claim Verification Pass
 
 #### 1. Claim Verification Script (`check_claims.py`, `CLAIMS_CHECK.md`)
@@ -21,7 +65,7 @@ All modifications to the repository, manuscript, scripts, and tables are logged 
 
 #### 3. Differential Privacy (DP-SGD) Reframing
 - **File**: `paper/main.tex`, `paper/MANUSCRIPT.md`, `README.md`, `paper/tables/table3_defenses.{tex,md}`, `TODO_for_v2.md`
-- **Old -> New**: Removed unrecorded numerical validity claims ($0\%$ at $\epsilon=3$, $1\%$ at $\epsilon=8$) and reframed the DP arm everywhere as a preliminary exploration with utility collapse: chemical validity evaluations were not recorded in the released summary, generated strings failed standard valence checks, and an attack AUC of $\sim 0.5$ in an invalid generator is not evidence of a useful defense.
+- **Old -> New**: Removed unrecorded numerical validity claims ($0\%$ at $\epsilon=3$, $1\%$ at $\epsilon=8$) and reframed the DP arm everywhere as a preliminary exploration with utility collapse: chemical validity evaluations were not recorded in the released summary, and we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).
 - **Reason**: Avoid reporting metrics not present in CSV summaries and maintain scientific honesty regarding defense efficacy.
 
 #### 4. Representation Variants Terminology

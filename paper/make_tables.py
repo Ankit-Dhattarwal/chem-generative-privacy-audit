@@ -119,8 +119,8 @@ def make_table1():
             best_m = m
         rows.append({
             'epoch': '60 (variants)',
-            'scoring_tex': 'Randomized-SMILES ($K=10$)',
-            'scoring_md': 'Randomized-SMILES ($K=10$)',
+            'scoring_tex': 'Randomized-SMILES (up to 10 strings, mean NLL)',
+            'scoring_md': 'Randomized-SMILES (up to 10 strings, mean NLL)',
             'attack_tex': method_display_tex[m],
             'attack_md': method_display_md[m],
             'auc_tex': format_val_tex(r['auc_mean'], r['auc_std'], digits=3),
@@ -133,8 +133,8 @@ def make_table1():
     r_best = sub_var[sub_var['method'] == best_m].iloc[0]
     rows.append({
         'epoch': '60 (variants)',
-        'scoring_tex': 'Randomized-SMILES ($K=10$)',
-        'scoring_md': 'Randomized-SMILES ($K=10$)',
+        'scoring_tex': 'Randomized-SMILES (up to 10 strings, mean NLL)',
+        'scoring_md': 'Randomized-SMILES (up to 10 strings, mean NLL)',
         'attack_tex': f"\\textbf{{Strongest: {tex_escape(best_m)}}}",
         'attack_md': f"**Strongest: {best_m.replace('_', ' ')}**",
         'auc_tex': f"\\textbf{{{format_val_tex(r_best['auc_mean'], r_best['auc_std'], digits=3)}}}",
@@ -149,7 +149,7 @@ def make_table1():
     tex = [
         "\\begin{table*}[t]",
         "\\centering",
-        "\\caption{Baseline membership inference vulnerability across training epochs on canonical SMILES. Evaluated over 32 shadow models on 20,000 candidate targets (10,000 members, 10,000 non-members). Values report mean $\\pm$ standard deviation across 32 leave-one-out target evaluations (not a confidence interval). All metrics use negative log-likelihood sum (\\texttt{nll\\_sum}), with randomized-SMILES variants scoring ($K=10$ variants) reported at epoch 60.}",
+        "\\caption{Baseline membership inference vulnerability across training epochs on canonical SMILES. Evaluated over 32 shadow models on 20,000 candidate targets (10,000 members, 10,000 non-members). Values report mean $\\pm$ standard deviation across 32 leave-one-out target evaluations (not a confidence interval). All metrics use negative log-likelihood sum (\\texttt{nll\\_sum}), with randomized-SMILES variants scoring (up to 10 distinct SMILES strings per molecule, the canonical form plus randomized forms, mean NLL) reported at epoch 60.}",
         "\\label{tab:baseline}",
         "\\small",
         "\\begin{tabular}{lllccc}",
@@ -174,7 +174,7 @@ def make_table1():
     md = [
         "# Table 1: Baseline Membership Inference Vulnerability Across Epochs",
         "",
-        "Evaluated over 32 shadow models on 20,000 candidate targets (10,000 members, 10,000 non-members). Values denote mean ± standard deviation across 32 leave-one-out target models (not a bootstrap CI). Consistently evaluated using `nll_sum`, with randomized variants scoring ($K=10$) also reported at epoch 60.",
+        "Evaluated over 32 shadow models on 20,000 candidate targets (10,000 members, 10,000 non-members). Values denote mean ± standard deviation across 32 leave-one-out target models (not a bootstrap CI). Consistently evaluated using `nll_sum`, with randomized variants scoring (up to 10 distinct SMILES strings per molecule, the canonical form plus randomized forms, mean NLL) also reported at epoch 60.",
         "",
         "| Epochs | Scoring Representation | Attack Method | ROC-AUC | TPR @ 1% FPR (%) | TPR @ 0.1% FPR (%) |",
         "|---|---|---|---|---|---|"
@@ -262,7 +262,7 @@ def make_table3():
     configs = [
         ("Baseline (Unmitigated)", "Baseline (Unmitigated)", b_60, "32 shadows"),
         ("Randomized-SMILES Training (Canonical Scoring)", "Randomized-SMILES Training (Canonical Scoring)", e5a_canon, "32 shadows"),
-        ("Randomized-SMILES Training (Variants Scoring, $K=10$)", "Randomized-SMILES Training (Variants Scoring, K=10)", e5a_var, "32 shadows"),
+        ("Randomized-SMILES Training (Variants Scoring, up to 10 strings, mean NLL)", "Randomized-SMILES Training (Variants Scoring, up to 10 strings, mean NLL)", e5a_var, "32 shadows"),
         ("DP-SGD ($\\epsilon=8.0, \\delta=10^{-5}$)*", "DP-SGD (ε=8.0, δ=1e-5)*", dp_8, "8 shadows; prelim."),
         ("DP-SGD ($\\epsilon=3.0, \\delta=10^{-5}$)*", "DP-SGD (ε=3.0, δ=1e-5)*", dp_3, "8 shadows; prelim."),
     ]
@@ -270,7 +270,7 @@ def make_table3():
     tex = [
         "\\begin{table*}[t]",
         "\\centering",
-        "\\caption{Comparison of privacy defenses at epoch 60 under standard and calibrated attacks. All values use \\texttt{nll\\_sum} (except randomized variants scoring which evaluates mean NLL across $K=10$ variants). The strongest attack per row (by highest AUC) is bolded. *Note on DP rows: preliminary run with utility collapse; no privacy-utility conclusion. AUC ~0.5 for a model that does not generate valid molecules is not evidence of a useful defense.}",
+        "\\caption{Comparison of privacy defenses at epoch 60 under standard and calibrated attacks. All values use \\texttt{nll\\_sum} (except randomized variants scoring which evaluates mean NLL across up to 10 distinct SMILES strings per molecule). The strongest attack per row (by highest AUC) is bolded. *Note on DP rows: preliminary run with utility collapse; we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).}",
         "\\label{tab:defenses}",
         "\\small",
         "\\begin{tabular}{lcccccccc}",
@@ -284,7 +284,7 @@ def make_table3():
     md = [
         "# Table 3: Defense Benchmark at Epoch 60",
         "",
-        "*Note on DP rows: preliminary run with utility collapse; no privacy-utility conclusion. AUC ~0.5 for a model that does not generate valid molecules is not evidence of a useful defense.*",
+        "*Note on DP rows: preliminary run with utility collapse; we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).*",
         "",
         "| Defense Configuration | Shadow Setup | LOSS AUC | LOSS TPR@1% (%) | Offline LiRA AUC | Offline LiRA TPR@1% (%) | Online LiRA AUC | Online LiRA TPR@1% (%) | Strongest Attack (Method: AUC, TPR@1%) |",
         "|---|---|---|---|---|---|---|---|---|"

@@ -34,7 +34,7 @@ pip install -r requirements.txt
   - `moses.csv`: Filtered subset of the MOSES molecular benchmark.
   - `pool.csv`: Evaluation universe pool (35,000 total candidate molecules; 20,000 active evaluation pool).
   - `val.csv`: Held-out validation split (5,000 molecules).
-  - `pool_metadata.csv`: Scaffold definitions, frequencies, and $K=10$ randomized-SMILES variants per compound.
+  - `pool_metadata.csv`: Scaffold definitions, frequencies, and randomized-SMILES variants (up to 10 distinct strings per compound, canonical included).
 - `results_summary/`:
   - Primary CSV summaries serving as the canonical source of truth for all manuscript numbers.
   - See `results_summary/README.md` for column definitions.
@@ -105,8 +105,15 @@ python paper/generate_figures.py
 # 3. Execute numerical verification check (matches all claims to CSVs)
 python check_claims.py
 
-# 4. Compile the paper manuscript PDF
+# 4. Execute mutation test on the claims checker
+python scripts/mutation_test_checker.py
+
+# 5. Compile the paper manuscript PDF
 tectonic paper/main.tex --outdir paper/
 ```
 
-All claims are verified against `results_summary/*.csv` by `check_claims.py`, ensuring complete consistency and auditability.
+### 4.1 What `check_claims.py` Does and Does Not Verify
+- **What it verifies:** `check_claims.py` extracts numerical tokens from the manuscript and verifies that each number appears in the ground-truth set compiled from `results_summary/*.csv` or a strictly designated whitelist (such as statistical significance thresholds $\alpha=0.05$ or approximate metric interval bounds $0.51-0.56$).
+- **What it does NOT verify:** It tests set membership, not semantic context. It cannot detect if a valid number from one experiment (such as a TPR from dataset scaling) is accidentally quoted in the description of another (such as baseline epochs). Contextual correctness is guaranteed by generating all tables and figures directly from CSVs using `paper/make_tables.py` and `paper/generate_figures.py`. To demonstrate this limitation empirically, run `python scripts/mutation_test_checker.py`.
+
+Numerical tokens in the manuscript are audited against `results_summary/*.csv` by `check_claims.py`, ensuring transparency and traceability.

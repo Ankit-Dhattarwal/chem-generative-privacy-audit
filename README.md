@@ -31,7 +31,7 @@ All metrics are evaluated using negative log-likelihood sum (`nll_sum`) and trac
 - **Transfer Learning**: Private fine-tuning on 10,000 molecules after public pretraining leaks private membership at offline LiRA AUC **0.801 ± 0.003** (TPR@1% **4.36 ± 0.51%**).
 - **Defenses**:
   - *Randomized-SMILES Training*: Suppresses canonical attack AUC to **0.528 ± 0.004** (TPR@1% **1.38 ± 0.21%**).
-  - *DP-SGD*: Suppresses attack AUC to **0.500 – 0.528**, but preliminary runs suffered severe utility collapse and generated strings failed standard valence checks (chemical validity evaluations for DP-SGD were not recorded in the released summary; AUC ~0.5 for a model that does not generate valid molecules is not evidence of a useful defense).
+  - *DP-SGD*: Suppresses attack AUC to **0.500 – 0.528**, but preliminary runs suffered severe utility collapse; we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).
 - **Generative Replication**: In a 15,000-sample audit, models produced 12 exact member copies vs. 7 holdout copies; a one-sided binomial test ($p = 0.1796 > 0.05$) and Fisher exact test ($p = 0.359 > 0.05$) indicate that this difference is **not statistically significant** under the evaluated sample size.
 
 ---
@@ -40,7 +40,7 @@ All metrics are evaluated using negative log-likelihood sum (`nll_sum`) and trac
 
 ### Table 1: Baseline Membership Leakage Across Epochs
 
-Evaluated over 32 shadow models on 20,000 candidate targets (10,000 members, 10,000 non-members). Values denote mean ± standard deviation across 32 leave-one-out target models (not a bootstrap CI). Consistently evaluated using `nll_sum`, with randomized variants scoring ($K=10$) also reported at epoch 60.
+Evaluated over 32 shadow models on 20,000 candidate targets (10,000 members, 10,000 non-members). Values denote mean ± standard deviation across 32 leave-one-out target models (not a bootstrap CI). Consistently evaluated using `nll_sum`, with randomized variants scoring (up to 10 distinct SMILES strings per molecule, the canonical form plus randomized forms, mean NLL) also reported at epoch 60.
 
 | Epochs | Scoring Representation | Attack Method | ROC-AUC | TPR @ 1% FPR (%) | TPR @ 0.1% FPR (%) |
 |---|---|---|---|---|---|
@@ -56,27 +56,20 @@ Evaluated over 32 shadow models on 20,000 candidate targets (10,000 members, 10,
 | 60 | Canonical (`nll_sum`) | Offline LiRA (Out-only) | 0.880 ± 0.004 | 27.15 ± 1.63 | 8.22 ± 1.32 |
 | 60 | Canonical (`nll_sum`) | Online LiRA (In vs. Out) | 0.898 ± 0.003 | 27.82 ± 1.47 | 8.15 ± 1.58 |
 | 60 | Canonical (`nll_sum`) | **Strongest: online LiRA** | **0.898 ± 0.003** | **27.82 ± 1.47** | **8.15 ± 1.58** |
-| 60 (variants) | Randomized-SMILES ($K=10$) | Loss Thresholding (LOSS) | 0.511 ± 0.004 | 1.09 ± 0.12 | 0.12 ± 0.05 |
-| 60 (variants) | Randomized-SMILES ($K=10$) | Offline LiRA (Out-only) | 0.560 ± 0.007 | 2.01 ± 0.29 | 0.30 ± 0.10 |
-| 60 (variants) | Randomized-SMILES ($K=10$) | Online LiRA (In vs. Out) | 0.528 ± 0.006 | 1.45 ± 0.47 | 0.18 ± 0.12 |
-| 60 (variants) | Randomized-SMILES ($K=10$) | **Strongest: offline LiRA** | **0.560 ± 0.007** | **2.01 ± 0.29** | **0.30 ± 0.10** |
+| 60 (variants) | Randomized-SMILES (up to 10 strings, mean NLL) | Loss Thresholding (LOSS) | 0.511 ± 0.004 | 1.09 ± 0.12 | 0.12 ± 0.05 |
+| 60 (variants) | Randomized-SMILES (up to 10 strings, mean NLL) | Offline LiRA (Out-only) | 0.560 ± 0.007 | 2.01 ± 0.29 | 0.30 ± 0.10 |
+| 60 (variants) | Randomized-SMILES (up to 10 strings, mean NLL) | Online LiRA (In vs. Out) | 0.528 ± 0.006 | 1.45 ± 0.47 | 0.18 ± 0.12 |
+| 60 (variants) | Randomized-SMILES (up to 10 strings, mean NLL) | **Strongest: offline LiRA** | **0.560 ± 0.007** | **2.01 ± 0.29** | **0.30 ± 0.10** |
 
 ### Table 3: Defense Benchmark at Epoch 60
 
-*Note on DP rows: preliminary run with utility collapse; no privacy-utility conclusion. AUC ~0.5 for a model that does not generate valid molecules is not evidence of a useful defense.*
+*Note on DP rows: preliminary run with utility collapse; we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).*
 
 | Defense Configuration | Shadow Setup | LOSS AUC | LOSS TPR@1% (%) | Offline LiRA AUC | Offline LiRA TPR@1% (%) | Online LiRA AUC | Online LiRA TPR@1% (%) | Strongest Attack (Method: AUC, TPR@1%) |
 |---|---|---|---|---|---|---|---|---|
 | Baseline (Unmitigated) | 32 shadows | 0.689 ± 0.005 | 2.96 ± 0.24 | 0.880 ± 0.004 | 27.15 ± 1.63 | 0.898 ± 0.003 | 27.82 ± 1.47 | **online LiRA**: 0.898 (TPR 27.82%) |
 | Randomized-SMILES Training (Canonical Scoring) | 32 shadows | 0.506 ± 0.004 | 1.08 ± 0.16 | 0.528 ± 0.004 | 1.38 ± 0.21 | 0.508 ± 0.004 | 1.09 ± 0.17 | **offline LiRA**: 0.528 (TPR 1.38%) |
-| Randomized-SMILES Training (Variants Scoring, K=10) | 32 shadows | 0.506 ± 0.004 | 1.10 ± 0.16 | 0.552 ± 0.005 | 1.56 ± 0.17 | 0.519 ± 0.005 | 1.14 ± 0.18 | **offline LiRA**: 0.552 (TPR 1.56%) |
-| DP-SGD (ε=8.0, δ=1e-5)* | 8 shadows; prelim. | 0.505 ± 0.004 | 1.13 ± 0.15 | 0.528 ± 0.003 | 1.20 ± 0.14 | 0.501 ± 0.005 | 1.09 ± 0.16 | **offline LiRA**: 0.528 (TPR 1.20%) |
-| DP-SGD (ε=3.0, δ=1e-5)* | 8 shadows; prelim. | 0.503 ± 0.004 | 1.10 ± 0.06 | 0.520 ± 0.003 | 1.12 ± 0.06 | 0.500 ± 0.002 | 1.01 ± 0.10 | **offline LiRA**: 0.520 (TPR 1.12%) |
-
----|---|---|---|---|---|---|---|---|
-| Baseline (Unmitigated) | 32 shadows | 0.689 ± 0.005 | 2.96 ± 0.24 | 0.880 ± 0.004 | 27.15 ± 1.63 | 0.898 ± 0.003 | 27.82 ± 1.47 | **online LiRA**: 0.898 (TPR 27.82%) |
-| Randomized-SMILES Training (Canonical Scoring) | 32 shadows | 0.506 ± 0.004 | 1.08 ± 0.16 | 0.528 ± 0.004 | 1.38 ± 0.21 | 0.508 ± 0.004 | 1.09 ± 0.17 | **offline LiRA**: 0.528 (TPR 1.38%) |
-| Randomized-SMILES Training (Variants Scoring, K=10) | 32 shadows | 0.506 ± 0.004 | 1.10 ± 0.16 | 0.552 ± 0.005 | 1.56 ± 0.17 | 0.519 ± 0.005 | 1.14 ± 0.18 | **offline LiRA**: 0.552 (TPR 1.56%) |
+| Randomized-SMILES Training (Variants Scoring, up to 10 strings, mean NLL) | 32 shadows | 0.506 ± 0.004 | 1.10 ± 0.16 | 0.552 ± 0.005 | 1.56 ± 0.17 | 0.519 ± 0.005 | 1.14 ± 0.18 | **offline LiRA**: 0.552 (TPR 1.56%) |
 | DP-SGD (ε=8.0, δ=1e-5)* | 8 shadows; prelim. | 0.505 ± 0.004 | 1.13 ± 0.15 | 0.528 ± 0.003 | 1.20 ± 0.14 | 0.501 ± 0.005 | 1.09 ± 0.16 | **offline LiRA**: 0.528 (TPR 1.20%) |
 | DP-SGD (ε=3.0, δ=1e-5)* | 8 shadows; prelim. | 0.503 ± 0.004 | 1.10 ± 0.06 | 0.520 ± 0.003 | 1.12 ± 0.06 | 0.500 ± 0.002 | 1.01 ± 0.10 | **offline LiRA**: 0.520 (TPR 1.12%) |
 
@@ -131,8 +124,15 @@ python paper/generate_figures.py
 # 3. Verify all numerical claims against CSVs
 python check_claims.py
 
-# 4. Compile manuscript PDF
+# 4. Run mutation test on claims checker
+python scripts/mutation_test_checker.py
+
+# 5. Compile manuscript PDF
 tectonic paper/main.tex --outdir paper/
 ```
+
+### What `check_claims.py` Does and Does Not Verify
+- **What it verifies:** `check_claims.py` extracts numerical tokens from the manuscript and verifies that each number appears in the ground-truth set compiled from `results_summary/*.csv` or a strictly designated whitelist (such as statistical significance thresholds $\alpha=0.05$ or approximate metric interval bounds $0.51-0.56$).
+- **What it does NOT verify:** It tests set membership, not semantic context. It cannot detect if a valid number from one experiment (such as a TPR from dataset scaling) is accidentally quoted in the description of another (such as baseline epochs). Contextual correctness is guaranteed by generating all tables and figures directly from CSVs using `paper/make_tables.py` and `paper/generate_figures.py`. To demonstrate this limitation empirically, run `python scripts/mutation_test_checker.py`.
 
 See [REPRODUCE.md](REPRODUCE.md) for full training and execution details.

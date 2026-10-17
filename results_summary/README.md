@@ -12,7 +12,7 @@ Summary metrics for baseline causal SMILES models across training epochs (5, 20,
 - **`stat`**: Sequence loss reduction metric across tokens:
   - `nll_sum`: Sum of negative log-likelihood across all sequence tokens (primary metric).
   - `nll_mean`: Average negative log-likelihood per token (length-normalized).
-  - `nll_variants_mean`: Average negative log-likelihood across $K=10$ randomized SMILES variants per molecule (evaluated at epoch 60).
+  - `nll_variants_mean`: Average negative log-likelihood across up to 10 distinct SMILES strings per molecule (the canonical form plus randomized forms), mean NLL (evaluated at epoch 60).
 - **`method`**: Attack algorithm:
   - `LOSS`: Standard sequence loss thresholding.
   - `offline_LiRA`: Calibrated Likelihood-Ratio Attack using out-distribution mean and variance ($\mu_{\text{out}}, \sigma_{\text{out}}$).
