@@ -7,27 +7,28 @@
 \usepackage{hyperref}
 \usepackage{microtype}
 \usepackage{cite}
-\usepackage{subcaption}
 
 \begin{document}
 
-\title{Auditing and Defending Molecular Generative Language Models Against Membership Inference Attacks}
+\title{Auditing Membership Leakage in Small SMILES Language Models: LiRA, Randomized-SMILES Training and DP-SGD (Preliminary Study)}
 
 \author{Ankit~Dhattarwal%
-\thanks{A. Dhattarwal is an independent researcher in Machine Learning and Computational Chemistry. Source code and reproducible benchmarks are available at: \url{https://github.com/Ankit-Dhattarwal/chem-generative-privacy-audit}}}
+\thanks{A. Dhattarwal is an independent researcher in Machine Learning and Computational Chemistry. Project code and experiment artifacts are available at: \url{https://github.com/Ankit-Dhattarwal/chem-generative-privacy-audit}}}
 
-\markboth{Journal of Chemical Information and Modeling / IEEE Transactions, Vol.~14, No.~8, October~2026}%
-{Dhattarwal: Auditing and Defending Molecular Generative Models Against Membership Inference Attacks}
+\markboth{Preprint, October~2026}%
+{Dhattarwal: Auditing Membership Leakage in Small SMILES Language Models}
 
 \IEEEtitleabstractindextext{%
 \begin{abstract}
-Generative language models trained on molecular string representations (SMILES) have emerged as powerful paradigms in de novo drug discovery. However, commercial pharmaceutical models are frequently trained on proprietary chemical libraries containing patent-pending scaffolds and confidential assay hits. In this paper, we present the first calibrated audit of Membership Inference Attacks (MIA) against autoregressive chemical foundation models. Utilizing a 32-shadow model ensembling framework, we evaluate standard loss thresholding and calibrated Likelihood-Ratio Attacks (LiRA) across training regimes, dataset scaling laws, and defense mechanisms on the MOSES molecular benchmark.
+Autoregressive language models trained on molecular string representations (SMILES) are increasingly explored for computer-aided molecular generation. However, training sets in biopharmaceutical contexts often contain proprietary chemical structures, confidential screening hits, and patented scaffolds. In this study, we empirically evaluate Membership Inference Attacks (MIA) against small causal SMILES language models (2 layers, $d=128$, $\sim 0.4\text{M}$ parameters) on a subset of the MOSES molecular benchmark. We evaluate standard sequence loss thresholding (LOSS) alongside calibrated Likelihood-Ratio Attacks (LiRA) across training epochs (5, 20, 60), dataset sizes ($N \in \{1\text{k}, 2.5\text{k}, 5\text{k}, 10\text{k}\}$), a transfer learning scenario (pretrain then fine-tune), and two defensive strategies: randomized-SMILES data augmentation and Differentially Private SGD (DP-SGD).
 
-Our empirical findings uncover severe privacy leakage: baseline causal GPT models overfit rapidly, reaching an attack ROC-AUC of 0.898 and a True Positive Rate (TPR) of 27.82\% at a 1\% False Positive Rate (FPR). On small proprietary subsets ($N = 1,000$), membership exposure is catastrophic (AUC = 0.975, TPR@1\% = 93.99\%). Moreover, transfer learning provides no safety: private fine-tuning after public pretraining leaks private compounds at AUC = 0.801. To protect confidential chemical intellectual property, we evaluate two defenses: (1) representation invariance via randomized SMILES data augmentation, which suppresses attack AUC down to 0.528 (TPR@1\% = 1.38\%) with zero computational overhead, and (2) Differentially Private SGD (DP-SGD) with custom causal attention layers, reducing attack AUC to 0.500 ($\epsilon = 3.0$), neutralizing adversary advantage completely. Finally, through a 15,000-sample generative audit, we demonstrate that verbatim memorization is the direct root cause of vulnerability, with overfitted models emitting training leads at twice the background replication rate.
+In our baseline setting evaluated with canonical SMILES queries and sequence negative log-likelihood sum ($nll\_sum$), models exhibit substantial membership leakage by epoch 60: online LiRA reaches a ROC-AUC of $0.898 \pm 0.003$ and a True Positive Rate (TPR) of $27.82 \pm 1.47\%$ at a 1\% False Positive Rate (FPR) ($8.15 \pm 1.58\%$ at 0.1\% FPR), compared to $0.689 \pm 0.005$ AUC and $2.96 \pm 0.24\%$ TPR@1\% FPR for standard LOSS. In smaller training cohorts ($N = 1,000$), attack sensitivity increases (LOSS AUC reaches $0.998 \pm 0.001$, TPR@1\% = $93.99 \pm 4.35\%$; offline LiRA AUC reaches $0.957 \pm 0.006$, TPR@1\% = $20.75 \pm 6.51\%$; online LiRA AUC reaches $0.975 \pm 0.004$, TPR@1\% = $45.49 \pm 33.14\%$, with high LiRA estimation variance). Private fine-tuning after public pretraining also exhibits leakage (offline LiRA AUC $0.801 \pm 0.003$, TPR@1\% = $4.36 \pm 0.51\%$). 
+
+Crucially, we find that membership leakage in canonical models is string-form dependent: querying the epoch-60 canonical baseline with up to 10 distinct SMILES strings per molecule (the canonical form plus randomized forms, with mean NLL) reduces online LiRA AUC to $0.528 \pm 0.006$ (offline LiRA AUC $0.560 \pm 0.007$, LOSS AUC $0.511 \pm 0.004$), indicating that under mean aggregation, alternative string forms remove most of the signal (individual non-canonical forms were not scored separately). Training with randomized-SMILES augmentation similarly suppresses canonical attack AUC to $0.528 \pm 0.004$. In our preliminary DP-SGD arm ($\epsilon \in \{8.0, 3.0\}$, $\delta = 10^{-5}$), attack AUC drops to $0.500 - 0.528$, but models suffer severe utility collapse: chemical validity evaluations for DP-SGD were not recorded in the released summary; preliminary runs suffered severe utility degradation and generated strings failed standard valence checks (AUC $\sim 0.5$ for a model that does not generate valid molecules is not evidence of a useful defense). Finally, an empirical audit of 15,000 generated samples across baseline models observed 12 exact member replications versus 7 holdout replications; a one-sided binomial test ($p = 0.1796 > 0.05$) and Fisher exact test ($p = 0.359 > 0.05$) indicate that this difference is not statistically significant at the current sample size. We conclude with a discussion of open limitations and recommendations for privacy evaluation in chemical language models.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Membership Inference Attacks, Molecular Generative Models, Chemical Foundation Models, Differential Privacy, DP-SGD, SMILES, AI Security in Drug Discovery.
+Membership Inference Attacks, Molecular Generative Models, SMILES, Differential Privacy, Likelihood-Ratio Attack, Privacy Auditing.
 \end{IEEEkeywords}}
 
 \maketitle
@@ -35,48 +36,77 @@ Membership Inference Attacks, Molecular Generative Models, Chemical Foundation M
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
-\IEEEPARstart{A}{utoregressive} generative transformers have transformed computer-aided drug design. By parameterizing the joint distribution of linear chemical notations like the Simplified Molecular Input Line Entry System (SMILES)~\cite{weininger1988smiles}, Causal Generative Pretrained Transformers (GPT) can explore chemical space, synthesize novel chemical scaffolds, and optimize drug-likeness.
+\IEEEPARstart{A}{utoregressive} generative sequence models parameterize discrete token distributions to explore chemical space. By modeling the Simplified Molecular Input Line Entry System (SMILES)~\cite{weininger1988smiles}, causal transformers can generate candidate structures and propose chemical variations for lead optimization.
 
-Despite these advancements, deploying generative chemistry in pharmaceutical research introduces major intellectual property (IP) risks. Proprietary screening libraries, lead optimization series, and patent-pending scaffolds form the core commercial value of biotechnology firms. When deep models are trained on these confidential corpora, they risk unintentionally memorizing sensitive training examples. 
+In commercial drug discovery, generative models are often fine-tuned or trained directly on proprietary compound collections, including patented chemical series, internal bioassay screening hits, and confidential leads. If an adversary can infer whether a specific target compound was included in the training cohort---a vulnerability formalized as a \textbf{Membership Inference Attack (MIA)}~\cite{shokri2017membership}---they may extract competitive intelligence regarding active medicinal chemistry programs or unreleased intellectual property.
 
-This exposure is formalized as a \textbf{Membership Inference Attack (MIA)}~\cite{shokri2017membership}: an adversary with query access to a target model $\mathcal{M}$ attempts to determine whether a specific proprietary candidate $x$ was included in the private training set $\mathcal{D}_{\text{train}}$. While extensively studied in vision and natural language processing, membership leakage in chemical generative models has remained under-explored.
+While membership inference has been widely investigated in computer vision and natural language processing, auditing molecular generative sequence models presents distinctive factors:
+\begin{enumerate}
+    \item Molecules admit multiple non-unique equivalent SMILES representations (non-canonical string enumeration).
+    \item Chemical libraries often contain recurring core frameworks (Bemis-Murcko scaffolds~\cite{bemis1996properties}) that induce structural correlation across compounds.
+    \item Language models may memorize specific surface syntax without learning generalized semantic invariants.
+\end{enumerate}
 
-In this work, we establish a comprehensive, calibrated empirical benchmark auditing membership inference across chemical foundation models using Carlini et al.'s Likelihood-Ratio Attack (LiRA)~\cite{carlini2022membership}. We investigate baseline exposure over training epochs, evaluate data scaling laws ($N \in \{1k, 2.5k, 5k, 10k\}$), benchmark transfer learning risks, and engineer both provable (DP-SGD~\cite{abadi2016deep,opacus2021}) and empirical (randomized SMILES enumeration~\cite{bjerrum2017smiles}) defenses.
+In this work, we present an empirical audit of membership leakage in small SMILES autoregressive models. Using a shadow-model ensemble framework based on Carlini et al.'s Likelihood-Ratio Attack (LiRA)~\cite{carlini2022membership}, we systematically evaluate exposure across training duration, dataset scaling, transfer learning, and defensive interventions.
 
 \section{Threat Model and Formulation}
-\subsection{Sequence Modeling of Chemical Space}
-Let a molecule be encoded as a sequence of chemical tokens $x = (x_1, \dots, x_T) \in \mathcal{V}^T$, where $\mathcal{V}$ denotes the token vocabulary. An autoregressive transformer parameterizes the likelihood:
+\subsection{Sequence Modeling and Scoring Metric}
+Let a molecular SMILES string be represented as a token sequence $x = (x_1, \dots, x_T) \in \mathcal{V}^T$, where $\mathcal{V}$ is a discrete vocabulary of chemical tokens. An autoregressive transformer parameterizes the likelihood:
 \begin{equation}
 P_\theta(x) = \prod_{t=1}^T P_\theta(x_t \mid x_{<t})
 \end{equation}
-The cross-entropy loss over a training molecule is:
+The sequence negative log-likelihood (NLL) sum is defined as:
 \begin{equation}
-\mathcal{L}(\theta; x) = - \sum_{t=1}^T \log P_\theta(x_t \mid x_{<t})
+\text{NLL}_{\text{sum}}(\theta; x) = - \sum_{t=1}^T \log P_\theta(x_t \mid x_{<t})
 \end{equation}
 
-\subsection{Adversarial Formulation: LOSS vs. LiRA}
-An adversary computes a score $S(x)$. In naive thresholding, the score is simply the negative sequence loss:
-\begin{equation}
-S_{\text{LOSS}}(x) = - \mathcal{L}(\mathcal{M}_{\text{target}}; x)
-\end{equation}
-However, molecule complexity varies significantly across chemical space. To calibrate for intrinsic sequence hardness, the Likelihood-Ratio Attack (LiRA)~\cite{carlini2022membership} trains $K$ shadow models. For a target molecule $x$, let $\mathcal{S}_{\text{out}}(x) = \{k : x \notin \mathcal{D}_k\}$ represent the models trained without $x$. The out-distribution parameters $\mu_{\text{out}}(x)$ and $\sigma_{\text{out}}(x)$ are estimated, yielding the calibrated Offline LiRA score:
-\begin{equation}
-\Lambda_{\text{offline}}(x) = - \frac{\mathcal{L}(\mathcal{M}_{\text{target}}; x) - \mu_{\text{out}}(x)}{\sigma_{\text{out}}(x) + \epsilon_{\text{stab}}}
-\end{equation}
-Similarly, Online LiRA fits parametric Gaussian densities for both in-membership $(\mu_{\text{in}}, \sigma_{\text{in}})$ and out-membership $(\mu_{\text{out}}, \sigma_{\text{out}})$ distributions.
+Throughout this paper, we consistently report and evaluate metrics using sequence NLL sum ($nll\_sum$). We adopt $nll\_sum$ because gradient-based privacy formulations (such as DP-SGD) operate on total loss per sample, and sequence-length normalization ($nll\_mean$) introduces length-dependent shrinkage that alters likelihood calibration across molecules of differing lengths. Where indicated, we also report randomized-SMILES variant scoring ($nll\_variants\_mean$), which averages NLL across $K=10$ randomized string representations of each molecule.
 
-\section{Methodology and Architecture}
-\subsection{Opacus-Compatible Causal Architecture}
-Standard PyTorch multihead attention implementations utilize fused CUDA kernels that fail under per-sample gradient tracking required by Differentially Private SGD (DP-SGD)~\cite{abadi2016deep}. We designed \texttt{DPCausalGPT}, an Opacus-compliant transformer with explicit batch-unbound linear projections:
-\begin{equation}
-\text{Scores} = \frac{Q K^T}{\sqrt{d_k}} \odot M_{\text{causal}}
-\end{equation}
-where $M_{\text{causal}}$ is an upper-triangular boolean mask. This architecture strictly passes \texttt{ModuleValidator.validate(model, strict=True)} and enables $(\epsilon, \delta)$-Differential Privacy with R\'enyi Differential Privacy (RDP) accounting.
+\subsection{Attack Formulations: LOSS vs. LiRA}
+Given a query molecule $x$, the adversary computes a test statistic $S(x)$ to predict whether $x \in \mathcal{D}_{\text{train}}$:
+\begin{enumerate}
+    \item \textbf{Loss Thresholding (LOSS):}
+    \begin{equation}
+    S_{\text{LOSS}}(x) = - \text{NLL}_{\text{sum}}(\mathcal{M}_{\text{target}}; x)
+    \end{equation}
+    LOSS assumes that training examples achieve lower sequence cross-entropy loss than non-training examples. However, intrinsic molecular complexity varies substantially: complex macrocycles or long branched chains exhibit higher baseline loss than simple aromatics regardless of membership.
+    \item \textbf{Calibrated Likelihood-Ratio Attack (LiRA):} To adjust for molecular complexity, LiRA~\cite{carlini2022membership} trains an ensemble of $K$ shadow models $\{\mathcal{M}_k\}_{k=1}^K$ on random subsets of the data pool. For each query $x$, the models are partitioned into in-models $\mathcal{S}_{\text{in}}(x) = \{k : x \in \mathcal{D}_k\}$ and out-models $\mathcal{S}_{\text{out}}(x) = \{k : x \notin \mathcal{D}_k\}$.
+    \begin{itemize}
+        \item \textit{Offline LiRA (Out-only):} Estimates the out-distribution parameters $\mu_{\text{out}}(x)$ and $\sigma_{\text{out}}(x)$ over out-models:
+        \begin{equation}
+        \Lambda_{\text{offline}}(x) = - \frac{\text{NLL}_{\text{sum}}(\mathcal{M}_{\text{target}}; x) - \mu_{\text{out}}(x)}{\sigma_{\text{out}}(x) + 10^{-6}}
+        \end{equation}
+        \item \textit{Online LiRA (In vs. Out):} Estimates both in-distribution $(\mu_{\text{in}}, \sigma_{\text{in}})$ and out-distribution $(\mu_{\text{out}}, \sigma_{\text{out}})$ parameters, computing the log-likelihood ratio under parametric Gaussian assumptions:
+        \begin{align}
+        \Lambda_{\text{online}}(x) = &-\frac{1}{2}\left(\frac{\text{obs} - \mu_{\text{in}}}{\sigma_{\text{in}}}\right)^2 + \log\left(\frac{\sigma_{\text{out}}}{\sigma_{\text{in}}}\right) \nonumber \\
+        &+ \frac{1}{2}\left(\frac{\text{obs} - \mu_{\text{out}}}{\sigma_{\text{out}}}\right)^2
+        \end{align}
+    \end{itemize}
+\end{enumerate}
 
-\section{Empirical Evaluation}
+\subsection{Threat Model Assumptions}
+We evaluate our models under an explicit, optimistic threat model:
+\begin{enumerate}
+    \item \textbf{Distribution Match:} Shadow models are sampled from the exact same marginal distribution as the target model (MOSES benchmark pool).
+    \item \textbf{Likelihood Access:} The adversary has query access enabling exact calculation of token-level sequence log-likelihoods ($nll\_sum$).
+    \item \textbf{Canonical-String Queries:} The adversary queries the target and shadow models using standard canonical SMILES representations.
+\end{enumerate}
+These represent strong assumptions favoring the attacker. In restricted black-box deployments (e.g., API rate limits, generation-only access, or query filtering), adversary effectiveness may be substantially lower.
 
-\subsection{Baseline Memorization vs. Training Duration}
-We evaluate 32 shadow models trained on $N = 20,000$ molecules from the MOSES benchmark~\cite{polykovskiy2020molecular} across epochs 5, 20, and 60.
+\section{Experimental Setup and Architecture}
+\subsection{Model Architecture}
+All evaluations utilize a small causal GPT architecture: 2 transformer layers, hidden embedding dimension $d_{\text{model}} = 128$, 4 attention heads, context window of 128 tokens, parameter count of $\sim 410,000$, and a vocabulary of 27 tokens. Models are trained using Adam ($\text{lr} = 5 \times 10^{-4}$), batch size 32, with a fixed sequence length of 128 tokens.
+
+\subsection{Dataset and Shadow Model Partitioning}
+Data are sourced from the MOSES benchmark~\cite{polykovskiy2020molecular}. The evaluation pool size is $\text{POOL\_N} = 20,000$ molecules. For each shadow model $k$, exactly $N = 10,000$ molecules are sampled uniformly at random without replacement using seed $k$ (\texttt{\_membership(pool, k)} in \texttt{colab\_pipeline.py}). Evaluation is conducted across all 20,000 candidate compounds (10,000 members, 10,000 non-members). In the baseline and randomized-augmentation (E5a) experiments, 32 shadow models are trained ($k \in \{0, \dots, 31\}$). In data scaling (E3), DP-SGD, and pretrain-finetune experiments, 8 shadow models are trained per condition.
+
+\subsection{Opacus DP-SGD Implementation}
+Differentially private training is implemented using Opacus (version 1.6.0)~\cite{opacus2021}. The noise scale $\sigma$ is computed dynamically using \texttt{opacus.accountants.utils.get\_noise\_multiplier(target\_epsilon=eps, target\_delta=1e-5, sample\_rate=32/N, epochs=60)}. Gradient clipping is set to \texttt{max\_grad\_norm = 1.0}, targeting $\epsilon \in \{8.0, 3.0\}$ with $\delta = 10^{-5}$. The causal attention layer avoids fused operations incompatible with Opacus per-sample gradient hooks. If training resumes from a checkpoint, privacy accounting restarts from zero unless serialized accountant state is restored. In \texttt{results\_summary/manifest.json}, a stale launch record with an \texttt{ImportError} for \texttt{DPCausalGPT} from an earlier initialization attempt is noted; subsequent runs completed.
+
+\section{Empirical Results and Findings}
+
+\subsection{Baseline Leakage vs. Training Duration}
+Table~\ref{tab:baseline} and Fig.~\ref{fig:exposure} present membership inference performance across 5, 20, and 60 training epochs on canonical SMILES representations evaluated using $nll\_sum$.
 
 \begin{figure}[htbp]
 \centering
@@ -85,95 +115,99 @@ We evaluate 32 shadow models trained on $N = 20,000$ molecules from the MOSES be
 \label{fig:exposure}
 \end{figure}
 
-\begin{table}[htbp]
-\centering
-\caption{Baseline Membership Leakage Across Epochs}
-\label{tab:baseline}
-\begin{tabular}{lccc}
-\toprule
-\textbf{Metric} & \textbf{Epoch 5} & \textbf{Epoch 20} & \textbf{Epoch 60} \\
-\midrule
-LOSS Attack (AUC) & $0.535 \pm 0.004$ & $0.591 \pm 0.004$ & $0.689 \pm 0.005$ \\
-Offline LiRA (AUC) & $0.630 \pm 0.008$ & $0.763 \pm 0.007$ & $\mathbf{0.880 \pm 0.004}$ \\
-Online LiRA (AUC) & $0.595 \pm 0.006$ & $0.760 \pm 0.006$ & $\mathbf{0.898 \pm 0.003}$ \\
-LiRA TPR @ 1\% FPR & $3.15 \pm 0.35\%$ & $9.58 \pm 0.62\%$ & $\mathbf{27.82 \pm 1.47\%}$ \\
-LiRA TPR @ 0.1\% FPR & $0.42 \pm 0.15\%$ & $1.86 \pm 0.33\%$ & $\mathbf{8.15 \pm 1.58\%}$ \\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{tables/table1_baseline.tex}
 
-As shown in Table~\ref{tab:baseline} and Fig.~\ref{fig:exposure}, while standard LOSS reports a modest AUC of 0.689 at epoch 60, calibrated LiRA reveals extreme leakage (AUC = 0.898). An adversary achieves a 27.82\% TPR at a 1\% false alarm rate.
+At epoch 5, membership leakage is modest (strongest attack: offline LiRA AUC $0.630 \pm 0.008$). By epoch 60, extensive exposure occurs: online LiRA reaches ROC-AUC $0.898 \pm 0.003$, with TPR@1\% FPR reaching $27.82 \pm 1.47\%$. At a stricter threshold of 0.1\% FPR, online LiRA still identifies $8.15 \pm 1.58\%$ of member molecules. Standard loss thresholding substantially underestimates vulnerability (AUC 0.689 vs. 0.898 for online LiRA at epoch 60).
 
-\subsection{Dataset Scaling Laws}
-We systematically sweep private training set sizes $N \in \{1k, 2.5k, 5k, 10k\}$ (Fig.~\ref{fig:scaling}).
+\textbf{Statistical Uncertainty:} The reported $\pm$ values reflect the standard deviation across 32 leave-one-out shadow target models. To assess uncertainty over the 20,000 evaluation molecules, we computed 95\% bootstrap confidence intervals for epoch-60 online LiRA across three independent target models:
+\begin{itemize}
+    \item Target 0: AUC $0.9004$, 95\% CI $[0.8962, 0.9045]$; TPR@1\% $0.2684$, 95\% CI $[0.2492, 0.3000]$.
+    \item Target 1: AUC $0.8916$, 95\% CI $[0.8870, 0.8961]$; TPR@1\% $0.2510$, 95\% CI $[0.2178, 0.2756]$.
+    \item Target 2: AUC $0.8972$, 95\% CI $[0.8930, 0.9012]$; TPR@1\% $0.2838$, 95\% CI $[0.2613, 0.3136]$.
+\end{itemize}
+
+\subsection{String-Form Sensitivity: Randomized-SMILES Scoring}
+A key finding in our audit is that memorization in small canonical-trained models is strongly syntax-specific. In \texttt{colab\_pipeline.py}, each molecule was scored at epoch 60 using up to 10 distinct SMILES strings per molecule (the canonical form plus randomized forms generated via RDKit \texttt{Chem.MolToSmiles(mol, doRandom=True, canonical=False)}), with the average NLL recorded as $nll\_variants\_mean$. Under mean aggregation, individual non-canonical forms were not scored separately; in our setting, mean-aggregated scoring over alternative string forms removes most of the signal.
+
+As reported in Table~\ref{tab:baseline} (bottom section), scoring canonical models with randomized variants drops LOSS AUC from $0.689$ to $0.511 \pm 0.004$, offline LiRA AUC from $0.880$ to $0.560 \pm 0.007$, and online LiRA AUC from $0.898$ to $0.528 \pm 0.006$. This indicates that the target model primarily memorized the canonical string sequence rather than the invariant molecular graph. An adversary restricted to non-canonical queries loses almost all advantage.
+
+\subsection{Private Dataset Scaling}
+We examine vulnerability across dataset sizes $N \in \{1\text{k}, 2.5\text{k}, 5\text{k}, 10\text{k}\}$ trained for 60 epochs, with 8 shadow models per size ($2N$ candidate universe). Results are presented in Table~\ref{tab:scaling} and Fig.~\ref{fig:scaling}, separating LOSS and LiRA attacks.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\columnwidth]{figures/fig2_data_scaling.pdf}
-\caption{Dataset Size Scaling Laws on Attack Exposure.}
+\caption{Dataset Size Scaling (E3). (a) Loss thresholding attack (LOSS). (b) Calibrated Likelihood-Ratio Attacks (LiRA).}
 \label{fig:scaling}
 \end{figure}
 
-\begin{table}[htbp]
-\centering
-\caption{Dataset Size Scaling Results at Epoch 60}
-\label{tab:scaling}
-\begin{tabular}{lccc}
-\toprule
-\textbf{Dataset Size ($N$)} & \textbf{LOSS AUC} & \textbf{LiRA AUC} & \textbf{TPR @ 1\% FPR} \\
-\midrule
-1,000 & $0.998 \pm 0.001$ & $\mathbf{0.975 \pm 0.004}$ & $\mathbf{93.99 \pm 4.35\%}$ \\
-2,500 & $0.941 \pm 0.006$ & $\mathbf{0.939 \pm 0.003}$ & $27.68 \pm 3.97\%$ \\
-5,000 & $0.820 \pm 0.010$ & $0.882 \pm 0.006$ & $7.99 \pm 1.55\%$ \\
-10,000 & $0.689 \pm 0.003$ & $0.785 \pm 0.003$ & $2.84 \pm 0.28\%$ \\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{tables/table2_scaling.tex}
 
-Small private datasets ($N \le 2,500$) exhibit catastrophic membership leakage (TPR@1\% = 93.99\%), proving that specialized proprietary libraries are extraordinarily vulnerable.
+Smaller training cohorts experience pronounced overfitting at 60 epochs. At $N=1,000$, standard LOSS reaches AUC $0.998 \pm 0.001$ with TPR@1\% = $93.99 \pm 4.35\%$, while offline LiRA reaches AUC $0.957 \pm 0.006$ (TPR@1\% = $20.75 \pm 6.51\%$) and online LiRA reaches AUC $0.975 \pm 0.004$ (TPR@1\% = $45.49 \pm 33.14\%$). With only 8 shadow models, LiRA density estimation at small $N$ suffers from high variance (e.g., online LiRA TPR@1\% standard deviation is $\pm 33.14\%$). We report these empirical numbers directly and do not claim a formal parametric scaling law.
 
-\subsection{Defense Benchmark: Augmentation vs. DP-SGD}
-We benchmark two defensive interventions at epoch 60: (1) Randomized SMILES data augmentation (E5a), and (2) Differentially Private SGD ($\epsilon \in \{8.0, 3.0\}$, $\delta = 10^{-5}$).
+\subsection{Transfer Learning: Pretraining to Fine-Tuning}
+We evaluated a transfer learning setting where a model was pretrained on 10,000 public molecules for 60 epochs, then fine-tuned on 10,000 private molecules for 20 epochs across 8 shadow targets (Table~\ref{tab:pretrain_ft}).
+
+\input{tables/table4_pretrain_ft.tex}
+
+Offline LiRA achieves an AUC of $0.801 \pm 0.003$ and TPR@1\% of $4.36 \pm 0.51\%$. While lower than baseline epoch 60 ($0.880$ / $27.15\%$), this confirms that fine-tuning on private data remains susceptible to membership inference.
+
+\subsection{Defense Benchmark at Epoch 60}
+Table~\ref{tab:defenses} and Fig.~\ref{fig:defenses} benchmark two defensive approaches at epoch 60: (1) Randomized-SMILES training (E5a), where models are trained with random-SMILES data augmentation applied per batch; and (2) DP-SGD targeting $\epsilon \in \{8.0, 3.0\}$ with $\delta = 10^{-5}$.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\columnwidth]{figures/fig3_defenses_comparison.pdf}
-\caption{Defense Benchmark Comparison against Baseline (Epoch 60).}
+\caption{Defense Benchmark Comparison at Epoch 60 showing the strongest attack per defense. *Note: DP-SGD runs suffered severe utility collapse; AUC $\sim 0.5$ is not evidence of a useful defense.}
 \label{fig:defenses}
 \end{figure}
 
-\begin{table}[htbp]
-\centering
-\caption{Defensive Mitigation Comparison at Epoch 60}
-\label{tab:defenses}
-\begin{tabular}{lccc}
-\toprule
-\textbf{Defense Strategy} & \textbf{Config} & \textbf{LiRA AUC} & \textbf{TPR @ 1\% FPR} \\
-\midrule
-Baseline (Undefended) & Canonical SGD & $\mathbf{0.898 \pm 0.003}$ & $\mathbf{27.82\%}$ \\
-Randomized SMILES (E5a) & Augmentation & $0.528 \pm 0.004$ & $1.38\%$ \\
-DP-SGD & $\epsilon = 8.0$ & $0.528 \pm 0.003$ & $1.19\%$ \\
-DP-SGD & $\epsilon = 3.0$ & $\mathbf{0.500 \pm 0.002}$ & $\mathbf{1.01\%}$ \\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{tables/table3_defenses.tex}
 
-As illustrated in Fig.~\ref{fig:defenses} and Table~\ref{tab:defenses}, DP-SGD with $\epsilon = 3.0$ entirely eliminates adversary advantage (AUC = 0.500, equal to a random guess). Concurrently, randomized SMILES enumeration achieves near-identical empirical suppression (AUC = 0.528) without noise injection.
+Randomized-SMILES training strongly suppresses canonical attack performance: offline LiRA drops from $0.880$ to $0.528 \pm 0.004$, and TPR@1\% drops from $27.15\%$ to $1.38\%$. When attacked via randomized variants scoring, offline LiRA AUC remains low at $0.552 \pm 0.005$.
+
+In preliminary runs, DP-SGD reduces attack AUC near random guess ($0.500 - 0.528$). However, these models suffered severe utility collapse: chemical validity evaluations for DP-SGD were not recorded in the released summary; preliminary runs suffered severe utility degradation and generated strings failed standard valence checks. We emphasize that an AUC of $\sim 0.5$ for a model that fails to generate chemically valid molecules is not evidence of a useful defense, and no privacy-utility conclusion can be drawn without preserving generation validity.
 
 \subsection{Generative Memorization Audit}
-To verify whether memorization drives vulnerability, we sampled 15,000 molecules across baseline models and audited them against training members.
+To audit whether models generate verbatim copies of training leads, we sampled 5,000 molecules per model for three baseline models (Models 0, 15, 31; total 15,000 samples) on Apple Silicon (MPS). Generated molecules were evaluated for chemical validity, uniqueness, and exact string matches against 10,000 training members versus 10,000 holdout molecules (Table~\ref{tab:e6_generation} and Fig.~\ref{fig:generative}).
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\columnwidth]{figures/fig4_generative_memorization.pdf}
-\caption{Generative Memorization and Quality Audit across 15,000 Samples.}
+\caption{Generative Memorization and Chemical Quality Audit (E6) across 15,000 samples.}
 \label{fig:generative}
 \end{figure}
 
-The generated libraries exhibited 60.5\% chemical validity, 99.9\% uniqueness, and 99.8\% novelty. Crucially, overfitted models replicated verbatim training leads at twice the rate of unseen holdout molecules (0.16\% vs. 0.08\%), directly verifying memorization.
+\input{tables/table5_e6_generation.tex}
+
+Across 15,000 samples, models produced 12 exact member copies and 7 holdout copies. Individual binomial test $p$-values are $0.750$, $0.500$, and $0.194$. The pooled one-sided binomial test yields $p = 0.1796$ ($p > 0.05$), and a Fisher exact test yields $p = 0.359$. Under the evaluated sample budget (5,000 per model), the difference between member copies and holdout copies is \textbf{not statistically significant}. Generative memorization cannot be claimed as statistically confirmed without higher-power sampling ($\ge 100\text{k}$ samples).
+
+\section{Related Work}
+Our work interfaces with privacy auditing, generative chemistry, and membership inference:
+\begin{itemize}
+    \item \textbf{Membership Inference Attacks:} Carlini et al.~\cite{carlini2022membership} established Likelihood-Ratio Attacks (LiRA) to overcome sequence hardness confounding. Shokri et al.~\cite{shokri2017membership} originally formulated shadow-model attacks. Recent theoretical analysis by Zhang et al.~\cite{zhang2024membership} emphasized that empirical membership inference attacks face significant evidentiary caveats and cannot formally prove that a specific sample was present in a training set without known reference baselines.
+    \item \textbf{Privacy in Cheminformatics \& Molecular Models:} Kr{\"u}ger et al.~\cite{kruger2025publishing} investigated membership leakage in molecular property predictors (\texttt{molprivacy}), demonstrating that publishing neural network weights poses data confidentiality risks. Aubinais et al.~\cite{aubinais2026membership} studied membership inference risks in quantized models, incorporating chemical language model experiments. Ross et al.~\cite{ross2025gpmolformer} developed GP-MoLFormer and noted training data memorization across 1.1 billion SMILES strings.
+    \item \textbf{Privacy Auditing in Biological Sequence Models:} Nemecek et al.~\cite{nemecek2026quantifying} analyzed memorization and privacy risk in genomic language models, illustrating domain-specific sequence leakage dynamics.
+    \item \textbf{SMILES Randomization \& Data Augmentation:} Ar{\'u}s-Pous et al.~\cite{aruspous2019randomized} and Bjerrum~\cite{bjerrum2017smiles} demonstrated that randomized SMILES enumeration expands the effective representation space and regularizes generative models against overfitting.
+    \item \textbf{Differential Privacy in Deep Learning:} Abadi et al.~\cite{abadi2016deep} and the Opacus library~\cite{opacus2021} formalized differential privacy via DP-SGD and R\'enyi Differential Privacy (RDP) accounting.
+\end{itemize}
+
+Our contribution provides a focused empirical audit of small causal SMILES language models across training epochs, dataset sizes, randomized representation scoring, and DP-SGD training. We do not claim to present the first or definitive study, but rather a transparent, reproducible benchmark of these dynamics in small chemical generative LMs.
+
+\section{Limitations}
+This preliminary study has several explicit limitations:
+\begin{enumerate}
+    \item \textbf{Model Capacity and Architecture:} Models evaluate a 2-layer, $d=128$, $\sim 0.4\text{M}$ parameter GPT with modest chemical validity ($\sim 60\%$). These findings may not generalize directly to larger generative models.
+    \item \textbf{Dataset Scope:} Experiments are restricted to a single filtered subset of the MOSES benchmark. Diverse proprietary libraries with differing scaffold distributions may exhibit different leakage profiles.
+    \item \textbf{Shadow Ensemble Scale Asymmetry:} While baseline and E5a arms used 32 shadow models, compute limits restricted E3, DP-SGD, and pretrain-FT to 8 shadow models, leading to higher estimation variance.
+    \item \textbf{Reported Uncertainty:} Metrics report standard deviation across leave-one-out shadow target models, rather than per-molecule bootstrap confidence intervals. Our computed 95\% bootstrap CIs across molecules for epoch 60 online LiRA on three targets span roughly $\pm 0.005$ in AUC and $\pm 0.03$ in TPR@1\%.
+    \item \textbf{Generative Sample Size and Hardware:} Experiment E6 sampled 5,000 molecules per model (15,000 total) and ran on Apple Silicon (MPS), whereas shadow training was conducted on CUDA Tesla T4. Statistical tests confirm that verbatim replication differences are not statistically significant ($p > 0.05$).
+    \item \textbf{DP-SGD Utility Collapse:} The DP-SGD arm represents a preliminary run with utility collapse: chemical validity evaluations were not recorded in the released summary, preliminary runs suffered severe utility degradation and generated strings failed standard valence checks, and privacy accounting logs and accountant state deserialization were not independently verified. Achieving an AUC of $\sim 0.5$ in a model lacking chemical generation utility does not demonstrate a practical defense.
+    \item \textbf{Lack of From-Scratch Control:} The pretrain $\to$ fine-tune experiment lacks an exact from-scratch baseline trained for 20 epochs on 10,000 molecules, preventing full disentanglement of pretraining effects from training duration.
+\end{enumerate}
 
 \section{Conclusion}
-This study provides the first calibrated audit of membership inference in generative chemistry. We demonstrated that standard molecular GPT models severely leak private chemical IP, with vulnerability worsening on small proprietary cohorts. We proved that randomized SMILES augmentation and Opacus-compatible DP-SGD provide robust empirical and mathematical solutions, ensuring secure deployment of generative AI in drug discovery.
+This preliminary study audited membership leakage in small SMILES language models. We observed that under canonical queries and likelihood access, models overfit over 60 epochs, enabling calibrated LiRA attacks to reach an AUC of 0.898. However, memorization is strongly coupled to canonical string representations: evaluating models with randomized SMILES variants or training with randomized augmentation suppresses attack AUC to near baseline levels ($0.51 - 0.55$). While DP-SGD mathematically bounds gradient leakage, current preliminary implementations suffer from severe utility collapse in small chemical sequence models; AUC $\sim 0.5$ in an invalid generator is not evidence of a useful defense. Future work must investigate scaling laws on larger architectures, higher-power generative sampling, and privacy-preserving training that maintains chemical validity.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
