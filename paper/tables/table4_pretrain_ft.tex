@@ -1,0 +1,15 @@
+\begin{table}[t]
+\centering
+\caption{Membership leakage in transfer learning (public pretraining on 10,000 molecules, fine-tuning on 10,000 private molecules). Metrics report mean $\pm$ std across 8 independent target models. Note: there is no from-scratch control trained at the exact same size/epochs in this experiment.}
+\label{tab:pretrain_ft}
+\small
+\begin{tabular}{lccc}
+\toprule
+\textbf{Attack Method} & \textbf{ROC-AUC} & \textbf{TPR @ 1\% FPR (\%)} & \textbf{TPR @ 0.1\% FPR (\%)} \\
+\midrule
+Loss Thresholding (LOSS) & $0.640 \pm 0.003$ & $2.31 \pm 0.26$ & $0.34 \pm 0.08$ \\
+Offline LiRA & $0.801 \pm 0.003$ & $4.36 \pm 0.51$ & $0.43 \pm 0.26$ \\
+Online LiRA & $0.751 \pm 0.004$ & $2.00 \pm 0.22$ & $0.22 \pm 0.05$ \\
+\bottomrule
+\end{tabular}
+\end{table}
