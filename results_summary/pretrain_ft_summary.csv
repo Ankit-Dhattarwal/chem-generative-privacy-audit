@@ -1,0 +1,25 @@
+target,method,stat,auc,tpr_fpr_1pct,tpr_fpr_0_1pct,balanced_accuracy,arm,scenario
+0,LOSS,nll_sum,0.6383110949999999,0.0245,0.0031,0.5951,CUDA,public pretrain then private fine-tune
+0,offline_LiRA,nll_sum,0.79912081,0.0436,0.0043,0.7294,CUDA,public pretrain then private fine-tune
+0,online_LiRA,nll_sum,0.7490104099999999,0.017,0.003,0.7043,CUDA,public pretrain then private fine-tune
+1,LOSS,nll_sum,0.637833195,0.025,0.0033,0.5963,CUDA,public pretrain then private fine-tune
+1,offline_LiRA,nll_sum,0.79761929,0.0413,0.0026,0.7343,CUDA,public pretrain then private fine-tune
+1,online_LiRA,nll_sum,0.74701053,0.0175,0.0016,0.7055,CUDA,public pretrain then private fine-tune
+2,LOSS,nll_sum,0.6386442849999999,0.0257,0.0032,0.5944,CUDA,public pretrain then private fine-tune
+2,offline_LiRA,nll_sum,0.8008998099999999,0.0369,0.0036,0.736,CUDA,public pretrain then private fine-tune
+2,online_LiRA,nll_sum,0.75500168,0.0192,0.0018,0.711,CUDA,public pretrain then private fine-tune
+3,LOSS,nll_sum,0.6458439300000001,0.0226,0.0029,0.6015,CUDA,public pretrain then private fine-tune
+3,offline_LiRA,nll_sum,0.80040063,0.0527,0.0105,0.7351,CUDA,public pretrain then private fine-tune
+3,online_LiRA,nll_sum,0.74959529,0.0235,0.0025,0.7065,CUDA,public pretrain then private fine-tune
+4,LOSS,nll_sum,0.6357394199999999,0.0252,0.0048,0.5938,CUDA,public pretrain then private fine-tune
+4,offline_LiRA,nll_sum,0.79969381,0.0443,0.0036,0.7321,CUDA,public pretrain then private fine-tune
+4,online_LiRA,nll_sum,0.7462507899999999,0.0223,0.0019,0.7021,CUDA,public pretrain then private fine-tune
+5,LOSS,nll_sum,0.6431976800000001,0.0231,0.0045,0.6016,CUDA,public pretrain then private fine-tune
+5,offline_LiRA,nll_sum,0.80285865,0.0381,0.0026,0.736,CUDA,public pretrain then private fine-tune
+5,online_LiRA,nll_sum,0.75228339,0.0196,0.0018,0.7045,CUDA,public pretrain then private fine-tune
+6,LOSS,nll_sum,0.6393972099999999,0.0198,0.0023,0.5997,CUDA,public pretrain then private fine-tune
+6,offline_LiRA,nll_sum,0.80132599,0.0473,0.004,0.7361,CUDA,public pretrain then private fine-tune
+6,online_LiRA,nll_sum,0.7508754,0.0209,0.0024,0.7048,CUDA,public pretrain then private fine-tune
+7,LOSS,nll_sum,0.638104645,0.0188,0.003,0.601,CUDA,public pretrain then private fine-tune
+7,offline_LiRA,nll_sum,0.8064963999999999,0.0449,0.0036,0.7412,CUDA,public pretrain then private fine-tune
+7,online_LiRA,nll_sum,0.756956,0.0197,0.0024,0.7101,CUDA,public pretrain then private fine-tune
