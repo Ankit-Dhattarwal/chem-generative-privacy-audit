@@ -31,7 +31,7 @@ All metrics are evaluated using negative log-likelihood sum (`nll_sum`) and trac
 - **Transfer Learning**: Private fine-tuning on 10,000 molecules after public pretraining leaks private membership at offline LiRA AUC **0.801 ± 0.003** (TPR@1% **4.36 ± 0.51%**).
 - **Defenses**:
   - *Randomized-SMILES Training*: Suppresses canonical attack AUC to **0.528 ± 0.004** (TPR@1% **1.38 ± 0.21%**).
-  - *DP-SGD*: Suppresses attack AUC to **0.500 – 0.528**, but preliminary runs suffered severe utility collapse; we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).
+  - *DP-SGD*: Suppresses attack AUC to **0.500 – 0.528**, but preliminary runs exhibited possible loss of generative utility (not evaluated); an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense.
 - **Generative Replication**: In a 15,000-sample audit, models produced 12 exact member copies vs. 7 holdout copies; a one-sided binomial test ($p = 0.1796 > 0.05$) and Fisher exact test ($p = 0.359 > 0.05$) indicate that this difference is **not statistically significant** under the evaluated sample size.
 
 ---
@@ -63,7 +63,7 @@ Evaluated over 32 shadow models on 20,000 candidate targets (10,000 members, 10,
 
 ### Table 3: Defense Benchmark at Epoch 60
 
-*Note on DP rows: preliminary run with utility collapse; we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).*
+*Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense.*
 
 | Defense Configuration | Shadow Setup | LOSS AUC | LOSS TPR@1% (%) | Offline LiRA AUC | Offline LiRA TPR@1% (%) | Online LiRA AUC | Online LiRA TPR@1% (%) | Strongest Attack (Method: AUC, TPR@1%) |
 |---|---|---|---|---|---|---|---|---|

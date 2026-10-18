@@ -9,11 +9,11 @@
 
 ## Abstract
 
-Autoregressive language models trained on molecular string representations (SMILES) are increasingly explored for computer-aided molecular generation. However, training sets in biopharmaceutical contexts often contain proprietary chemical structures, confidential screening hits, and patented scaffolds. In this study, we empirically evaluate **Membership Inference Attacks (MIA)** against small causal SMILES language models (2 layers, $d=128$, $\sim 0.4\text{M}$ parameters) on a subset of the MOSES molecular benchmark. We evaluate standard sequence loss thresholding (LOSS) alongside calibrated **Likelihood-Ratio Attacks (LiRA)** across training epochs (5, 20, 60), dataset sizes ($N \in \{1\text{k}, 2.5\text{k}, 5\text{k}, 10\text{k}\}$), a transfer learning scenario (pretrain then fine-tune), and two defensive strategies: randomized-SMILES data augmentation and Differentially Private SGD (DP-SGD).
+Autoregressive language models trained on molecular string representations (SMILES) are increasingly explored for computer-aided molecular generation. However, training sets in biopharmaceutical contexts often contain proprietary chemical structures, confidential screening hits, and patented scaffolds. In this study, we empirically evaluate **Membership Inference Attacks (MIA)** against small causal SMILES language models (2 layers, $d=128$, 419,584 parameters, vocab size 25) on a subset of the MOSES molecular benchmark. We evaluate standard sequence loss thresholding (LOSS) alongside calibrated **Likelihood-Ratio Attacks (LiRA)** across training epochs (5, 20, 60), dataset sizes ($N \in \{1\text{k}, 2.5\text{k}, 5\text{k}, 10\text{k}\}$), a transfer learning scenario (pretrain then fine-tune), and two defensive strategies: randomized-SMILES data augmentation and Differentially Private SGD (DP-SGD).
 
 In our baseline setting evaluated with canonical SMILES queries and sequence negative log-likelihood sum (`nll_sum`), models exhibit substantial membership leakage by epoch 60: online LiRA reaches a ROC-AUC of $0.898 \pm 0.003$ and a True Positive Rate (TPR) of $27.82 \pm 1.47\%$ at a 1% False Positive Rate (FPR) ($8.15 \pm 1.58\%$ at 0.1% FPR), compared to $0.689 \pm 0.005$ AUC and $2.96 \pm 0.24\%$ TPR@1% FPR for standard LOSS. In smaller training cohorts ($N = 1,000$), attack sensitivity increases (LOSS AUC reaches $0.998 \pm 0.001$, TPR@1% = $93.99 \pm 4.35\%$; offline LiRA AUC reaches $0.957 \pm 0.006$, TPR@1% = $20.75 \pm 6.51\%$; online LiRA AUC reaches $0.975 \pm 0.004$, TPR@1% = $45.49 \pm 33.14\%$, with high LiRA estimation variance). Private fine-tuning after public pretraining also exhibits leakage (offline LiRA AUC $0.801 \pm 0.003$, TPR@1% = $4.36 \pm 0.51\%$). 
 
-Crucially, we find that membership leakage in canonical models is string-form dependent: querying the epoch-60 canonical baseline with up to 10 distinct SMILES strings per molecule (the canonical form plus randomized forms, with mean NLL) reduces online LiRA AUC to $0.528 \pm 0.006$ (offline LiRA AUC $0.560 \pm 0.007$, LOSS AUC $0.511 \pm 0.004$), indicating that under mean aggregation, alternative string forms remove most of the signal (individual non-canonical forms were not scored separately). Training with randomized-SMILES augmentation similarly suppresses canonical attack AUC to $0.528 \pm 0.004$. In our preliminary DP-SGD arm ($\epsilon \in \{8.0, 3.0\}$, $\delta = 10^{-5}$), attack AUC drops to $0.500 - 0.528$, but models suffer severe utility collapse: we did not evaluate the generative utility of the DP models; an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense. Finally, an empirical audit of 15,000 generated samples across baseline models observed 12 exact member replications versus 7 holdout replications; a one-sided binomial test ($p = 0.1796 > 0.05$) and Fisher exact test ($p = 0.359 > 0.05$) indicate that this difference is not statistically significant at the current sample size. We conclude with a discussion of open limitations and recommendations for privacy evaluation in chemical language models.
+In our setting, mean-aggregated scoring over up to 10 string forms (canonical included) removes most of the signal: querying the epoch-60 canonical baseline with up to 10 distinct SMILES strings per molecule (the canonical form plus randomized forms, with mean NLL) reduces online LiRA AUC to $0.528 \pm 0.006$ (offline LiRA AUC $0.560 \pm 0.007$, LOSS AUC $0.511 \pm 0.004$). We did not score individual non-canonical strings, so we cannot say whether single randomized forms leak. Training with randomized-SMILES augmentation similarly suppresses canonical attack AUC to $0.528 \pm 0.004$. In our preliminary DP-SGD arm ($\epsilon \in \{8.0, 3.0\}$, $\delta = 10^{-5}$), attack AUC drops to $0.500 - 0.528$, with possible loss of generative utility (not evaluated): we did not evaluate the generative utility of the DP models; an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense. Finally, an empirical audit of 15,000 generated samples across baseline models observed 12 exact member replications versus 7 holdout replications; a one-sided binomial test ($p = 0.1796 > 0.05$) and Fisher exact test ($p = 0.359 > 0.05$) indicate that this difference is not statistically significant at the current sample size. We conclude with a discussion of open limitations and recommendations for privacy evaluation in chemical language models.
 
 ---
 
@@ -70,16 +70,17 @@ These represent strong assumptions favoring the attacker. In restricted black-bo
 
 ## 3. Experimental Setup and Architecture
 
-### 3.1 Model Architecture
+### 3.1 Model Architecture and Training Setup
 All evaluations utilize a small causal GPT architecture:
 - Number of transformer layers: 2
 - Hidden embedding dimension ($d_{\text{model}}$): 128
 - Attention heads: 4
+- Dropout: 0.1
 - Maximum context window: 128 tokens
-- Parameter count: $\sim 410,000$ parameters
-- Vocabulary size: 27 tokens
+- Parameter count: 419,584 parameters (exact count from `len(tokenizer.itos)`)
+- Vocabulary size: 25 tokens
 
-Models are trained using Adam ($\text{lr} = 5 \times 10^{-4}$), batch size 32, with a fixed sequence length of 128 tokens.
+Models are trained using AdamW ($\text{lr} = 10^{-3}$, $\text{weight\_decay} = 0.01$), batch size 32, with gradient clipping norm 1.0 and a fixed sequence length of 128 tokens. Differentially private models (`DPCausalGPT`) evaluate the identical architecture (419,584 parameters) and utilize the same optimizer configuration (AdamW, $\text{lr} = 10^{-3}$, $\text{weight\_decay} = 0.01$, batch size 32, dropout $0.1$, $\text{max\_grad\_norm} = 1.0$) wrapped via Opacus.
 
 ### 3.2 Dataset and Shadow Model Partitioning
 Data are sourced from the MOSES benchmark (clean, drug-like molecules).
@@ -127,20 +128,20 @@ Table 1 and Figure 1 present membership inference performance across 5, 20, and 
 - At epoch 5, membership leakage is modest (strongest attack: offline LiRA AUC $0.630 \pm 0.008$).
 - By epoch 60, extensive exposure occurs: online LiRA achieves ROC-AUC $0.898 \pm 0.003$, with TPR@1% FPR reaching $27.82 \pm 1.47\%$. At a stricter threshold of 0.1% FPR, online LiRA still identifies $8.15 \pm 1.58\%$ of member molecules.
 - Standard loss thresholding substantially underestimates vulnerability (AUC 0.689 vs. 0.898 for online LiRA at epoch 60).
-- **Statistical Uncertainty:** To supplement the cross-target standard deviations, we computed 95% bootstrap confidence intervals over the 20,000 evaluation molecules for epoch-60 online LiRA on three targets:
+- **Statistical Uncertainty:** To supplement the cross-target standard deviations, we computed 95% bootstrap confidence intervals over the 20,000 evaluation molecules for epoch-60 online LiRA on three target models (not independent: they share shadow models and overlapping training pools):
   - Target 0: AUC $0.9004$, 95% CI $[0.8962, 0.9045]$; TPR@1% $0.2684$, 95% CI $[0.2492, 0.3000]$.
   - Target 1: AUC $0.8916$, 95% CI $[0.8870, 0.8961]$; TPR@1% $0.2510$, 95% CI $[0.2178, 0.2756]$.
   - Target 2: AUC $0.8972$, 95% CI $[0.8930, 0.9012]$; TPR@1% $0.2838$, 95% CI $[0.2613, 0.3136]$.
 
 ### 4.2 String-Form Sensitivity: Randomized-SMILES Scoring
-A key finding in our audit is that memorization in small canonical-trained models is strongly syntax-specific. In `colab_pipeline.py`, each molecule was scored at epoch 60 using up to 10 distinct SMILES strings per molecule (the canonical form plus randomized forms generated via RDKit `Chem.MolToSmiles(mol, doRandom=True, canonical=False)`), with the average NLL recorded as `nll_variants_mean`. Under mean aggregation, individual non-canonical forms were not scored separately; in our setting, mean-aggregated scoring over alternative string forms removes most of the signal.
+In our setting, mean-aggregated scoring over up to 10 string forms (canonical included) removes most of the signal. In `colab_pipeline.py`, each molecule was scored at epoch 60 using up to 10 distinct SMILES strings per molecule (the canonical form plus randomized forms generated via RDKit `Chem.MolToSmiles(mol, doRandom=True, canonical=False)`), with the average NLL recorded as `nll_variants_mean`.
 
 As reported in Table 1 (bottom section):
 - Scoring canonical models with randomized variants drops LOSS AUC from $0.689$ to $0.511 \pm 0.004$.
 - Offline LiRA AUC drops from $0.880$ to $0.560 \pm 0.007$.
 - Online LiRA AUC drops from $0.898$ to $0.528 \pm 0.006$.
 
-This indicates that the target model primarily memorized the canonical string sequence rather than the invariant molecular graph. An adversary restricted to non-canonical queries loses almost all advantage.
+We did not score individual non-canonical strings, so we cannot say whether single randomized forms leak.
 
 ### 4.3 Private Dataset Scaling (Experiment E3)
 We examine vulnerability across dataset sizes $N \in \{1\text{k}, 2.5\text{k}, 5\text{k}, 10\text{k}\}$ trained for 60 epochs, with 8 shadow models per size ($2N$ candidate universe). Results are presented in Table 2 and Figure 2, separating LOSS and LiRA attacks.
@@ -167,9 +168,9 @@ We evaluated a transfer learning setting where a model was pretrained on 10,000 
 | Offline LiRA | 0.801 ± 0.003 | 4.36 ± 0.51 | 0.43 ± 0.26 |
 | Online LiRA | 0.751 ± 0.004 | 2.00 ± 0.22 | 0.22 ± 0.05 |
 
-*Table 4: Pretrain $\to$ fine-tune scenario (8 target models, `nll_sum`). Note: this experiment lacks an isolated from-scratch control at the same size and epoch count.*
+*Table 4: Pretrain $\to$ fine-tune scenario (8 target models (not independent: they share shadow models and overlapping training pools), `nll_sum`). Note: this experiment lacks an isolated from-scratch control at the same size and epoch count.*
 
-Offline LiRA achieves an AUC of $0.801 \pm 0.003$ and TPR@1% of $4.36 \pm 0.51\%$. While lower than baseline epoch 60 ($0.880$ / $27.15\%$), this confirms that fine-tuning on private data remains susceptible to membership inference.
+Offline LiRA achieves an AUC of $0.801 \pm 0.003$ and TPR@1% of $4.36 \pm 0.51\%$. While lower than baseline epoch 60 ($0.880 \pm 0.004$ / $27.15 \pm 1.63\%$), offline LiRA AUC is higher than the baseline trained from scratch for 20 epochs ($0.763 \pm 0.007$ / $9.58 \pm 0.84\%$, though TPR@1% is lower), indicating that fine-tuning on private data remains susceptible to membership inference. However, there is no matched from-scratch control trained on the identical 10,000 private compounds for 20 epochs without pretraining, so the isolated effect of pretraining cannot be disentangled.
 
 ### 4.5 Defense Benchmark at Epoch 60
 Table 3 and Figure 3 benchmark two defensive approaches at epoch 60:
@@ -181,14 +182,14 @@ Table 3 and Figure 3 benchmark two defensive approaches at epoch 60:
 | Baseline (Unmitigated) | 32 shadows | 0.689 ± 0.005 | 2.96 ± 0.24 | 0.880 ± 0.004 | 27.15 ± 1.63 | 0.898 ± 0.003 | 27.82 ± 1.47 | **online LiRA**: 0.898 (TPR 27.82%) |
 | Randomized-SMILES Training (Canonical Scoring) | 32 shadows | 0.506 ± 0.004 | 1.08 ± 0.16 | 0.528 ± 0.004 | 1.38 ± 0.21 | 0.508 ± 0.004 | 1.09 ± 0.17 | **offline LiRA**: 0.528 (TPR 1.38%) |
 | Randomized-SMILES Training (Variants Scoring, up to 10 strings, mean NLL) | 32 shadows | 0.506 ± 0.004 | 1.10 ± 0.16 | 0.552 ± 0.005 | 1.56 ± 0.17 | 0.519 ± 0.005 | 1.14 ± 0.18 | **offline LiRA**: 0.552 (TPR 1.56%) |
-| DP-SGD (ε=8.0, δ=1e-5) | 8 shadows; preliminary* | 0.505 ± 0.004 | 1.13 ± 0.15 | 0.528 ± 0.003 | 1.20 ± 0.14 | 0.501 ± 0.005 | 1.09 ± 0.16 | **offline LiRA**: 0.528 (TPR 1.20%) |
-| DP-SGD (ε=3.0, δ=1e-5) | 8 shadows; preliminary* | 0.503 ± 0.004 | 1.10 ± 0.06 | 0.520 ± 0.003 | 1.12 ± 0.06 | 0.500 ± 0.002 | 1.01 ± 0.10 | **offline LiRA**: 0.520 (TPR 1.12%) |
+| DP-SGD (ε=8.0, δ=1e-5)* | 8 shadows; preliminary* | 0.505 ± 0.004 | 1.13 ± 0.15 | 0.528 ± 0.003 | 1.20 ± 0.14 | 0.501 ± 0.005 | 1.09 ± 0.16 | **offline LiRA**: 0.528 (TPR 1.20%) |
+| DP-SGD (ε=3.0, δ=1e-5)* | 8 shadows; preliminary* | 0.503 ± 0.004 | 1.10 ± 0.06 | 0.520 ± 0.003 | 1.12 ± 0.06 | 0.500 ± 0.002 | 1.01 ± 0.10 | **offline LiRA**: 0.520 (TPR 1.12%) |
 
-*Table 3: Defense benchmark at epoch 60. Evaluated with `nll_sum` (except variants scoring). *DP rows are preliminary: privacy accounting logs and model generative utility have not been independently verified.*
+*Table 3: Defense benchmark at epoch 60. Evaluated with `nll_sum` (except variants scoring). *Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense.*
 
 **Defensive Analysis:**
-- Randomized-SMILES training strongly suppresses canonical attack performance: offline LiRA drops from $0.880$ to $0.528 \pm 0.004$, and TPR@1% drops from $27.15\%$ to $1.38\%$. When attacked via randomized variants scoring, offline LiRA AUC remains low at $0.552 \pm 0.005$.
-- In preliminary runs, DP-SGD reduces attack AUC near random guess ($0.500 - 0.528$). However, these models suffered severe utility collapse: we did not evaluate the generative utility of the DP models; an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense. No privacy-utility conclusion can be drawn without preserving generation validity.
+- Randomized-SMILES training reduces canonical attack performance: offline LiRA drops from $0.880$ to $0.528 \pm 0.004$, and TPR@1% drops from $27.15\%$ to $1.38\%$. When attacked via randomized variants scoring, offline LiRA AUC remains low at $0.552 \pm 0.005$.
+- In preliminary runs, DP-SGD reduces attack AUC near random guess ($0.500 - 0.528$). However, these models exhibited possible loss of generative utility (not evaluated): we did not evaluate the generative utility of the DP models; an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense. No privacy-utility conclusion can be drawn without preserving generation validity.
 
 ### 4.6 Generative Memorization Audit (Experiment E6)
 To audit whether models generate verbatim copies of training leads, we sampled 5,000 molecules per model for three baseline models (Models 0, 15, 31; total 15,000 samples) on Apple Silicon (MPS). Generated molecules were evaluated for chemical validity, uniqueness, and exact string matches against 10,000 training members versus 10,000 holdout molecules (Table 5).
@@ -200,7 +201,7 @@ To audit whether models generate verbatim copies of training leads, we sampled 5
 | Model 31 | 59.10% | 99.90% | 99.73% | 8 | 4 | 0.1938 | No ($p > 0.05$) |
 | **Pooled (15,000 samples)** | **60.53%** | **99.91%** | **99.87%** | **12** | **7** | **0.1796** | **No ($p > 0.05$)** |
 
-*Table 5: Generative memorization audit (E6). Counts represent verbatim replications ($\text{Fraction} \times 5,000$). One-sided binomial tests ($p=0.5$) test whether member replications exceed non-member replications.*
+*Table 5: Generative memorization audit (E6). Counts represent verbatim replications ($\text{Fraction} \times 5,000$). One-sided binomial tests ($p=0.5$) and Fisher exact tests do not show a statistically significant replication difference at $\alpha=0.05$.*
 
 **Findings:**
 - Across 15,000 samples, models produced 12 exact member copies and 7 holdout copies.
@@ -232,14 +233,15 @@ This preliminary study has several explicit limitations:
 3. **Shadow Ensemble Scale Asymmetry:** While baseline and E5a arms used 32 shadow models, compute limits restricted E3, DP-SGD, and pretrain-FT to 8 shadow models, leading to higher estimation variance.
 4. **Reported Uncertainty:** Metrics report standard deviation across leave-one-out shadow target models, rather than per-molecule bootstrap confidence intervals. Our computed 95% bootstrap CIs across molecules for epoch 60 online LiRA on three targets span roughly $\pm 0.005$ in AUC and $\pm 0.03$ in TPR@1% (raw per-molecule scoring parquets are omitted from the release repository due to storage constraints and are available on request).
 5. **Generative Sample Size and Hardware:** Experiment E6 sampled 5,000 molecules per model (15,000 total) and ran on Apple Silicon (MPS), whereas shadow training was conducted on CUDA Tesla T4. Statistical tests do not show a significant difference at this sample size ($p > 0.05$).
-6. **DP-SGD Utility Collapse:** The DP-SGD arm represents a preliminary run with utility collapse: chemical validity evaluations were not recorded in the released summary, and we did not evaluate the generative utility of the DP models. An attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense. Furthermore, privacy accounting logs and accountant state deserialization were not independently verified.
+6. **DP-SGD Generative Utility:** The DP-SGD arm represents a preliminary run with possible loss of generative utility (not evaluated): chemical validity evaluations were not recorded in the released summary, and we did not evaluate the generative utility of the DP models. An attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense. Furthermore, privacy accounting logs and accountant state deserialization were not independently verified.
 7. **Lack of From-Scratch Control:** The pretrain $\to$ fine-tune experiment lacks an exact from-scratch baseline trained for 20 epochs on 10,000 molecules, preventing full disentanglement of pretraining effects from training duration.
+8. **Randomized-SMILES Utility Evaluation:** Validation NLL and generative chemical validity of randomized-SMILES-trained models were not evaluated.
 
 ---
 
 ## 7. Conclusion
  
-This preliminary study audited membership leakage in small SMILES language models. We observed that under canonical queries and likelihood access, models overfit over 60 epochs, enabling calibrated LiRA attacks to reach an AUC of 0.898. In our setting, scoring with mean NLL over up to 10 string forms (canonical included) removes most of the signal; training with randomized SMILES also reduces attack AUC to $0.51 - 0.56$. While DP-SGD mathematically bounds gradient leakage, we did not evaluate the generative utility of the DP models; an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense. Future work must investigate scaling laws on larger architectures, higher-power generative sampling, and privacy-preserving training that maintains chemical validity.
+This preliminary study audited membership leakage in small SMILES language models. We observed that under canonical queries and likelihood access, models overfit over 60 epochs, enabling calibrated LiRA attacks to reach an AUC of 0.898. In our setting, scoring with mean NLL over up to 10 string forms (canonical included) removes most of the signal; training with randomized SMILES also reduces attack AUC to $0.51 - 0.56$. While DP-SGD mathematically bounds gradient leakage, preliminary implementations exhibited possible loss of generative utility (not evaluated); an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense. Future work must investigate scaling laws on larger architectures, higher-power generative sampling, and privacy-preserving training that maintains chemical validity.
 
 ---
 

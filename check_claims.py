@@ -120,6 +120,7 @@ whitelist = {
     # Hyperparameters & data sizes
     '0.4', '0.4M', '2.5', '2.5k', '1k', '5k', '10k', '20k', '35k', '100k',
     '1.0', '1e-5', '8.0', '3.0', '5', '20', '60', '32', '8', '27', '5e-4',
+    '0.01', '0.1',
     # Percentages
     '1%', '0.1%', '5%', '95%', '60%',
     # Significance levels and fixed bounds

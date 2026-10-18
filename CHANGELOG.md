@@ -4,6 +4,35 @@ All modifications to the repository, manuscript, scripts, and tables are logged 
 
 ---
 
+### [2026-10-18] - Pre-Release Review Refinements & Layout Fixes
+
+#### 1. Generative Utility Wording Alignment
+- **File**: `paper/main.tex`, `paper/MANUSCRIPT.md`, `README.md`, `TODO_for_v2.md`, `paper/make_tables.py`, `paper/tables/table3_defenses.{tex,md}`
+- **Old -> New**: Replaced "severe utility collapse" / "utility collapse" / "suffered ... collapse" with "possible loss of generative utility (not evaluated)". Replaced "strongly suppresses" with "reduces".
+- **Reason**: More precise framing acknowledging that generative validity was not evaluated in the released summary rather than asserting measured collapse without recorded logs.
+
+#### 2. String-Form Leakage Scope Precision (Sec 4.2 & Abstract)
+- **File**: `paper/main.tex`, `paper/MANUSCRIPT.md`
+- **Old -> New**: Removed "strongly syntax-specific", "primarily memorized the canonical string rather than the invariant molecular graph", "loses almost all advantage", and "Crucially, we find". Stated explicitly: "In our setting, mean-aggregated scoring over up to 10 string forms (canonical included) removes most of the signal. We did not score individual non-canonical strings, so we cannot say whether single randomized forms leak."
+- **Reason**: Accurately bounds the empirical claim to the actual mean aggregation evaluated.
+
+#### 3. Exact Model Architecture and Optimizer Setup (Sec 3.1)
+- **File**: `paper/main.tex`, `paper/MANUSCRIPT.md`
+- **Old -> New**: Documented exact parameter count (419,584) and vocabulary size (25 tokens) from `len(tokenizer.itos)`. Updated training optimizer to AdamW ($\text{lr} = 10^{-3}$, $\text{weight\_decay} = 0.01$, batch size 32, dropout 0.1, grad clip 1.0) and confirmed DP training wraps the identical optimizer setup via Opacus.
+- **Reason**: Strict alignment with actual implementation in `colab_pipeline.py` and `src/train.py`.
+
+#### 4. Table Resizing and Float Placement
+- **File**: `paper/make_tables.py`, `paper/tables/*.tex`, `paper/main.tex`
+- **Old -> New**: Wrapped two-column tables (Tables 1, 2, 3, 5) with `\resizebox{\textwidth}{!}{...}` and single-column Table 4 with `\resizebox{\columnwidth}{!}{...}`. Moved `\input{tables/table3_defenses.tex}` before Figure 3 to prevent float overlap.
+- **Reason**: Fix page-edge clipping and float collision in IEEEtran layout.
+
+#### 5. Target Model Non-Independence and Baseline Comparison
+- **File**: `paper/main.tex`, `paper/MANUSCRIPT.md`, `paper/make_tables.py`, `paper/tables/table4_pretrain_ft.tex`, `paper/tables/table5_e6_generation.tex`
+- **Old -> New**: Clarified that evaluated targets share shadow models and overlapping training pools. In Sec 4.4, compared pretrain-FT offline LiRA ($0.801 \pm 0.003$ / $4.36 \pm 0.51\%$) to baseline epoch 20 ($0.763 \pm 0.007$ / $9.58 \pm 0.84\%$) and stated the lack of a matched from-scratch control. Updated Table 5 caption to state tests "do not show" a significant difference. Added Limitation #8 noting validation NLL and validity of randomized-SMILES models were not evaluated.
+- **Reason**: Ensure rigorous scientific framing and caveats.
+
+---
+
 ### [2026-10-18] - Pre-Release Cleanup & Reviewer Audit Verification (v1.0.0)
 
 #### 1. Randomized SMILES Variants Terminology (V1 / F1)

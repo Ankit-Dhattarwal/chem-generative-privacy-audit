@@ -3,6 +3,7 @@
 \caption{Membership leakage scaling as private dataset size varies ($N \in \{1k, 2.5k, 5k, 10k\}$). Each size uses 8 shadow models ($2N$ candidate universe). LiRA estimates exhibit high variance at small $N$ due to limited shadow samples per molecule. Evaluated using \texttt{nll\_sum}. We present empirical measurements without assuming a parametric power law.}
 \label{tab:scaling}
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccccc}
 \toprule
 & \multicolumn{2}{c}{\textbf{Loss Thresholding (LOSS)}} & \multicolumn{2}{c}{\textbf{Offline LiRA}} & \multicolumn{2}{c}{\textbf{Online LiRA}} \\
@@ -14,5 +15,6 @@
 5,000 & $0.820 \pm 0.010$ & $7.99 \pm 1.55$ & $0.898 \pm 0.008$ & $8.19 \pm 1.05$ & $0.882 \pm 0.006$ & $3.23 \pm 0.60$ \\
 10,000 & $0.689 \pm 0.003$ & $2.84 \pm 0.09$ & $0.827 \pm 0.006$ & $4.81 \pm 0.63$ & $0.785 \pm 0.003$ & $2.07 \pm 0.28$ \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table*}

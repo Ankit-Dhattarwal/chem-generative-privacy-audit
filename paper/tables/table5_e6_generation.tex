@@ -1,8 +1,9 @@
 \begin{table*}[t]
 \centering
-\caption{Generative memorization audit (Experiment E6; 5,000 samples per model evaluated against 10,000 training members and 10,000 non-members). Replication counts denote verbatim matches: $\text{Count} = \text{Fraction} \times 5,000$. One-sided binomial tests ($p=0.5$) evaluate whether member replications exceed non-member replications. All $p$-values exceed $0.05$, confirming that the observed replication differences are not statistically significant at the current sample size.}
+\caption{Generative memorization audit (Experiment E6; 5,000 samples per model evaluated against 10,000 training members and 10,000 non-members). Replication counts denote verbatim matches: $\text{Count} = \text{Fraction} \times 5,000$. One-sided binomial tests ($p=0.5$) evaluate whether member replications exceed non-member replications. All $p$-values exceed $0.05$, and tests do not show a statistically significant replication difference at the current sample size.}
 \label{tab:e6_generation}
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lccccccc}
 \toprule
 \textbf{Model ID} & \textbf{Validity (\%)} & \textbf{Uniqueness (\%)} & \textbf{Novelty (\%)} & \textbf{Member Copies} & \textbf{Out Copies} & \textbf{Binomial $p$-value} & \textbf{Statistically Significant?} \\
@@ -13,5 +14,6 @@ Model 31 & $59.10\%$ & $99.90\%$ & $99.73\%$ & 8 & 4 & $0.1938$ & No ($p > 0.05$
 \midrule
 \textbf{Pooled (15k)} & \textbf{$60.53\%$} & \textbf{$99.91\%$} & \textbf{$99.87\%$} & \textbf{12} & \textbf{7} & \textbf{$0.1796$} & \textbf{No ($p > 0.05$)} \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table*}

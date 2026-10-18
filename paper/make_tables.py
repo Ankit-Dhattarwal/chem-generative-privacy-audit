@@ -152,6 +152,7 @@ def make_table1():
         "\\caption{Baseline membership inference vulnerability across training epochs on canonical SMILES. Evaluated over 32 shadow models on 20,000 candidate targets (10,000 members, 10,000 non-members). Values report mean $\\pm$ standard deviation across 32 leave-one-out target evaluations (not a confidence interval). All metrics use negative log-likelihood sum (\\texttt{nll\\_sum}), with randomized-SMILES variants scoring (up to 10 distinct SMILES strings per molecule, the canonical form plus randomized forms, mean NLL) reported at epoch 60.}",
         "\\label{tab:baseline}",
         "\\small",
+        "\\resizebox{\\textwidth}{!}{%",
         "\\begin{tabular}{lllccc}",
         "\\toprule",
         "\\textbf{Epochs} & \\textbf{Scoring Representation} & \\textbf{Attack Method} & \\textbf{ROC-AUC} & \\textbf{TPR @ 1\\% FPR (\\%)} & \\textbf{TPR @ 0.1\\% FPR (\\%)} \\\\",
@@ -165,7 +166,8 @@ def make_table1():
         tex.append(f"{r['epoch']} & {r['scoring_tex']} & {r['attack_tex']} & {r['auc_tex']} & {r['tpr1_tex']} & {r['tpr01_tex']} \\\\")
     tex.extend([
         "\\bottomrule",
-        "\\end{tabular}",
+        "\\end{tabular}%",
+        "}",
         "\\end{table*}"
     ])
     (TABLES_DIR / "table1_baseline.tex").write_text("\n".join(tex) + "\n")
@@ -198,6 +200,7 @@ def make_table2():
         "\\caption{Membership leakage scaling as private dataset size varies ($N \\in \\{1k, 2.5k, 5k, 10k\\}$). Each size uses 8 shadow models ($2N$ candidate universe). LiRA estimates exhibit high variance at small $N$ due to limited shadow samples per molecule. Evaluated using \\texttt{nll\\_sum}. We present empirical measurements without assuming a parametric power law.}",
         "\\label{tab:scaling}",
         "\\small",
+        "\\resizebox{\\textwidth}{!}{%",
         "\\begin{tabular}{lcccccc}",
         "\\toprule",
         "& \\multicolumn{2}{c}{\\textbf{Loss Thresholding (LOSS)}} & \\multicolumn{2}{c}{\\textbf{Offline LiRA}} & \\multicolumn{2}{c}{\\textbf{Online LiRA}} \\\\",
@@ -237,7 +240,8 @@ def make_table2():
 
     tex.extend([
         "\\bottomrule",
-        "\\end{tabular}",
+        "\\end{tabular}%",
+        "}",
         "\\end{table*}"
     ])
     (TABLES_DIR / "table2_scaling.tex").write_text("\n".join(tex) + "\n")
@@ -270,9 +274,10 @@ def make_table3():
     tex = [
         "\\begin{table*}[t]",
         "\\centering",
-        "\\caption{Comparison of privacy defenses at epoch 60 under standard and calibrated attacks. All values use \\texttt{nll\\_sum} (except randomized variants scoring which evaluates mean NLL across up to 10 distinct SMILES strings per molecule). The strongest attack per row (by highest AUC) is bolded. *Note on DP rows: preliminary run with utility collapse; we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).}",
+        "\\caption{Comparison of privacy defenses at epoch 60 under standard and calibrated attacks. All values use \\texttt{nll\\_sum} (except randomized variants scoring which evaluates mean NLL across up to 10 distinct SMILES strings per molecule). The strongest attack per row (by highest AUC) is bolded. *Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).}",
         "\\label{tab:defenses}",
         "\\small",
+        "\\resizebox{\\textwidth}{!}{%",
         "\\begin{tabular}{lcccccccc}",
         "\\toprule",
         "& & \\multicolumn{2}{c}{\\textbf{Loss Thresholding}} & \\multicolumn{2}{c}{\\textbf{Offline LiRA}} & \\multicolumn{2}{c}{\\textbf{Online LiRA}} & \\textbf{Strongest Attack} \\\\",
@@ -284,7 +289,7 @@ def make_table3():
     md = [
         "# Table 3: Defense Benchmark at Epoch 60",
         "",
-        "*Note on DP rows: preliminary run with utility collapse; we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).*",
+        "*Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).*",
         "",
         "| Defense Configuration | Shadow Setup | LOSS AUC | LOSS TPR@1% (%) | Offline LiRA AUC | Offline LiRA TPR@1% (%) | Online LiRA AUC | Online LiRA TPR@1% (%) | Strongest Attack (Method: AUC, TPR@1%) |",
         "|---|---|---|---|---|---|---|---|---|"
@@ -322,7 +327,8 @@ def make_table3():
 
     tex.extend([
         "\\bottomrule",
-        "\\end{tabular}",
+        "\\end{tabular}%",
+        "}",
         "\\end{table*}"
     ])
     (TABLES_DIR / "table3_defenses.tex").write_text("\n".join(tex) + "\n")
@@ -350,9 +356,10 @@ def make_table4():
     tex = [
         "\\begin{table}[t]",
         "\\centering",
-        "\\caption{Membership leakage in transfer learning (public pretraining on 10,000 molecules, fine-tuning on 10,000 private molecules). Metrics report mean $\\pm$ std across 8 independent target models. Note: there is no from-scratch control trained at the exact same size/epochs in this experiment.}",
+        "\\caption{Membership leakage in transfer learning (public pretraining on 10,000 molecules, fine-tuning on 10,000 private molecules). Metrics report mean $\\pm$ std across 8 target models (not independent: they share shadow models and overlapping training pools). Note: there is no from-scratch control trained at the exact same size/epochs in this experiment.}",
         "\\label{tab:pretrain_ft}",
         "\\small",
+        "\\resizebox{\\columnwidth}{!}{%",
         "\\begin{tabular}{lccc}",
         "\\toprule",
         "\\textbf{Attack Method} & \\textbf{ROC-AUC} & \\textbf{TPR @ 1\\% FPR (\\%)} & \\textbf{TPR @ 0.1\\% FPR (\\%)} \\\\",
@@ -385,7 +392,8 @@ def make_table4():
 
     tex.extend([
         "\\bottomrule",
-        "\\end{tabular}",
+        "\\end{tabular}%",
+        "}",
         "\\end{table}"
     ])
     (TABLES_DIR / "table4_pretrain_ft.tex").write_text("\n".join(tex) + "\n")
@@ -402,9 +410,10 @@ def make_table5():
     tex = [
         "\\begin{table*}[t]",
         "\\centering",
-        "\\caption{Generative memorization audit (Experiment E6; 5,000 samples per model evaluated against 10,000 training members and 10,000 non-members). Replication counts denote verbatim matches: $\\text{Count} = \\text{Fraction} \\times 5,000$. One-sided binomial tests ($p=0.5$) evaluate whether member replications exceed non-member replications. All $p$-values exceed $0.05$, confirming that the observed replication differences are not statistically significant at the current sample size.}",
+        "\\caption{Generative memorization audit (Experiment E6; 5,000 samples per model evaluated against 10,000 training members and 10,000 non-members). Replication counts denote verbatim matches: $\\text{Count} = \\text{Fraction} \\times 5,000$. One-sided binomial tests ($p=0.5$) evaluate whether member replications exceed non-member replications. All $p$-values exceed $0.05$, and tests do not show a statistically significant replication difference at the current sample size.}",
         "\\label{tab:e6_generation}",
         "\\small",
+        "\\resizebox{\\textwidth}{!}{%",
         "\\begin{tabular}{lccccccc}",
         "\\toprule",
         "\\textbf{Model ID} & \\textbf{Validity (\\%)} & \\textbf{Uniqueness (\\%)} & \\textbf{Novelty (\\%)} & \\textbf{Member Copies} & \\textbf{Out Copies} & \\textbf{Binomial $p$-value} & \\textbf{Statistically Significant?} \\\\",
@@ -471,7 +480,8 @@ def make_table5():
 
     tex.extend([
         "\\bottomrule",
-        "\\end{tabular}",
+        "\\end{tabular}%",
+        "}",
         "\\end{table*}"
     ])
     (TABLES_DIR / "table5_e6_generation.tex").write_text("\n".join(tex) + "\n")

@@ -1,8 +1,9 @@
 \begin{table*}[t]
 \centering
-\caption{Comparison of privacy defenses at epoch 60 under standard and calibrated attacks. All values use \texttt{nll\_sum} (except randomized variants scoring which evaluates mean NLL across up to 10 distinct SMILES strings per molecule). The strongest attack per row (by highest AUC) is bolded. *Note on DP rows: preliminary run with utility collapse; we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).}
+\caption{Comparison of privacy defenses at epoch 60 under standard and calibrated attacks. All values use \texttt{nll\_sum} (except randomized variants scoring which evaluates mean NLL across up to 10 distinct SMILES strings per molecule). The strongest attack per row (by highest AUC) is bolded. *Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).}
 \label{tab:defenses}
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccccccc}
 \toprule
 & & \multicolumn{2}{c}{\textbf{Loss Thresholding}} & \multicolumn{2}{c}{\textbf{Offline LiRA}} & \multicolumn{2}{c}{\textbf{Online LiRA}} & \textbf{Strongest Attack} \\
@@ -15,5 +16,6 @@ Randomized-SMILES Training (Variants Scoring, up to 10 strings, mean NLL) & 32 s
 DP-SGD ($\epsilon=8.0, \delta=10^{-5}$)* & 8 shadows; prelim. & $0.505 \pm 0.004$ & $1.13 \pm 0.15$ & $0.528 \pm 0.003$ & $1.20 \pm 0.14$ & $0.501 \pm 0.005$ & $1.09 \pm 0.16$ & \textbf{offline\_LiRA: 0.528 / 1.20\%} \\
 DP-SGD ($\epsilon=3.0, \delta=10^{-5}$)* & 8 shadows; prelim. & $0.503 \pm 0.004$ & $1.10 \pm 0.06$ & $0.520 \pm 0.003$ & $1.12 \pm 0.06$ & $0.500 \pm 0.002$ & $1.01 \pm 0.10$ & \textbf{offline\_LiRA: 0.520 / 1.12\%} \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table*}

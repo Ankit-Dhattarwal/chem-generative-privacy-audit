@@ -1,6 +1,6 @@
 # Table 3: Defense Benchmark at Epoch 60
 
-*Note on DP rows: preliminary run with utility collapse; we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).*
+*Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).*
 
 | Defense Configuration | Shadow Setup | LOSS AUC | LOSS TPR@1% (%) | Offline LiRA AUC | Offline LiRA TPR@1% (%) | Online LiRA AUC | Online LiRA TPR@1% (%) | Strongest Attack (Method: AUC, TPR@1%) |
 |---|---|---|---|---|---|---|---|---|
