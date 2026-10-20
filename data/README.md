@@ -33,7 +33,8 @@ SOFTWARE.
 ```
 
 ## Dataset Files in this Directory
-- `moses.csv`: Filtered upstream MOSES dataset table.
 - `pool.csv`: 20,000 clean drug-like molecules sampled uniformly at random without replacement (`seed=0`), filtered to token length $\le 100$.
 - `val.csv`: 500 disjoint validation molecules.
 - `pool_metadata.csv`: Precomputed Murcko scaffolds, scaffold frequencies, and up to 10 randomized SMILES representations per molecule.
+- `download_moses.py`: Standalone script to download the upstream MOSES dataset (`dataset_v1.csv`).
+- `moses.csv`: (Optional / Excluded from release zip to save bandwidth) Full 81 MB upstream MOSES dataset table. Running `python data/download_moses.py` downloads this file if rebuilding the candidate pool from scratch. The provided `pool.csv`, `val.csv`, and `pool_metadata.csv` files are sufficient to run all experiments, evaluations, and table/figure generation directly.

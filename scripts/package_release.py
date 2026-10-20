@@ -18,8 +18,18 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 RC_DIR = REPO_ROOT / "release_candidate"
 ZIP_PATH = RC_DIR / "ankit_paper_release.zip"
 
-EXCLUDE_PATTERNS = [
+EXCLUDE_EXACT_NAMES = {
+    "WORKLOG.md",
+    "NEEDS_HUMAN.md",
+    "FINAL_REPORT.md",
+    "REVIEW_ROUND_1.md",
+    "HUMAN_READ_CHECKLIST.md",
+    "CODE_PAPER_MATRIX.md",
     "RESEARCH_AUDIT_SUMMARY_FOR_CLAUDE.md",
+    "moses.csv",
+}
+
+EXCLUDE_PATTERNS = [
     "ankit_paper_final.zip",
     "ankit_paper_release.zip",
     ".venv",
@@ -29,18 +39,27 @@ EXCLUDE_PATTERNS = [
     "_archive",
     "backup",
     "release_candidate",
+    "paper_revised",
+    "VERIFICATION_REPORT",
+    "REVIEW_ROUND_",
 ]
 
 EXCLUDE_EXTENSIONS = {
     ".pt",
     ".parquet",
     ".pyc",
-    ".pyo"
+    ".pyo",
+    ".partial",
+    ".tmp",
 }
 
 def should_exclude(rel_path_str: str) -> bool:
-    parts = Path(rel_path_str).parts
-    for p in parts:
+    path = Path(rel_path_str)
+    if path.name in EXCLUDE_EXACT_NAMES:
+        return True
+    for p in path.parts:
+        if p in EXCLUDE_EXACT_NAMES:
+            return True
         for excl in EXCLUDE_PATTERNS:
             if excl in p:
                 return True
@@ -48,8 +67,6 @@ def should_exclude(rel_path_str: str) -> bool:
         if excl in rel_path_str:
             return True
     if any(rel_path_str.endswith(ext) for ext in EXCLUDE_EXTENSIONS):
-        return True
-    if "VERIFICATION_REPORT" in rel_path_str:
         return True
     return False
 

@@ -31,17 +31,18 @@ pip install -r requirements.txt
 ## 2. Directory Structure and Data Locations
 
 - `data/`:
-  - `moses.csv`: Filtered subset of the MOSES molecular benchmark.
+  - `download_moses.py`: Downloader for upstream MOSES dataset (`dataset_v1.csv`).
   - `pool.csv`: Evaluation universe pool (35,000 total candidate molecules; 20,000 active evaluation pool).
   - `val.csv`: Held-out validation split (5,000 molecules).
   - `pool_metadata.csv`: Scaffold definitions, frequencies, and randomized-SMILES variants (up to 10 distinct strings per compound, canonical included).
+  - *(Note: The 81 MB upstream `moses.csv` is omitted from the release archive to save bandwidth; running `python data/download_moses.py` will retrieve it if needed, but `pool.csv` and `pool_metadata.csv` are already provided for all evaluations).*
 - `results_summary/`:
   - Primary CSV summaries serving as the canonical source of truth for all manuscript numbers.
   - See `results_summary/README.md` for column definitions.
-- `results/cuda_arm/` (or Colab run outputs):
+- `results/cuda_arm/` (Generated during pipeline execution; raw per-molecule `.parquet` files omitted from release distribution):
   - Model scoring parquets (`model_{k}_epoch{ep}.parquet`) containing per-molecule sequence loss values.
   - `split_control.csv`: Deterministic membership partition checks.
-- `runs/cuda_arm/`:
+- `runs/cuda_arm/` (Generated during pipeline execution; raw model checkpoint `.pt` files omitted from release distribution):
   - Checkpoint files (`epoch5.pt`, `epoch20.pt`, `epoch60.pt`), RNG states, and `membership_mask.npy`.
 - `paper/`:
   - `main.tex`: LaTeX source for the manuscript.

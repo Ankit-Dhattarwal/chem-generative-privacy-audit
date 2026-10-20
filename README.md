@@ -93,8 +93,11 @@ Evaluated over 32 shadow models on 20,000 candidate targets (10,000 members, 10,
 ├── README.md                      # Project overview and audited findings
 ├── REPRODUCE.md                   # Reproduction instructions and runtimes
 ├── CHANGELOG.md                   # Comprehensive audit change log
-├── TODO_for_v2.md                 # Methodological roadmap for version 2
-├── CODE_PAPER_MATRIX.md           # Implementation vs manuscript consistency matrix
+├── data/
+│   ├── download_moses.py          # Downloader for official upstream MOSES benchmark
+│   ├── pool.csv                   # Candidate evaluation pool (20,000 compounds)
+│   ├── val.csv                    # Held-out validation split
+│   └── pool_metadata.csv          # Scaffolds and randomized SMILES variants
 ├── claims.yaml                    # Formal claim registry mapping claims to CSVs
 ├── LICENSE                        # MIT License (Ankit Dhattarwal)
 ├── requirements.txt               # Pinned dependencies

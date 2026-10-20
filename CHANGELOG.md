@@ -67,7 +67,7 @@ All modifications to the repository, manuscript, scripts, and tables are logged 
 
 #### 7. Parquet Directory CLI Parameter (V8 / F7)
 - **File**: `scripts/make_bootstrap_ci.py`
-- **Old -> New**: Replaced hardcoded absolute path `/Users/ankit/...` with `--parquet-dir` CLI argument defaulting to relative repository path. Added raw scoring parquet omission note to Limitations #4.
+- **Old -> New**: Replaced hardcoded absolute path `<absolute_local_path>/...` with `--parquet-dir` CLI argument defaulting to relative repository path. Added raw scoring parquet omission note to Limitations #4.
 - **Reason**: Ensure script executes on any environment and document parquet omission.
 
 #### 8. Table & Manuscript Synchronization (V11 / F10)
