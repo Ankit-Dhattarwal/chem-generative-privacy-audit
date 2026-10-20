@@ -4,7 +4,7 @@ Publication-Quality Figure Generation for SMILES MIA Audit.
 Strictly generated from results_summary/*.csv files:
 - Fig 1: Baseline attack vulnerability vs epochs (LOSS, offline LiRA, online LiRA using nll_sum)
 - Fig 2: Dataset scaling (E3: 1k, 2.5k, 5k, 10k) with LOSS and LiRA shown separately
-- Fig 3: Defense benchmark comparison at epoch 60 showing the strongest attack per defense
+- Fig 3: Defense comparison at epoch 60 showing the strongest attack per defense
 - Fig 4: Generative audit (E6) exact member copies vs out copies and chemical quality
 """
 
@@ -154,7 +154,7 @@ plt.close(fig)
 print("Figure 2 generated (LOSS and LiRA shown separately).")
 
 # -------------------------------------------------------------
-# FIGURE 3: Defense Benchmark Comparison (Strongest Attack per Defense)
+# FIGURE 3: Defense Comparison (Strongest Attack per Defense)
 # -------------------------------------------------------------
 df_dp = pd.read_csv(RESULTS_DIR / "DP_SGD_summary.csv")
 df_e5a = pd.read_csv(RESULTS_DIR / "E5a_augmentation_summary.csv")

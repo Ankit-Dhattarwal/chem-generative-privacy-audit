@@ -264,38 +264,59 @@ def make_table3():
     dp_3 = df_dp[df_dp['epsilon_target'] == 3]
 
     configs = [
-        ("Baseline (Unmitigated)", "Baseline (Unmitigated)", b_60, "32 shadows"),
-        ("Randomized-SMILES Training (Canonical Scoring)", "Randomized-SMILES Training (Canonical Scoring)", e5a_canon, "32 shadows"),
-        ("Randomized-SMILES Training (Variants Scoring, up to 10 strings, mean NLL)", "Randomized-SMILES Training (Variants Scoring, up to 10 strings, mean NLL)", e5a_var, "32 shadows"),
-        ("DP-SGD ($\\epsilon=8.0, \\delta=10^{-5}$)*", "DP-SGD (ε=8.0, δ=1e-5)*", dp_8, "8 shadows; prelim."),
-        ("DP-SGD ($\\epsilon=3.0, \\delta=10^{-5}$)*", "DP-SGD (ε=3.0, δ=1e-5)*", dp_3, "8 shadows; prelim."),
+        ("Baseline (Unmitigated)", "Baseline (Unmitigated)", b_60, "32", "32 shadows"),
+        ("Rand-SMILES (Canonical)", "Randomized-SMILES Training (Canonical Scoring)", e5a_canon, "32", "32 shadows"),
+        ("Rand-SMILES (Variants, $\\le 10$ strings)", "Randomized-SMILES Training (Variants Scoring, up to 10 strings, mean NLL)", e5a_var, "32", "32 shadows"),
+        ("DP-SGD ($\\epsilon=8.0, \\delta=10^{-5}$)*", "DP-SGD (ε=8.0, δ=1e-5)*", dp_8, "8; prelim.", "8 shadows; prelim."),
+        ("DP-SGD ($\\epsilon=3.0, \\delta=10^{-5}$)*", "DP-SGD (ε=3.0, δ=1e-5)*", dp_3, "8; prelim.", "8 shadows; prelim."),
     ]
 
     tex = [
         "\\begin{table*}[t]",
         "\\centering",
-        "\\caption{Comparison of privacy defenses at epoch 60 under standard and calibrated attacks. All values use \\texttt{nll\\_sum} (except randomized variants scoring which evaluates mean NLL across up to 10 distinct SMILES strings per molecule). The strongest attack per row (by highest AUC) is bolded. *Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).}",
+        "\\caption{Comparison of privacy defenses at epoch 60 under standard and calibrated attacks. All values use \\texttt{nll\\_sum} (except randomized variants scoring which evaluates mean NLL across up to 10 distinct SMILES strings per molecule). The strongest attack per defense is bolded. *Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense.}",
         "\\label{tab:defenses}",
         "\\small",
-        "\\resizebox{\\textwidth}{!}{%",
-        "\\begin{tabular}{lcccccccc}",
+        "\\setlength{\\tabcolsep}{3.5pt}",
+        "\\textbf{Panel (a): Calibrated Likelihood-Ratio Attacks (LiRA)} \\\\[0.5ex]",
+        "\\begin{tabular}{lcccccc}",
         "\\toprule",
-        "& & \\multicolumn{2}{c}{\\textbf{Loss Thresholding}} & \\multicolumn{2}{c}{\\textbf{Offline LiRA}} & \\multicolumn{2}{c}{\\textbf{Online LiRA}} & \\textbf{Strongest Attack} \\\\",
-        "\\cmidrule(lr){3-4} \\cmidrule(lr){5-6} \\cmidrule(lr){7-8} \\cmidrule(lr){9-9}",
-        "\\textbf{Defense Configuration} & \\textbf{Shadows} & \\textbf{AUC} & \\textbf{TPR@1\\%} & \\textbf{AUC} & \\textbf{TPR@1\\%} & \\textbf{AUC} & \\textbf{TPR@1\\%} & \\textbf{AUC / TPR@1\\%} \\\\",
+        "& & \\multicolumn{2}{c}{\\textbf{Offline LiRA}} & \\multicolumn{2}{c}{\\textbf{Online LiRA}} & \\textbf{Strongest} \\\\",
+        "\\cmidrule(lr){3-4} \\cmidrule(lr){5-6} \\cmidrule(lr){7-7}",
+        "\\textbf{Defense Configuration} & \\textbf{Shadows} & \\textbf{AUC} & \\textbf{TPR@1\\% (\\%)} & \\textbf{AUC} & \\textbf{TPR@1\\% (\\%)} & \\textbf{Attack} \\\\",
         "\\midrule"
     ]
 
     md = [
-        "# Table 3: Defense Benchmark at Epoch 60",
+        "# Table 4: Defense Comparison at Epoch 60",
         "",
-        "*Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).*",
+        "*Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense.*",
         "",
-        "| Defense Configuration | Shadow Setup | LOSS AUC | LOSS TPR@1% (%) | Offline LiRA AUC | Offline LiRA TPR@1% (%) | Online LiRA AUC | Online LiRA TPR@1% (%) | Strongest Attack (Method: AUC, TPR@1%) |",
-        "|---|---|---|---|---|---|---|---|---|"
+        "### Panel (a): Calibrated Likelihood-Ratio Attacks (LiRA)",
+        "",
+        "| Defense Configuration | Shadow Setup | Offline LiRA AUC | Offline LiRA TPR@1% (%) | Online LiRA AUC | Online LiRA TPR@1% (%) | Strongest Attack |",
+        "|---|---|---|---|---|---|---|"
     ]
 
-    for name_tex, name_md, sub, note in configs:
+    panel_b_tex = [
+        "\\vspace{1.5ex}",
+        "",
+        "\\textbf{Panel (b): Uncalibrated Loss Thresholding Baseline} \\\\[0.5ex]",
+        "\\begin{tabular}{lccc}",
+        "\\toprule",
+        "\\textbf{Defense Configuration} & \\textbf{Shadows} & \\textbf{LOSS AUC} & \\textbf{LOSS TPR@1\\% (\\%)} \\\\",
+        "\\midrule"
+    ]
+
+    panel_b_md = [
+        "",
+        "### Panel (b): Uncalibrated Loss Thresholding Baseline",
+        "",
+        "| Defense Configuration | Shadow Setup | LOSS AUC | LOSS TPR@1% (%) |",
+        "|---|---|---|---|"
+    ]
+
+    for name_tex, name_md, sub, note_tex, note_md in configs:
         r_loss = sub[sub['method'] == 'LOSS'].iloc[0]
         r_off = sub[sub['method'] == 'offline_LiRA'].iloc[0]
         r_on = sub[sub['method'] == 'online_LiRA'].iloc[0]
@@ -306,34 +327,51 @@ def make_table3():
             ('online_LiRA', r_on['auc_mean'], r_on['auc_std'], r_on['tpr1_mean'], r_on['tpr1_std'])
         ]
         best = max(candidates, key=lambda x: x[1])
-        best_str_tex = tex_escape(best[0]) + f": {best[1]:.3f} / {best[3]*100:.2f}\\%"
-        best_str_md = f"**{best[0].replace('_', ' ')}**: {best[1]:.3f} (TPR {best[3]*100:.2f}%)"
+        best_name = "Online LiRA" if best[0] == "online_LiRA" else "Offline LiRA" if best[0] == "offline_LiRA" else "LOSS"
+        best_str_tex = f"\\textbf{{{best_name}}}"
+        best_str_md = f"**{best_name}**"
 
         tex.append(
-            f"{name_tex} & {note} & "
-            f"{format_val_tex(r_loss['auc_mean'], r_loss['auc_std'], digits=3)} & {format_val_tex(r_loss['tpr1_mean'], r_loss['tpr1_std'], pct=True, digits=2)} & "
+            f"{name_tex} & {note_tex} & "
             f"{format_val_tex(r_off['auc_mean'], r_off['auc_std'], digits=3)} & {format_val_tex(r_off['tpr1_mean'], r_off['tpr1_std'], pct=True, digits=2)} & "
             f"{format_val_tex(r_on['auc_mean'], r_on['auc_std'], digits=3)} & {format_val_tex(r_on['tpr1_mean'], r_on['tpr1_std'], pct=True, digits=2)} & "
-            f"\\textbf{{{best_str_tex}}} \\\\"
+            f"{best_str_tex} \\\\"
         )
 
         md.append(
-            f"| {name_md} | {note} | "
-            f"{format_val_md(r_loss['auc_mean'], r_loss['auc_std'], digits=3)} | {format_val_md(r_loss['tpr1_mean'], r_loss['tpr1_std'], pct=True, digits=2)} | "
+            f"| {name_md} | {note_md} | "
             f"{format_val_md(r_off['auc_mean'], r_off['auc_std'], digits=3)} | {format_val_md(r_off['tpr1_mean'], r_off['tpr1_std'], pct=True, digits=2)} | "
             f"{format_val_md(r_on['auc_mean'], r_on['auc_std'], digits=3)} | {format_val_md(r_on['tpr1_mean'], r_on['tpr1_std'], pct=True, digits=2)} | "
             f"{best_str_md} |"
         )
 
+        panel_b_tex.append(
+            f"{name_tex} & {note_tex} & "
+            f"{format_val_tex(r_loss['auc_mean'], r_loss['auc_std'], digits=3)} & {format_val_tex(r_loss['tpr1_mean'], r_loss['tpr1_std'], pct=True, digits=2)} \\\\"
+        )
+
+        panel_b_md.append(
+            f"| {name_md} | {note_md} | "
+            f"{format_val_md(r_loss['auc_mean'], r_loss['auc_std'], digits=3)} | {format_val_md(r_loss['tpr1_mean'], r_loss['tpr1_std'], pct=True, digits=2)} |"
+        )
+
     tex.extend([
         "\\bottomrule",
-        "\\end{tabular}%",
-        "}",
+        "\\end{tabular}",
+        ""
+    ])
+    tex.extend(panel_b_tex)
+    tex.extend([
+        "\\bottomrule",
+        "\\end{tabular}",
         "\\end{table*}"
     ])
+
+    md.extend(panel_b_md)
+
     (TABLES_DIR / "table3_defenses.tex").write_text("\n".join(tex) + "\n")
     (TABLES_DIR / "table3_defenses.md").write_text("\n".join(md) + "\n")
-    print("Generated Table 3 (defenses)")
+    print("Generated Table 3 (defenses - Table 4 in paper)")
 
 
 # ==============================================================================

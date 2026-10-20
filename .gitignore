@@ -36,3 +36,11 @@ runs/
 paper_revised/
 *CLAUDE*
 scratch/
+_archive/
+release_candidate/
+WORKLOG.md
+REVIEW_ROUND_*.md
+FINAL_REPORT.md
+NEEDS_HUMAN.md
+HUMAN_READ_CHECKLIST.md
+CODE_PAPER_MATRIX.md

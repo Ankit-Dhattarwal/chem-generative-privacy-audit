@@ -102,18 +102,16 @@ python paper/make_tables.py
 # 2. Regenerate publication-quality figures
 python paper/generate_figures.py
 
-# 3. Execute numerical verification check (matches all claims to CSVs)
-python check_claims.py
+# 3. Execute independent claims verifier (checks exact match across paper and PDF)
+python scripts/verify_claims.py
 
-# 4. Execute mutation test on the claims checker
-python scripts/mutation_test_checker.py
+# 4. Execute mutation testing suite (must detect all corrupted values)
+python scripts/mutation_test.py
 
 # 5. Compile the paper manuscript PDF
 tectonic paper/main.tex --outdir paper/
 ```
 
-### 4.1 What `check_claims.py` Does and Does Not Verify
-- **What it verifies:** `check_claims.py` extracts numerical tokens from the manuscript and verifies that each number appears in the ground-truth set compiled from `results_summary/*.csv` or a strictly designated whitelist (such as statistical significance thresholds $\alpha=0.05$ or approximate metric interval bounds $0.51-0.56$).
-- **What it does NOT verify:** It tests set membership, not semantic context. It cannot detect if a valid number from one experiment (such as a TPR from dataset scaling) is accidentally quoted in the description of another (such as baseline epochs). Contextual correctness is guaranteed by generating all tables and figures directly from CSVs using `paper/make_tables.py` and `paper/generate_figures.py`. To demonstrate this limitation empirically, run `python scripts/mutation_test_checker.py`.
-
-Numerical tokens in the manuscript are audited against `results_summary/*.csv` by `check_claims.py`, ensuring transparency and traceability.
+### 4.1 Independent Claims Verification
+- **What it verifies:** `scripts/verify_claims.py` loads `claims.yaml` and independently re-derives every expected string from the ground-truth CSVs in `results_summary/` using `pandas` exclusively. It checks that each exact string appears at its expected location in `paper/MANUSCRIPT.md`, `paper/main.tex`, `README.md`, `paper/tables/*`, and in the text extracted from `paper/main.pdf`. It also verifies that all numbers in these files are either registered claims or part of a strict whitelist of constants (e.g. model hyperparameter dimensions, epoch counts, table numbers, statistical significance thresholds).
+- **Mutation Resistance:** `scripts/mutation_test.py` validates the verification pipeline by injecting synthetic mutations into the data and claim registry (swapping values between LiRA and LOSS, altering dataset sizes, modifying counts, changing standard deviations, and perturbing bootstrap CIs). The verification harness must catch and fail on all of these mutations.

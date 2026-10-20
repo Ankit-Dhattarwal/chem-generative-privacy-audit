@@ -1,21 +1,36 @@
 \begin{table*}[t]
 \centering
-\caption{Comparison of privacy defenses at epoch 60 under standard and calibrated attacks. All values use \texttt{nll\_sum} (except randomized variants scoring which evaluates mean NLL across up to 10 distinct SMILES strings per molecule). The strongest attack per row (by highest AUC) is bolded. *Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); we did not evaluate the generative utility of the DP models (an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense).}
+\caption{Comparison of privacy defenses at epoch 60 under standard and calibrated attacks. All values use \texttt{nll\_sum} (except randomized variants scoring which evaluates mean NLL across up to 10 distinct SMILES strings per molecule). The strongest attack per defense is bolded. *Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense.}
 \label{tab:defenses}
 \small
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccccc}
+\setlength{\tabcolsep}{3.5pt}
+\textbf{Panel (a): Calibrated Likelihood-Ratio Attacks (LiRA)} \\[0.5ex]
+\begin{tabular}{lcccccc}
 \toprule
-& & \multicolumn{2}{c}{\textbf{Loss Thresholding}} & \multicolumn{2}{c}{\textbf{Offline LiRA}} & \multicolumn{2}{c}{\textbf{Online LiRA}} & \textbf{Strongest Attack} \\
-\cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-9}
-\textbf{Defense Configuration} & \textbf{Shadows} & \textbf{AUC} & \textbf{TPR@1\%} & \textbf{AUC} & \textbf{TPR@1\%} & \textbf{AUC} & \textbf{TPR@1\%} & \textbf{AUC / TPR@1\%} \\
+& & \multicolumn{2}{c}{\textbf{Offline LiRA}} & \multicolumn{2}{c}{\textbf{Online LiRA}} & \textbf{Strongest} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-7}
+\textbf{Defense Configuration} & \textbf{Shadows} & \textbf{AUC} & \textbf{TPR@1\% (\%)} & \textbf{AUC} & \textbf{TPR@1\% (\%)} & \textbf{Attack} \\
 \midrule
-Baseline (Unmitigated) & 32 shadows & $0.689 \pm 0.005$ & $2.96 \pm 0.24$ & $0.880 \pm 0.004$ & $27.15 \pm 1.63$ & $0.898 \pm 0.003$ & $27.82 \pm 1.47$ & \textbf{online\_LiRA: 0.898 / 27.82\%} \\
-Randomized-SMILES Training (Canonical Scoring) & 32 shadows & $0.506 \pm 0.004$ & $1.08 \pm 0.16$ & $0.528 \pm 0.004$ & $1.38 \pm 0.21$ & $0.508 \pm 0.004$ & $1.09 \pm 0.17$ & \textbf{offline\_LiRA: 0.528 / 1.38\%} \\
-Randomized-SMILES Training (Variants Scoring, up to 10 strings, mean NLL) & 32 shadows & $0.506 \pm 0.004$ & $1.10 \pm 0.16$ & $0.552 \pm 0.005$ & $1.56 \pm 0.17$ & $0.519 \pm 0.005$ & $1.14 \pm 0.18$ & \textbf{offline\_LiRA: 0.552 / 1.56\%} \\
-DP-SGD ($\epsilon=8.0, \delta=10^{-5}$)* & 8 shadows; prelim. & $0.505 \pm 0.004$ & $1.13 \pm 0.15$ & $0.528 \pm 0.003$ & $1.20 \pm 0.14$ & $0.501 \pm 0.005$ & $1.09 \pm 0.16$ & \textbf{offline\_LiRA: 0.528 / 1.20\%} \\
-DP-SGD ($\epsilon=3.0, \delta=10^{-5}$)* & 8 shadows; prelim. & $0.503 \pm 0.004$ & $1.10 \pm 0.06$ & $0.520 \pm 0.003$ & $1.12 \pm 0.06$ & $0.500 \pm 0.002$ & $1.01 \pm 0.10$ & \textbf{offline\_LiRA: 0.520 / 1.12\%} \\
+Baseline (Unmitigated) & 32 & $0.880 \pm 0.004$ & $27.15 \pm 1.63$ & $0.898 \pm 0.003$ & $27.82 \pm 1.47$ & \textbf{Online LiRA} \\
+Rand-SMILES (Canonical) & 32 & $0.528 \pm 0.004$ & $1.38 \pm 0.21$ & $0.508 \pm 0.004$ & $1.09 \pm 0.17$ & \textbf{Offline LiRA} \\
+Rand-SMILES (Variants, $\le 10$ strings) & 32 & $0.552 \pm 0.005$ & $1.56 \pm 0.17$ & $0.519 \pm 0.005$ & $1.14 \pm 0.18$ & \textbf{Offline LiRA} \\
+DP-SGD ($\epsilon=8.0, \delta=10^{-5}$)* & 8; prelim. & $0.528 \pm 0.003$ & $1.20 \pm 0.14$ & $0.501 \pm 0.005$ & $1.09 \pm 0.16$ & \textbf{Offline LiRA} \\
+DP-SGD ($\epsilon=3.0, \delta=10^{-5}$)* & 8; prelim. & $0.520 \pm 0.003$ & $1.12 \pm 0.06$ & $0.500 \pm 0.002$ & $1.01 \pm 0.10$ & \textbf{Offline LiRA} \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabular}
+
+\vspace{1.5ex}
+
+\textbf{Panel (b): Uncalibrated Loss Thresholding Baseline} \\[0.5ex]
+\begin{tabular}{lccc}
+\toprule
+\textbf{Defense Configuration} & \textbf{Shadows} & \textbf{LOSS AUC} & \textbf{LOSS TPR@1\% (\%)} \\
+\midrule
+Baseline (Unmitigated) & 32 & $0.689 \pm 0.005$ & $2.96 \pm 0.24$ \\
+Rand-SMILES (Canonical) & 32 & $0.506 \pm 0.004$ & $1.08 \pm 0.16$ \\
+Rand-SMILES (Variants, $\le 10$ strings) & 32 & $0.506 \pm 0.004$ & $1.10 \pm 0.16$ \\
+DP-SGD ($\epsilon=8.0, \delta=10^{-5}$)* & 8; prelim. & $0.505 \pm 0.004$ & $1.13 \pm 0.15$ \\
+DP-SGD ($\epsilon=3.0, \delta=10^{-5}$)* & 8; prelim. & $0.503 \pm 0.004$ & $1.10 \pm 0.06$ \\
+\bottomrule
+\end{tabular}
 \end{table*}

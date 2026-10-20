@@ -1,0 +1,2010 @@
+version: '1.0'
+description: Exhaustive Claim Registry mapping all empirical numbers to source CSVs
+claims:
+- id: base_ep5_nll_mean_LOSS_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_mean
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5386955421875
+  std_val: 0.0038898271685604
+- id: base_ep5_nll_mean_LOSS_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_mean
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.012725
+  std_val: 0.0017991037195082
+- id: base_ep5_nll_mean_LOSS_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_mean
+    method: LOSS
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.001384375
+  std_val: 0.0004363406297393
+- id: base_ep5_nll_mean_offline_LiRA_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_mean
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.629734146875
+  std_val: 0.0075338542515888
+- id: base_ep5_nll_mean_offline_LiRA_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_mean
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.03154375
+  std_val: 0.0036304214187087
+- id: base_ep5_nll_mean_offline_LiRA_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_mean
+    method: offline_LiRA
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.004225
+  std_val: 0.0014925622048959
+- id: base_ep5_nll_mean_online_LiRA_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_mean
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.594851975
+  std_val: 0.0062469930165562
+- id: base_ep5_nll_mean_online_LiRA_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_mean
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.02118125
+  std_val: 0.0034922437098564
+- id: base_ep5_nll_mean_online_LiRA_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_mean
+    method: online_LiRA
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.00193125
+  std_val: 0.0008524868743668
+- id: base_ep5_nll_sum_LOSS_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_sum
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.53537891078125
+  std_val: 0.0037721113204233
+- id: base_ep5_nll_sum_LOSS_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_sum
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.01228125
+  std_val: 0.0017970293587276
+- id: base_ep5_nll_sum_LOSS_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_sum
+    method: LOSS
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.00144375
+  std_val: 0.0006805773166003
+- id: base_ep5_nll_sum_offline_LiRA_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_sum
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.629734018125
+  std_val: 0.0075338138961015
+- id: base_ep5_nll_sum_offline_LiRA_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_sum
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.03154375
+  std_val: 0.0036304214187087
+- id: base_ep5_nll_sum_offline_LiRA_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_sum
+    method: offline_LiRA
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.004221875
+  std_val: 0.001492504795475
+- id: base_ep5_nll_sum_online_LiRA_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_sum
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.594851430625
+  std_val: 0.0062469887814194
+- id: base_ep5_nll_sum_online_LiRA_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_sum
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.02118125
+  std_val: 0.0034922437098564
+- id: base_ep5_nll_sum_online_LiRA_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_sum
+    method: online_LiRA
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.00193125
+  std_val: 0.0008524868743668
+- id: base_ep20_nll_mean_LOSS_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_mean
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.59430742453125
+  std_val: 0.0040358375737853
+- id: base_ep20_nll_mean_LOSS_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_mean
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.01705625
+  std_val: 0.001783967578904
+- id: base_ep20_nll_mean_LOSS_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_mean
+    method: LOSS
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.0020125
+  std_val: 0.0008051247148433
+- id: base_ep20_nll_mean_offline_LiRA_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_mean
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.7629342996875
+  std_val: 0.0066115635544846
+- id: base_ep20_nll_mean_offline_LiRA_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_mean
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.0958
+  std_val: 0.0083951983203918
+- id: base_ep20_nll_mean_offline_LiRA_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_mean
+    method: offline_LiRA
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.018634375
+  std_val: 0.0047323600723992
+- id: base_ep20_nll_mean_online_LiRA_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_mean
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.7603112321875
+  std_val: 0.0055938193894602
+- id: base_ep20_nll_mean_online_LiRA_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_mean
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.086584375
+  std_val: 0.0062279344359674
+- id: base_ep20_nll_mean_online_LiRA_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_mean
+    method: online_LiRA
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.013415625
+  std_val: 0.0032872293829498
+- id: base_ep20_nll_sum_LOSS_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_sum
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5907443228125
+  std_val: 0.0038206982151663
+- id: base_ep20_nll_sum_LOSS_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_sum
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.01655625
+  std_val: 0.0020787616505987
+- id: base_ep20_nll_sum_LOSS_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_sum
+    method: LOSS
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.002121875
+  std_val: 0.0008338540040078
+- id: base_ep20_nll_sum_offline_LiRA_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_sum
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.76293407625
+  std_val: 0.006611587878214
+- id: base_ep20_nll_sum_offline_LiRA_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_sum
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.0958
+  std_val: 0.0083951983203918
+- id: base_ep20_nll_sum_offline_LiRA_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_sum
+    method: offline_LiRA
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.018634375
+  std_val: 0.0047323600723992
+- id: base_ep20_nll_sum_online_LiRA_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_sum
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.7603103453125
+  std_val: 0.0055938782048241
+- id: base_ep20_nll_sum_online_LiRA_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_sum
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.0865875
+  std_val: 0.0062298837559703
+- id: base_ep20_nll_sum_online_LiRA_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_sum
+    method: online_LiRA
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.013415625
+  std_val: 0.0032872293829498
+- id: base_ep60_nll_mean_LOSS_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_mean
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.6909412046875
+  std_val: 0.0044693524121562
+- id: base_ep60_nll_mean_LOSS_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_mean
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.030040625
+  std_val: 0.0036966296223068
+- id: base_ep60_nll_mean_LOSS_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_mean
+    method: LOSS
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.0039375
+  std_val: 0.0013442230037724
+- id: base_ep60_nll_mean_offline_LiRA_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_mean
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.8801216959375
+  std_val: 0.0044025709116949
+- id: base_ep60_nll_mean_offline_LiRA_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_mean
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.27154375
+  std_val: 0.0163080019444245
+- id: base_ep60_nll_mean_offline_LiRA_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_mean
+    method: offline_LiRA
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.082228125
+  std_val: 0.0132404130715945
+- id: base_ep60_nll_mean_online_LiRA_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_mean
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.8975203721875
+  std_val: 0.0032846673902176
+- id: base_ep60_nll_mean_online_LiRA_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_mean
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.2782125
+  std_val: 0.0146762206174785
+- id: base_ep60_nll_mean_online_LiRA_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_mean
+    method: online_LiRA
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.08146875
+  std_val: 0.0158464697910515
+- id: base_ep60_nll_sum_LOSS_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_sum
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.688880969375
+  std_val: 0.004643056024863
+- id: base_ep60_nll_sum_LOSS_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_sum
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.029609375
+  std_val: 0.0024290392863926
+- id: base_ep60_nll_sum_LOSS_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_sum
+    method: LOSS
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.004121875
+  std_val: 0.0014753314280461
+- id: base_ep60_nll_sum_offline_LiRA_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_sum
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.8801216012499999
+  std_val: 0.0044025670756501
+- id: base_ep60_nll_sum_offline_LiRA_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_sum
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.27153125
+  std_val: 0.0163090206090312
+- id: base_ep60_nll_sum_offline_LiRA_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_sum
+    method: offline_LiRA
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.082225
+  std_val: 0.0132432088500167
+- id: base_ep60_nll_sum_online_LiRA_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_sum
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.8975197809375
+  std_val: 0.0032846757308627
+- id: base_ep60_nll_sum_online_LiRA_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_sum
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.2782125
+  std_val: 0.0146732530421413
+- id: base_ep60_nll_sum_online_LiRA_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_sum
+    method: online_LiRA
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.081459375
+  std_val: 0.0158406756815606
+- id: base_ep60_nll_variants_mean_LOSS_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_variants_mean
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.51089167421875
+  std_val: 0.0038522363854534
+- id: base_ep60_nll_variants_mean_LOSS_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_variants_mean
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.010878125
+  std_val: 0.0012288820975494
+- id: base_ep60_nll_variants_mean_LOSS_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_variants_mean
+    method: LOSS
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.0012125
+  std_val: 0.0005040161287741
+- id: base_ep60_nll_variants_mean_offline_LiRA_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_variants_mean
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5597041771875
+  std_val: 0.0069654298263793
+- id: base_ep60_nll_variants_mean_offline_LiRA_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_variants_mean
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.020071875
+  std_val: 0.0029099644577144
+- id: base_ep60_nll_variants_mean_offline_LiRA_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_variants_mean
+    method: offline_LiRA
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.0029593749999999
+  std_val: 0.0009747983662474
+- id: base_ep60_nll_variants_mean_online_LiRA_auc
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_variants_mean
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.52790710375
+  std_val: 0.0062248431474544
+- id: base_ep60_nll_variants_mean_online_LiRA_tpr1
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_variants_mean
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.014490625
+  std_val: 0.0047263406956087
+- id: base_ep60_nll_variants_mean_online_LiRA_tpr01
+  section: Sec 4.1 / Table 1
+  source_csv: results_summary/baseline_attack_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_variants_mean
+    method: online_LiRA
+  metric: tpr01
+  mean_col: tpr01_mean
+  std_col: tpr01_std
+  is_percentage: true
+  mean_val: 0.00179375
+  std_val: 0.0011766375000192
+- id: bootstrap_target_0_online_LiRA_AUC
+  section: Sec 4.1
+  source_csv: results_summary/bootstrap_ci.csv
+  row_filters:
+    target: 0
+    metric: online_LiRA_AUC
+  metric: online_LiRA_AUC
+  point_estimate: 0.9004
+  ci_low: 0.8962
+  ci_high: 0.9045
+  ci_format: '[0.8962, 0.9045]'
+- id: bootstrap_target_0_online_LiRA_TPR1
+  section: Sec 4.1
+  source_csv: results_summary/bootstrap_ci.csv
+  row_filters:
+    target: 0
+    metric: online_LiRA_TPR1
+  metric: online_LiRA_TPR1
+  point_estimate: 0.2684
+  ci_low: 0.2492
+  ci_high: 0.3
+  ci_format: '[0.2492, 0.3000]'
+- id: bootstrap_target_1_online_LiRA_AUC
+  section: Sec 4.1
+  source_csv: results_summary/bootstrap_ci.csv
+  row_filters:
+    target: 1
+    metric: online_LiRA_AUC
+  metric: online_LiRA_AUC
+  point_estimate: 0.8916
+  ci_low: 0.887
+  ci_high: 0.8961
+  ci_format: '[0.8870, 0.8961]'
+- id: bootstrap_target_1_online_LiRA_TPR1
+  section: Sec 4.1
+  source_csv: results_summary/bootstrap_ci.csv
+  row_filters:
+    target: 1
+    metric: online_LiRA_TPR1
+  metric: online_LiRA_TPR1
+  point_estimate: 0.251
+  ci_low: 0.2178
+  ci_high: 0.2756
+  ci_format: '[0.2178, 0.2756]'
+- id: bootstrap_target_2_online_LiRA_AUC
+  section: Sec 4.1
+  source_csv: results_summary/bootstrap_ci.csv
+  row_filters:
+    target: 2
+    metric: online_LiRA_AUC
+  metric: online_LiRA_AUC
+  point_estimate: 0.8972
+  ci_low: 0.893
+  ci_high: 0.9012
+  ci_format: '[0.8930, 0.9012]'
+- id: bootstrap_target_2_online_LiRA_TPR1
+  section: Sec 4.1
+  source_csv: results_summary/bootstrap_ci.csv
+  row_filters:
+    target: 2
+    metric: online_LiRA_TPR1
+  metric: online_LiRA_TPR1
+  point_estimate: 0.2838
+  ci_low: 0.2613
+  ci_high: 0.3136
+  ci_format: '[0.2613, 0.3136]'
+- id: e3_scaling_size_1000_LOSS_auc
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 1000
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.997575375
+  std_val: 0.0010809224813622
+- id: e3_scaling_size_1000_LOSS_tpr1
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 1000
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.939875
+  std_val: 0.0434952788899471
+- id: e3_scaling_size_1000_offline_LiRA_auc
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 1000
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.95709675
+  std_val: 0.0059416762846379
+- id: e3_scaling_size_1000_offline_LiRA_tpr1
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 1000
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.2075
+  std_val: 0.0650779752077679
+- id: e3_scaling_size_1000_online_LiRA_auc
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 1000
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.974873375
+  std_val: 0.0040199776807305
+- id: e3_scaling_size_1000_online_LiRA_tpr1
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 1000
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.454875
+  std_val: 0.331396369279189
+- id: e3_scaling_size_2500_LOSS_auc
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 2500
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.94147813
+  std_val: 0.0064559527393472
+- id: e3_scaling_size_2500_LOSS_tpr1
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 2500
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.27675
+  std_val: 0.0396657102725839
+- id: e3_scaling_size_2500_offline_LiRA_auc
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 2500
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.93585444
+  std_val: 0.0034745736081095
+- id: e3_scaling_size_2500_offline_LiRA_tpr1
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 2500
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.12845
+  std_val: 0.0297351643681349
+- id: e3_scaling_size_2500_online_LiRA_auc
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 2500
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.9392691
+  std_val: 0.0030385664691476
+- id: e3_scaling_size_2500_online_LiRA_tpr1
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 2500
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.06525
+  std_val: 0.0160462723753168
+- id: e3_scaling_size_5000_LOSS_auc
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 5000
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.8203176475
+  std_val: 0.0095609894531053
+- id: e3_scaling_size_5000_LOSS_tpr1
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 5000
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.07995
+  std_val: 0.0154914723085223
+- id: e3_scaling_size_5000_offline_LiRA_auc
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 5000
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.897512565
+  std_val: 0.0079745296132391
+- id: e3_scaling_size_5000_offline_LiRA_tpr1
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 5000
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.081875
+  std_val: 0.0104596845076703
+- id: e3_scaling_size_5000_online_LiRA_auc
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 5000
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.881740725
+  std_val: 0.0059539452125676
+- id: e3_scaling_size_5000_online_LiRA_tpr1
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 5000
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.0323
+  std_val: 0.0060228137705133
+- id: e3_scaling_size_10000_LOSS_auc
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 10000
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.689010754375
+  std_val: 0.0031839287691841
+- id: e3_scaling_size_10000_LOSS_tpr1
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 10000
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.0283625
+  std_val: 0.0009455723890095
+- id: e3_scaling_size_10000_offline_LiRA_auc
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 10000
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.82657365
+  std_val: 0.005639543118298
+- id: e3_scaling_size_10000_offline_LiRA_tpr1
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 10000
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.04815
+  std_val: 0.0063347116294722
+- id: e3_scaling_size_10000_online_LiRA_auc
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 10000
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.7847105562500001
+  std_val: 0.0034678559861964
+- id: e3_scaling_size_10000_online_LiRA_tpr1
+  section: Sec 4.3 / Table 2
+  source_csv: results_summary/E3_scaling_summary.csv
+  row_filters:
+    member_size: 10000
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.0207375
+  std_val: 0.0027671220221945
+- id: pretrain_ft_LOSS_auc
+  section: Sec 4.4 / Table 3
+  source_csv: results_summary/pretrain_ft_summary.csv
+  row_filters:
+    method: LOSS
+    stat: nll_sum
+  metric: auc
+  column: auc
+  is_percentage: false
+  mean_val: 0.6396339325
+  std_val: 0.003268864096629906
+- id: pretrain_ft_LOSS_tpr1
+  section: Sec 4.4 / Table 3
+  source_csv: results_summary/pretrain_ft_summary.csv
+  row_filters:
+    method: LOSS
+    stat: nll_sum
+  metric: tpr1
+  column: tpr_fpr_1pct
+  is_percentage: true
+  mean_val: 0.0230875
+  std_val: 0.0025737340854985664
+- id: pretrain_ft_LOSS_tpr01
+  section: Sec 4.4 / Table 3
+  source_csv: results_summary/pretrain_ft_summary.csv
+  row_filters:
+    method: LOSS
+    stat: nll_sum
+  metric: tpr01
+  column: tpr_fpr_0_1pct
+  is_percentage: true
+  mean_val: 0.0033875
+  std_val: 0.0008391109240482706
+- id: pretrain_ft_offline_LiRA_auc
+  section: Sec 4.4 / Table 3
+  source_csv: results_summary/pretrain_ft_summary.csv
+  row_filters:
+    method: offline_LiRA
+    stat: nll_sum
+  metric: auc
+  column: auc
+  is_percentage: false
+  mean_val: 0.80105192375
+  std_val: 0.0026935283171066237
+- id: pretrain_ft_offline_LiRA_tpr1
+  section: Sec 4.4 / Table 3
+  source_csv: results_summary/pretrain_ft_summary.csv
+  row_filters:
+    method: offline_LiRA
+    stat: nll_sum
+  metric: tpr1
+  column: tpr_fpr_1pct
+  is_percentage: true
+  mean_val: 0.043637499999999996
+  std_val: 0.0050582146765717345
+- id: pretrain_ft_offline_LiRA_tpr01
+  section: Sec 4.4 / Table 3
+  source_csv: results_summary/pretrain_ft_summary.csv
+  row_filters:
+    method: offline_LiRA
+    stat: nll_sum
+  metric: tpr01
+  column: tpr_fpr_0_1pct
+  is_percentage: true
+  mean_val: 0.00435
+  std_val: 0.0025567836938510968
+- id: pretrain_ft_online_LiRA_auc
+  section: Sec 4.4 / Table 3
+  source_csv: results_summary/pretrain_ft_summary.csv
+  row_filters:
+    method: online_LiRA
+    stat: nll_sum
+  metric: auc
+  column: auc
+  is_percentage: false
+  mean_val: 0.75087293625
+  std_val: 0.003730633369419582
+- id: pretrain_ft_online_LiRA_tpr1
+  section: Sec 4.4 / Table 3
+  source_csv: results_summary/pretrain_ft_summary.csv
+  row_filters:
+    method: online_LiRA
+    stat: nll_sum
+  metric: tpr1
+  column: tpr_fpr_1pct
+  is_percentage: true
+  mean_val: 0.0199625
+  std_val: 0.0022193547968465325
+- id: pretrain_ft_online_LiRA_tpr01
+  section: Sec 4.4 / Table 3
+  source_csv: results_summary/pretrain_ft_summary.csv
+  row_filters:
+    method: online_LiRA
+    stat: nll_sum
+  metric: tpr01
+  column: tpr_fpr_0_1pct
+  is_percentage: true
+  mean_val: 0.002175
+  std_val: 0.0004743416490252569
+- id: e5a_defense_ep5_nll_mean_LOSS_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_mean
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.50188063265625
+  std_val: 0.0036084080546128
+- id: e5a_defense_ep5_nll_mean_LOSS_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_mean
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.0101
+  std_val: 0.0013295645661207
+- id: e5a_defense_ep5_nll_mean_offline_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_mean
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5066795209375
+  std_val: 0.0037428914302795
+- id: e5a_defense_ep5_nll_mean_offline_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_mean
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.011453125
+  std_val: 0.0015466893624354
+- id: e5a_defense_ep5_nll_mean_online_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_mean
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.49961317375
+  std_val: 0.0033173767654839
+- id: e5a_defense_ep5_nll_mean_online_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_mean
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.0096
+  std_val: 0.0012886602194877
+- id: e5a_defense_ep5_nll_sum_LOSS_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_sum
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.50111263828125
+  std_val: 0.0040261170974056
+- id: e5a_defense_ep5_nll_sum_LOSS_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_sum
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.009884375
+  std_val: 0.001256751925889
+- id: e5a_defense_ep5_nll_sum_offline_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_sum
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5066795234375
+  std_val: 0.0037428874616502
+- id: e5a_defense_ep5_nll_sum_offline_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_sum
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.011453125
+  std_val: 0.0015466893624354
+- id: e5a_defense_ep5_nll_sum_online_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_sum
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.49961319
+  std_val: 0.003317393774034
+- id: e5a_defense_ep5_nll_sum_online_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 5
+    stat: nll_sum
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.009596875
+  std_val: 0.0012870281785019
+- id: e5a_defense_ep20_nll_mean_LOSS_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_mean
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.50406155890625
+  std_val: 0.003616200419071
+- id: e5a_defense_ep20_nll_mean_LOSS_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_mean
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.010259375
+  std_val: 0.001383744190185
+- id: e5a_defense_ep20_nll_mean_offline_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_mean
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5157081753125
+  std_val: 0.0045223431180735
+- id: e5a_defense_ep20_nll_mean_offline_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_mean
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.011453125
+  std_val: 0.0014372878525082
+- id: e5a_defense_ep20_nll_mean_online_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_mean
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5036595071875
+  std_val: 0.0039809913890664
+- id: e5a_defense_ep20_nll_mean_online_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_mean
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.00955
+  std_val: 0.0015016120370047
+- id: e5a_defense_ep20_nll_sum_LOSS_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_sum
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.50318153140625
+  std_val: 0.0038735492276581
+- id: e5a_defense_ep20_nll_sum_LOSS_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_sum
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.0103625
+  std_val: 0.0013124097511214
+- id: e5a_defense_ep20_nll_sum_offline_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_sum
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5157081706250001
+  std_val: 0.0045223267239138
+- id: e5a_defense_ep20_nll_sum_offline_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_sum
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.011453125
+  std_val: 0.0014372878525082
+- id: e5a_defense_ep20_nll_sum_online_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_sum
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5036594996875
+  std_val: 0.0039811355708483
+- id: e5a_defense_ep20_nll_sum_online_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 20
+    stat: nll_sum
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.00955
+  std_val: 0.0015016120370047
+- id: e5a_defense_ep60_nll_mean_LOSS_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_mean
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.50725052109375
+  std_val: 0.0035641510878155
+- id: e5a_defense_ep60_nll_mean_LOSS_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_mean
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.01076875
+  std_val: 0.0015042815239262
+- id: e5a_defense_ep60_nll_mean_offline_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_mean
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5283961028125
+  std_val: 0.0040796428621721
+- id: e5a_defense_ep60_nll_mean_offline_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_mean
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.013815625
+  std_val: 0.002095788307304
+- id: e5a_defense_ep60_nll_mean_online_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_mean
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5077635390624999
+  std_val: 0.004146150314303
+- id: e5a_defense_ep60_nll_mean_online_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_mean
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.01085625
+  std_val: 0.0017286835378962
+- id: e5a_defense_ep60_nll_sum_LOSS_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_sum
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5061635925
+  std_val: 0.0039365955371232
+- id: e5a_defense_ep60_nll_sum_LOSS_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_sum
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.0107875
+  std_val: 0.0015942942619066
+- id: e5a_defense_ep60_nll_sum_offline_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_sum
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5283960478125
+  std_val: 0.0040796312706425
+- id: e5a_defense_ep60_nll_sum_offline_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_sum
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.013815625
+  std_val: 0.002095788307304
+- id: e5a_defense_ep60_nll_sum_online_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_sum
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5077634240625
+  std_val: 0.0041460811277116
+- id: e5a_defense_ep60_nll_sum_online_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_sum
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.010853125
+  std_val: 0.0017271988089986
+- id: e5a_defense_ep60_nll_variants_mean_LOSS_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_variants_mean
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5062625417187501
+  std_val: 0.0037810089735132
+- id: e5a_defense_ep60_nll_variants_mean_LOSS_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_variants_mean
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.010984375
+  std_val: 0.0015573155925626
+- id: e5a_defense_ep60_nll_variants_mean_offline_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_variants_mean
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.55204882875
+  std_val: 0.0049197965698054
+- id: e5a_defense_ep60_nll_variants_mean_offline_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_variants_mean
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.015609375
+  std_val: 0.0017084910102947
+- id: e5a_defense_ep60_nll_variants_mean_online_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_variants_mean
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.51921257875
+  std_val: 0.0045229706890313
+- id: e5a_defense_ep60_nll_variants_mean_online_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/E5a_augmentation_summary.csv
+  row_filters:
+    epoch: 60
+    stat: nll_variants_mean
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.011403125
+  std_val: 0.0018120536157773
+- id: dp_sgd_defense_eps3.0_LOSS_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/DP_SGD_summary.csv
+  row_filters:
+    epsilon_target: 3.0
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.503233375625
+  std_val: 0.0044717167902691
+- id: dp_sgd_defense_eps3.0_LOSS_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/DP_SGD_summary.csv
+  row_filters:
+    epsilon_target: 3.0
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.0109875
+  std_val: 0.0006128096884724
+- id: dp_sgd_defense_eps3.0_offline_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/DP_SGD_summary.csv
+  row_filters:
+    epsilon_target: 3.0
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.52041856625
+  std_val: 0.003272313044058
+- id: dp_sgd_defense_eps3.0_offline_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/DP_SGD_summary.csv
+  row_filters:
+    epsilon_target: 3.0
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.0112125
+  std_val: 0.0005566160513059
+- id: dp_sgd_defense_eps3.0_online_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/DP_SGD_summary.csv
+  row_filters:
+    epsilon_target: 3.0
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.50037323625
+  std_val: 0.0017514342559737
+- id: dp_sgd_defense_eps3.0_online_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/DP_SGD_summary.csv
+  row_filters:
+    epsilon_target: 3.0
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.010075
+  std_val: 0.0009587938851941
+- id: dp_sgd_defense_eps8.0_LOSS_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/DP_SGD_summary.csv
+  row_filters:
+    epsilon_target: 8.0
+    method: LOSS
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5053702087499999
+  std_val: 0.0039589182863709
+- id: dp_sgd_defense_eps8.0_LOSS_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/DP_SGD_summary.csv
+  row_filters:
+    epsilon_target: 8.0
+    method: LOSS
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.0113375
+  std_val: 0.0015212189661114
+- id: dp_sgd_defense_eps8.0_offline_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/DP_SGD_summary.csv
+  row_filters:
+    epsilon_target: 8.0
+    method: offline_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.5279196024999999
+  std_val: 0.0027260724268899
+- id: dp_sgd_defense_eps8.0_offline_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/DP_SGD_summary.csv
+  row_filters:
+    epsilon_target: 8.0
+    method: offline_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.01195
+  std_val: 0.0013617215994048
+- id: dp_sgd_defense_eps8.0_online_LiRA_auc
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/DP_SGD_summary.csv
+  row_filters:
+    epsilon_target: 8.0
+    method: online_LiRA
+  metric: auc
+  mean_col: auc_mean
+  std_col: auc_std
+  is_percentage: false
+  mean_val: 0.500960345
+  std_val: 0.0048145768476604
+- id: dp_sgd_defense_eps8.0_online_LiRA_tpr1
+  section: Sec 4.5 / Table 4
+  source_csv: results_summary/DP_SGD_summary.csv
+  row_filters:
+    epsilon_target: 8.0
+    method: online_LiRA
+  metric: tpr1
+  mean_col: tpr1_mean
+  std_col: tpr1_std
+  is_percentage: true
+  mean_val: 0.010925
+  std_val: 0.001550806241927
+- id: e6_model_0
+  section: Sec 4.6 / Table 5
+  source_csv: results_summary/E6_generative_audit_summary.csv
+  row_filters:
+    model: 0
+  validity_pct: 60.24
+  uniqueness_pct: 99.9667994687915
+  novelty_pct: 99.9667994687915
+  member_copies: 1
+  out_copies: 1
+  binomial_pvalue: 0.75
+- id: e6_model_15
+  section: Sec 4.6 / Table 5
+  source_csv: results_summary/E6_generative_audit_summary.csv
+  row_filters:
+    model: 15
+  validity_pct: 62.260000000000005
+  uniqueness_pct: 99.87150658528752
+  novelty_pct: 99.90362993896565
+  member_copies: 3
+  out_copies: 2
+  binomial_pvalue: 0.5
+- id: e6_model_31
+  section: Sec 4.6 / Table 5
+  source_csv: results_summary/E6_generative_audit_summary.csv
+  row_filters:
+    model: 31
+  validity_pct: 59.099999999999994
+  uniqueness_pct: 99.8984771573604
+  novelty_pct: 99.72927241962776
+  member_copies: 8
+  out_copies: 4
+  binomial_pvalue: 0.19384765625
+- id: e6_pooled
+  section: Sec 4.6 / Table 5
+  source_csv: results_summary/E6_generative_audit_summary.csv
+  row_filters:
+    pooled: true
+  validity_pct: 60.53333333333333
+  uniqueness_pct: 99.91226107047981
+  novelty_pct: 99.86656727579498
+  member_copies: 12
+  out_copies: 7
+  binomial_pvalue: 0.1796417236328125
+  fisher_pvalue: 0.35912962401735654

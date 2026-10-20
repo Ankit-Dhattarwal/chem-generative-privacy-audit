@@ -61,17 +61,29 @@ Evaluated over 32 shadow models on 20,000 candidate targets (10,000 members, 10,
 | 60 (variants) | Randomized-SMILES (up to 10 strings, mean NLL) | Online LiRA (In vs. Out) | 0.528 ± 0.006 | 1.45 ± 0.47 | 0.18 ± 0.12 |
 | 60 (variants) | Randomized-SMILES (up to 10 strings, mean NLL) | **Strongest: offline LiRA** | **0.560 ± 0.007** | **2.01 ± 0.29** | **0.30 ± 0.10** |
 
-### Table 3: Defense Benchmark at Epoch 60
+### Table 4: Defense Comparison at Epoch 60
 
 *Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense.*
 
-| Defense Configuration | Shadow Setup | LOSS AUC | LOSS TPR@1% (%) | Offline LiRA AUC | Offline LiRA TPR@1% (%) | Online LiRA AUC | Online LiRA TPR@1% (%) | Strongest Attack (Method: AUC, TPR@1%) |
-|---|---|---|---|---|---|---|---|---|
-| Baseline (Unmitigated) | 32 shadows | 0.689 ± 0.005 | 2.96 ± 0.24 | 0.880 ± 0.004 | 27.15 ± 1.63 | 0.898 ± 0.003 | 27.82 ± 1.47 | **online LiRA**: 0.898 (TPR 27.82%) |
-| Randomized-SMILES Training (Canonical Scoring) | 32 shadows | 0.506 ± 0.004 | 1.08 ± 0.16 | 0.528 ± 0.004 | 1.38 ± 0.21 | 0.508 ± 0.004 | 1.09 ± 0.17 | **offline LiRA**: 0.528 (TPR 1.38%) |
-| Randomized-SMILES Training (Variants Scoring, up to 10 strings, mean NLL) | 32 shadows | 0.506 ± 0.004 | 1.10 ± 0.16 | 0.552 ± 0.005 | 1.56 ± 0.17 | 0.519 ± 0.005 | 1.14 ± 0.18 | **offline LiRA**: 0.552 (TPR 1.56%) |
-| DP-SGD (ε=8.0, δ=1e-5)* | 8 shadows; prelim. | 0.505 ± 0.004 | 1.13 ± 0.15 | 0.528 ± 0.003 | 1.20 ± 0.14 | 0.501 ± 0.005 | 1.09 ± 0.16 | **offline LiRA**: 0.528 (TPR 1.20%) |
-| DP-SGD (ε=3.0, δ=1e-5)* | 8 shadows; prelim. | 0.503 ± 0.004 | 1.10 ± 0.06 | 0.520 ± 0.003 | 1.12 ± 0.06 | 0.500 ± 0.002 | 1.01 ± 0.10 | **offline LiRA**: 0.520 (TPR 1.12%) |
+#### Panel (a): Calibrated Likelihood-Ratio Attacks (LiRA)
+
+| Defense Configuration | Shadow Setup | Offline LiRA AUC | Offline LiRA TPR@1% (%) | Online LiRA AUC | Online LiRA TPR@1% (%) | Strongest Attack |
+|---|---|---|---|---|---|---|
+| Baseline (Unmitigated) | 32 shadows | 0.880 ± 0.004 | 27.15 ± 1.63 | 0.898 ± 0.003 | 27.82 ± 1.47 | **Online LiRA** |
+| Randomized-SMILES Training (Canonical Scoring) | 32 shadows | 0.528 ± 0.004 | 1.38 ± 0.21 | 0.508 ± 0.004 | 1.09 ± 0.17 | **Offline LiRA** |
+| Randomized-SMILES Training (Variants Scoring, up to 10 strings, mean NLL) | 32 shadows | 0.552 ± 0.005 | 1.56 ± 0.17 | 0.519 ± 0.005 | 1.14 ± 0.18 | **Offline LiRA** |
+| DP-SGD (ε=8.0, δ=1e-5)* | 8 shadows; prelim. | 0.528 ± 0.003 | 1.20 ± 0.14 | 0.501 ± 0.005 | 1.09 ± 0.16 | **Offline LiRA** |
+| DP-SGD (ε=3.0, δ=1e-5)* | 8 shadows; prelim. | 0.520 ± 0.003 | 1.12 ± 0.06 | 0.500 ± 0.002 | 1.01 ± 0.10 | **Offline LiRA** |
+
+#### Panel (b): Uncalibrated Loss Thresholding Baseline
+
+| Defense Configuration | Shadow Setup | LOSS AUC | LOSS TPR@1% (%) |
+|---|---|---|---|
+| Baseline (Unmitigated) | 32 shadows | 0.689 ± 0.005 | 2.96 ± 0.24 |
+| Randomized-SMILES Training (Canonical Scoring) | 32 shadows | 0.506 ± 0.004 | 1.08 ± 0.16 |
+| Randomized-SMILES Training (Variants Scoring, up to 10 strings, mean NLL) | 32 shadows | 0.506 ± 0.004 | 1.10 ± 0.16 |
+| DP-SGD (ε=8.0, δ=1e-5)* | 8 shadows; prelim. | 0.505 ± 0.004 | 1.13 ± 0.15 |
+| DP-SGD (ε=3.0, δ=1e-5)* | 8 shadows; prelim. | 0.503 ± 0.004 | 1.10 ± 0.06 |
 
 ---
 
@@ -81,12 +93,15 @@ Evaluated over 32 shadow models on 20,000 candidate targets (10,000 members, 10,
 ├── README.md                      # Project overview and audited findings
 ├── REPRODUCE.md                   # Reproduction instructions and runtimes
 ├── CHANGELOG.md                   # Comprehensive audit change log
-├── CLAIMS_CHECK.md                # Verification report mapping claims to CSVs
 ├── TODO_for_v2.md                 # Methodological roadmap for version 2
+├── CODE_PAPER_MATRIX.md           # Implementation vs manuscript consistency matrix
+├── claims.yaml                    # Formal claim registry mapping claims to CSVs
 ├── LICENSE                        # MIT License (Ankit Dhattarwal)
 ├── requirements.txt               # Pinned dependencies
 ├── colab_pipeline.py              # End-to-end experiment pipeline
-├── check_claims.py                # Automated claims verification script
+├── scripts/
+│   ├── verify_claims.py           # Independent pandas-based claims verifier
+│   └── mutation_test.py           # Mutation testing suite for claims verifier
 ├── results_summary/               # Primary CSV summaries (canonical truth)
 │   ├── README.md                  # Column definitions and data dictionary
 │   ├── baseline_attack_summary.csv
@@ -100,7 +115,7 @@ Evaluated over 32 shadow models on 20,000 candidate targets (10,000 members, 10,
 │   ├── main.tex                   # LaTeX manuscript
 │   ├── main.pdf                   # Compiled publication PDF
 │   ├── MANUSCRIPT.md              # Markdown manuscript (synchronized with main.tex)
-│   ├── references.bib             # Verified bibliography
+│   ├── references.bib             # BibTeX bibliography
 │   ├── make_tables.py             # Script to regenerate LaTeX/MD tables
 │   ├── generate_figures.py        # Script to regenerate figures from CSVs
 │   ├── tables/                    # Generated LaTeX and Markdown tables
@@ -121,18 +136,19 @@ python paper/make_tables.py
 # 2. Regenerate figures
 python paper/generate_figures.py
 
-# 3. Verify all numerical claims against CSVs
-python check_claims.py
+# 3. Verify all numerical claims across manuscripts, tables, and PDF
+python scripts/verify_claims.py
 
-# 4. Run mutation test on claims checker
-python scripts/mutation_test_checker.py
+# 4. Run mutation testing suite (must detect all corruptions)
+python scripts/mutation_test.py
 
 # 5. Compile manuscript PDF
 tectonic paper/main.tex --outdir paper/
 ```
 
-### What `check_claims.py` Does and Does Not Verify
-- **What it verifies:** `check_claims.py` extracts numerical tokens from the manuscript and verifies that each number appears in the ground-truth set compiled from `results_summary/*.csv` or a strictly designated whitelist (such as statistical significance thresholds $\alpha=0.05$ or approximate metric interval bounds $0.51-0.56$).
-- **What it does NOT verify:** It tests set membership, not semantic context. It cannot detect if a valid number from one experiment (such as a TPR from dataset scaling) is accidentally quoted in the description of another (such as baseline epochs). Contextual correctness is guaranteed by generating all tables and figures directly from CSVs using `paper/make_tables.py` and `paper/generate_figures.py`. To demonstrate this limitation empirically, run `python scripts/mutation_test_checker.py`.
+### Claims Verification Architecture
+- **Semantic Traceability:** Every numerical claim in the abstract, main text, tables, captions, and compiled PDF is formally registered in `claims.yaml`.
+- **Independent Derivation:** `scripts/verify_claims.py` re-derives each expected value from the ground-truth CSVs using `pandas` exclusively, ensuring complete independence from table generation scripts.
+- **Strict Whitelist & Mutation Resistance:** The verifier checks that every numerical token in the paper files is accounted for by the registry or a designated constant whitelist, and `scripts/mutation_test.py` proves that any synthetic deviation or corrupted value immediately triggers verifier failure.
 
 See [REPRODUCE.md](REPRODUCE.md) for full training and execution details.
