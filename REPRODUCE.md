@@ -103,7 +103,7 @@ python paper/make_tables.py
 # 2. Regenerate publication-quality figures
 python paper/generate_figures.py
 
-# 3. Execute independent claims verifier (checks exact match across paper and PDF)
+# 3. Execute independent claims verifier (re-derives registered values and audits numerical tokens)
 python scripts/verify_claims.py
 
 # 4. Execute mutation testing suite (must detect all corrupted values)
@@ -114,5 +114,5 @@ tectonic paper/main.tex --outdir paper/
 ```
 
 ### 4.1 Independent Claims Verification
-- **What it verifies:** `scripts/verify_claims.py` loads `claims.yaml` and independently re-derives every expected string from the ground-truth CSVs in `results_summary/` using `pandas` exclusively. It checks that each exact string appears at its expected location in `paper/MANUSCRIPT.md`, `paper/main.tex`, `README.md`, `paper/tables/*`, and in the text extracted from `paper/main.pdf`. It also verifies that all numbers in these files are either registered claims or part of a strict whitelist of constants (e.g. model hyperparameter dimensions, epoch counts, table numbers, statistical significance thresholds).
-- **Mutation Resistance:** `scripts/mutation_test.py` validates the verification pipeline by injecting synthetic mutations into the data and claim registry (swapping values between LiRA and LOSS, altering dataset sizes, modifying counts, changing standard deviations, and perturbing bootstrap CIs). The verification harness must catch and fail on all of these mutations.
+- **What it verifies:** `scripts/verify_claims.py` re-derives registered metrics from `results_summary/*.csv`, recomputes E6 binomial tests, validates the pooled E6 p-values in the abstract sources, and checks numerical tokens in the paper and PDF against registered values or a constants whitelist. It does not establish that every registered claim is present at every expected body-text location. `paper/make_tables.py` regenerates table files from the source CSVs.
+- **Mutation coverage:** `scripts/mutation_test.py` runs ten targeted corruptions, including data changes and an incorrect E6 abstract p-value. These checks exercise specific failure paths rather than proving detection of all possible edits.

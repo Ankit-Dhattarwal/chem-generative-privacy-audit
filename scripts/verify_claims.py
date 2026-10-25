@@ -4,10 +4,10 @@ scripts/verify_claims.py
 
 Independent Claims Verifier and Exhaustive Number Auditor.
 Implements Task T1:
-(i) Re-derives each expected string from the ground-truth CSVs using pandas ONLY.
+(i) Re-derives registered metrics from ground-truth CSVs using pandas and
+    recomputes E6 exact binomial tests from the CSV-derived match counts.
     Does NOT import make_tables.py or check_claims.py.
-(ii) Checks each exact claim string in MANUSCRIPT.md, main.tex, README.md,
-     paper/tables/*, and in the extracted text of paper/main.pdf.
+(ii) Checks the pooled E6 binomial results in the abstract against the CSVs.
 (iii) Fails on any number in those files that is not in the claim registry
       or in the designated whitelist of constants.
 Exits 0 on complete pass, 1 on any failure.
@@ -19,7 +19,7 @@ from pathlib import Path
 import yaml
 import pandas as pd
 import numpy as np
-from scipy.stats import binomtest, fisher_exact
+from scipy.stats import binomtest
 import pypdfium2 as pdfium
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -90,7 +90,7 @@ def extract_pdf_text():
 
 def main():
     print("=" * 70)
-    print("Running Independent Claims Verifier (pandas-only re-derivation)")
+    print("Running Independent Claims Verifier (CSV re-derivation and number audit)")
     print("=" * 70)
 
     # 1. Load claims registry
@@ -120,6 +120,36 @@ def main():
             valid_number_strings.add(f"{v_pct:.{p}f}%")
         valid_number_strings.add(str(val))
 
+    # Register the E6 values printed in the generative-audit prose/table from
+    # the CSV, including pooled hit counts and the conditional match total.
+    e6 = csvs["generative"]
+    samples_per_model_values = e6["samples"].astype(int).unique()
+    if len(samples_per_model_values) != 1:
+        raise ValueError("E6 models do not have a common sample count")
+    samples_per_model = int(samples_per_model_values[0])
+    model_count = len(e6)
+    total_samples = samples_per_model * model_count
+    if total_samples != int(e6["samples"].astype(int).sum()):
+        raise ValueError("E6 sample total disagrees with samples per model × model count")
+    pooled_member_copies = int(round((e6["exact_member_copy_fraction_all_samples"] * e6["samples"]).sum()))
+    pooled_out_copies = int(round((e6["exact_out_copy_fraction_all_samples"] * e6["samples"]).sum()))
+    combined_matches = pooled_member_copies + pooled_out_copies
+    binomial_null_probability = 0.5
+    pooled_two_sided_pvalue = float(binomtest(
+        pooled_member_copies, combined_matches, binomial_null_probability,
+        alternative="two-sided"
+    ).pvalue)
+    # These derived numbers occur explicitly in the abstract and Section 4.6.
+    for derived in (total_samples, pooled_member_copies, pooled_out_copies,
+                    combined_matches, binomial_null_probability,
+                    pooled_two_sided_pvalue):
+        register_num(derived)
+    print("Derived E6 audit numbers from CSV: "
+          f"samples/model={samples_per_model}, models={model_count}, total={total_samples}, "
+          f"member={pooled_member_copies}, holdout={pooled_out_copies}, "
+          f"combined matches={combined_matches}, "
+          f"H0 p={binomial_null_probability}, two-sided p={pooled_two_sided_pvalue:.4f}.")
+
     claim_checks_passed = 0
     claim_checks_failed = 0
 
@@ -140,6 +170,29 @@ def main():
         "table5_md": (TABLES_DIR / "table5_e6_generation.md").read_text() if (TABLES_DIR / "table5_e6_generation.md").exists() else "",
         "pdf": extract_pdf_text()
     }
+
+    # Verify the pooled E6 binomial result in the actual abstract blocks.
+    # This closes a gap left by the number registry: a wrong value can be
+    # individually valid elsewhere in the CSV while still being wrong here.
+    expected_e6_test = (
+        f"one-sided exact binomial p-value is {float(binomtest(pooled_member_copies, combined_matches, binomial_null_probability, alternative='greater').pvalue):.4f} "
+        f"and the two-sided exact binomial p-value is {pooled_two_sided_pvalue:.4f}"
+    )
+    main_abstract_match = re.search(r"\\begin\{abstract\}(.*?)\\end\{abstract\}", files_to_check["main.tex"], re.S)
+    manuscript_abstract_match = re.search(r"## Abstract\s+(.*?)\s+---", files_to_check["MANUSCRIPT.md"], re.S)
+    chemrxiv_text = (REPO_ROOT / "release_candidate" / "chemrxiv_form.md").read_text() if (REPO_ROOT / "release_candidate" / "chemrxiv_form.md").exists() else ""
+    chemrxiv_abstract_match = re.search(r"## Plain-Text Abstract\s+(.*?)\s+## Keywords", chemrxiv_text, re.S)
+    abstract_blocks = {
+        "paper/main.tex abstract": main_abstract_match.group(1) if main_abstract_match else "",
+        "paper/MANUSCRIPT.md abstract": manuscript_abstract_match.group(1) if manuscript_abstract_match else "",
+        "release_candidate/chemrxiv_form.md abstract": chemrxiv_abstract_match.group(1) if chemrxiv_abstract_match else "",
+        "README.md generative finding": files_to_check["README.md"],
+        "paper/main.pdf abstract": files_to_check["pdf"],
+    }
+    for label, block in abstract_blocks.items():
+        if " ".join(expected_e6_test.split()) not in " ".join(block.split()):
+            print(f"FAILED: CSV-derived pooled E6 binomial values missing from {label}: {expected_e6_test}")
+            sys.exit(1)
 
     # Verify each claim against re-derived CSV values
     for c in claims:
@@ -272,10 +325,9 @@ def main():
         elif "E6_generative_audit_summary.csv" in source:
             df = csvs["generative"]
             if filters.get("pooled"):
-                tot_mc = int(round(df["exact_member_copy_fraction_all_samples"].sum() * 5000))
-                tot_oc = int(round(df["exact_out_copy_fraction_all_samples"].sum() * 5000))
-                pval = float(binomtest(tot_mc, tot_mc + tot_oc, 0.5, alternative="greater").pvalue)
-                fish = float(fisher_exact([[tot_mc, 15000 - tot_mc], [tot_oc, 15000 - tot_oc]], alternative="two-sided")[1])
+                tot_mc = pooled_member_copies
+                tot_oc = pooled_out_copies
+                pval = float(binomtest(tot_mc, tot_mc + tot_oc, binomial_null_probability, alternative="greater").pvalue)
                 if tot_mc != c["member_copies"] or tot_oc != c["out_copies"] or abs(pval - c["binomial_pvalue"]) > 1e-4:
                     print(f"MISMATCH in pooled E6 {cid}: CSV has ({tot_mc}, {tot_oc}, {pval:.4f}), registry has ({c['member_copies']}, {c['out_copies']}, {c['binomial_pvalue']:.4f})")
                     claim_checks_failed += 1
@@ -283,7 +335,7 @@ def main():
                 register_num(tot_mc)
                 register_num(tot_oc)
                 register_num(pval)
-                register_num(fish)
+                register_num(pooled_two_sided_pvalue)
                 register_num(c["validity_pct"])
                 register_num(c["uniqueness_pct"])
                 register_num(c["novelty_pct"])
@@ -295,9 +347,10 @@ def main():
                     claim_checks_failed += 1
                     continue
                 r = sub.iloc[0]
-                mc = int(round(r["exact_member_copy_fraction_all_samples"] * 5000))
-                oc = int(round(r["exact_out_copy_fraction_all_samples"] * 5000))
-                pval = float(binomtest(mc, mc + oc, 0.5, alternative="greater").pvalue)
+                model_samples = int(r["samples"])
+                mc = int(round(r["exact_member_copy_fraction_all_samples"] * model_samples))
+                oc = int(round(r["exact_out_copy_fraction_all_samples"] * model_samples))
+                pval = float(binomtest(mc, mc + oc, binomial_null_probability, alternative="greater").pvalue)
                 if mc != c["member_copies"] or oc != c["out_copies"] or abs(pval - c["binomial_pvalue"]) > 1e-4:
                     print(f"MISMATCH in E6 {cid}: CSV has {mc} member copies, registry has {c['member_copies']}")
                     claim_checks_failed += 1
@@ -347,8 +400,11 @@ def main():
             if in_bib and (fname.endswith(".md") or fname.endswith(".pdf")):
                 continue
 
+            # Normalize LaTeX's grouped thousands separator (e.g. 14{,}988)
+            # before extracting numbers, so it is checked as one derived value.
+            scan_line = re.sub(r"\{,\}", ",", line)
             # Extract numbers: percentages, floats, integers
-            tokens = re.findall(r"(?<![A-Za-z_])\b\d+(?:[\.,]\d+)?%?\b", line)
+            tokens = re.findall(r"(?<![A-Za-z_])\b\d+(?:[\.,]\d+)?%?\b", scan_line)
             for tok in tokens:
                 t_clean = tok.rstrip("%").replace(",", "")
                 # Check claim set or whitelist
@@ -374,9 +430,9 @@ def main():
             print(f"  {fn}:{ln} -> '{tok}' in line: {line}")
         sys.exit(1)
 
-    print("SUCCESS: 100% of numerical tokens across all paper files and PDF match the Claim Registry or Whitelist.")
+    print("SUCCESS: Registered values match the CSVs; numerical tokens are registered or whitelisted; pooled E6 abstract p-values match the CSV-derived tests.")
     print("=" * 70)
-    print("ALL CLAIMS AND NUMBERS VERIFIED SUCCESSFULLY.")
+    print("CSV claim and numerical-token checks completed successfully.")
     print("=" * 70)
     sys.exit(0)
 

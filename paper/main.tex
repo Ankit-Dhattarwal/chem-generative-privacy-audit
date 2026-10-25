@@ -20,11 +20,11 @@
 
 \IEEEtitleabstractindextext{%
 \begin{abstract}
-Autoregressive models trained on molecular SMILES strings are explored for generative chemistry, where training sets often contain proprietary chemical structures and patented scaffolds. In this study, we empirically evaluate Membership Inference Attacks (MIA) against small causal SMILES language models (2 layers, $d=128$, 419,584 parameters, vocab size 25) on a subset of the MOSES benchmark across training epochs (5, 20, 60), dataset sizes ($N \in \{1\text{k}, 2.5\text{k}, 5\text{k}, 10\text{k}\}$), and defenses.
+Autoregressive models trained on molecular SMILES strings are explored for generative chemistry, where training sets often contain proprietary chemical structures and patented scaffolds. In this study, we empirically evaluate Membership Inference Attacks (MIA) against small causal SMILES language models (2 layers, $d = 128$, with 419,584 parameters, vocab size 25) on a subset of the MOSES benchmark across training epochs (5, 20, 60), dataset sizes ($N \in \{1\text{k}, 2.5\text{k}, 5\text{k}, 10\text{k}\}$), and defenses.
 
 Under canonical SMILES queries and sequence negative log-likelihood sum ($nll\_sum$), models exhibit substantial membership leakage by epoch 60: online LiRA reaches a ROC-AUC of $0.898 \pm 0.003$ and a True Positive Rate (TPR) of $27.82 \pm 1.47\%$ at a 1\% False Positive Rate (FPR), compared to $0.689 \pm 0.005$ AUC and $2.96 \pm 0.24\%$ TPR@1\% FPR for standard LOSS. In smaller training cohorts ($N = 1,000$), attack sensitivity increases: LOSS AUC reaches $0.998 \pm 0.001$ (TPR@1\% = $93.99 \pm 4.35\%$) and online LiRA AUC reaches $0.975 \pm 0.004$ (TPR@1\% = $45.49 \pm 33.14\%$).
 
-Mean-aggregated scoring over up to 10 string forms (canonical included) removes most of the signal (online LiRA AUC drops to $0.528 \pm 0.006$); this reflects a change in the query/scoring method for a model trained on canonical SMILES and is not a defense. Finally, in our preliminary DP-SGD arm ($\epsilon \in \{8.0, 3.0\}$, \mbox{$\delta = 10^{-5}$}), generative utility was not evaluated, so the low attack AUC ($0.500 - 0.528$) cannot be interpreted as an effective defense.
+Mean-aggregated scoring over up to 10 string forms (canonical included) removes most of the signal (online LiRA AUC drops to $0.528 \pm 0.006$); this reflects a change in the query/scoring method for a model trained on canonical SMILES and is not a defense. Finally, in our preliminary DP-SGD arm ($\epsilon \in \{8.0, 3.0\}$, \mbox{$\delta = 10^{-5}$}), generative utility was not evaluated, so the low attack AUC ($0.500 - 0.528$) cannot be interpreted as an effective defense. Training with randomized SMILES reduces canonical-query offline LiRA AUC to 0.528 ± 0.004 (variants scoring: 0.552 ± 0.005); validation NLL and generative validity of these models were not evaluated. Of 15,000 generated samples, 12 canonicalized outputs matched molecules in the training set and 7 matched molecules in the holdout set. Conditioning on these 19 matches and assuming equal match probability for the two equally sized reference sets (H0: p = 0.5), the one-sided exact binomial p-value is 0.1796 and the two-sided exact binomial p-value is 0.3593. Neither result is significant at the 0.05 level.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -161,7 +161,7 @@ Table~\ref{tab:defenses} and Fig.~\ref{fig:defenses} compare two defensive appro
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\columnwidth]{figures/fig3_defenses_comparison.pdf}
-\caption{Defense Comparison at Epoch 60 showing the strongest attack per defense. *Note on DP rows: preliminary run where generative utility was not evaluated; an attack AUC near 0.5 may reflect an under-trained model rather than an effective defense.}
+\caption{Defense Comparison at Epoch 60 showing the strongest attack per defense. *Note: preliminary, utility not measured.}
 \label{fig:defenses}
 \end{figure}
 
@@ -170,7 +170,7 @@ Randomized-SMILES training reduces canonical attack performance: offline LiRA dr
 In preliminary runs, DP-SGD reduces attack AUC near random guess ($0.500 - 0.528$). However, generative utility was not evaluated: an attack AUC near 0.5 can arise from an under-trained model rather than an effective defense, and privacy-utility tradeoffs cannot be established without verifying chemical validity. This represents a methodological caution rather than a measured finding of this paper.
 
 \subsection{Generative Memorization Audit}
-To audit whether models generate verbatim copies of training leads, we sampled 5,000 molecules per model for three baseline models (Models 0, 15, 31; total 15,000 samples) on Apple Silicon (MPS). Generated molecules were evaluated for chemical validity, uniqueness, and exact string matches against 10,000 training members versus 10,000 holdout molecules (Table~\ref{tab:e6_generation} and Fig.~\ref{fig:generative}).
+To audit whether models generate molecules matching the canonicalized structures in the training set, we sampled 5,000 molecules per model for three baseline models (Models 0, 15, 31; total 15,000 samples) on Apple Silicon (MPS). Generated molecules were evaluated for chemical validity, uniqueness, and canonicalized structure matches against 10,000 training members and 10,000 holdout molecules (Table~\ref{tab:e6_generation} and Fig.~\ref{fig:generative}).
 
 \begin{figure}[htbp]
 \centering
@@ -181,13 +181,13 @@ To audit whether models generate verbatim copies of training leads, we sampled 5
 
 \input{tables/table5_e6_generation.tex}
 
-Across 15,000 samples, models produced 12 exact member copies and 7 holdout copies. Individual binomial test $p$-values are $0.750$, $0.500$, and $0.194$. The pooled one-sided binomial test yields $p = 0.1796$ ($p > 0.05$), and a Fisher exact test yields $p = 0.359$. Under the evaluated sample budget (5,000 per model), the difference between member copies and holdout copies is \textbf{not statistically significant}. Generative memorization cannot be claimed as statistically confirmed without higher-power sampling ($\ge 100\text{k}$ samples).
+Of 15,000 generated samples, 12 canonicalized outputs matched molecules in the training set and 7 matched molecules in the holdout set. Conditioning on these 19 matches and assuming equal match probability for the two equally sized reference sets (H0: p = 0.5), the one-sided exact binomial p-value is 0.1796 and the two-sided exact binomial p-value is 0.3593. Neither result is significant at the 0.05 level. Individual model one-sided binomial p-values are $0.750$, $0.500$, and $0.194$.
 
 \section{Related Work}
 Our work interfaces with privacy auditing, generative chemistry, and membership inference:
 \begin{itemize}
     \item \textbf{Membership Inference Attacks:} Carlini et al.~\cite{carlini2022membership} established Likelihood-Ratio Attacks (LiRA) to overcome sequence hardness confounding. Shokri et al.~\cite{shokri2017membership} originally formulated shadow-model attacks. Recent theoretical analysis by Zhang et al.~\cite{zhang2024membership} emphasized that empirical membership inference attacks face significant evidentiary caveats and cannot formally prove that a specific sample was present in a training set without known reference baselines.
-    \item \textbf{Privacy in Cheminformatics \& Molecular Models:} Kr{\"u}ger et al.~\cite{kruger2025publishing} investigated membership leakage in molecular property predictors (\texttt{molprivacy}), demonstrating that publishing neural network weights poses data confidentiality risks. Aubinais et al.~\cite{aubinais2026membership} studied membership inference risks in quantized models, incorporating chemical language model experiments. Ross et al.~\cite{ross2025gpmolformer} developed GP-MoLFormer and noted training data memorization across 1.1 billion SMILES strings.
+    \item \textbf{Privacy in Cheminformatics \& Molecular Models:} Kr{\"u}ger et al.~\cite{kruger2025publishing} investigated membership leakage in molecular property predictors (\texttt{molprivacy}), demonstrating that publishing neural network weights poses data confidentiality risks. Aubinais et al.~\cite{aubinais2025membership} studied quantization and included experiments on fine-tuned language models for molecular tasks (arXiv:2502.06567; AISTATS 2026). Ross et al.~\cite{ross2025gpmolformer} developed GP-MoLFormer and noted training data memorization across 1.1 billion SMILES strings.
     \item \textbf{Privacy Auditing in Biological Sequence Models:} Nemecek et al.~\cite{nemecek2026quantifying} analyzed memorization and privacy risk in genomic language models, illustrating domain-specific sequence leakage dynamics.
     \item \textbf{SMILES Randomization \& Data Augmentation:} Ar{\'u}s-Pous et al.~\cite{aruspous2019randomized} and Bjerrum~\cite{bjerrum2017smiles} demonstrated that randomized SMILES enumeration expands the effective representation space and regularizes generative models against overfitting.
     \item \textbf{Differential Privacy in Deep Learning:} Abadi et al.~\cite{abadi2016deep} and the Opacus library~\cite{opacus2021} formalized differential privacy via DP-SGD and R\'enyi Differential Privacy (RDP) accounting.
@@ -203,9 +203,9 @@ This preliminary study has several explicit limitations:
     \item \textbf{Shadow Ensemble Scale Asymmetry:} While baseline and E5a arms used 32 shadow models, compute limits restricted E3, DP-SGD, and pretrain-FT to 8 shadow models, leading to higher estimation variance.
     \item \textbf{Reported Uncertainty:} Metrics report standard deviation across leave-one-out shadow target models, rather than per-molecule bootstrap confidence intervals. Our computed 95\% bootstrap CIs across molecules for epoch 60 online LiRA on three targets span roughly $\pm 0.005$ in AUC and $\pm 0.03$ in TPR@1\% (raw per-molecule scoring parquets are omitted from the release repository due to storage constraints and are available on request).
     \item \textbf{Generative Sample Size and Hardware:} Experiment E6 sampled 5,000 molecules per model (15,000 total) and ran on Apple Silicon (MPS), whereas shadow training was conducted on CUDA Tesla T4. Statistical tests do not show a significant difference at this sample size ($p > 0.05$).
-    \item \textbf{DP-SGD Generative Utility:} The DP-SGD arm represents a preliminary exploration where generative utility was not evaluated: chemical validity was not measured for DP checkpoints, meaning an attack AUC near 0.5 may reflect an under-trained model rather than an effective defense. Furthermore, privacy accounting logs and accountant state deserialization were not independently verified.
+    \item \textbf{DP-SGD Generative Utility:} The DP-SGD arm represents a preliminary exploration where utility was not evaluated for DP checkpoints; an attack AUC near 0.5 may reflect an under-trained model rather than an effective defense. I independently reloaded the serialized Opacus accountant state from all 16 latest checkpoints and recomputed $\epsilon$ at $\delta=10^{-5}$; the recomputed values agree closely with the per-model logs, with small numeric differences. This checks the saved accountant totals, not the end-to-end correctness of the training implementation or its assumptions.
     \item \textbf{Lack of From-Scratch Control:} The pretrain $\to$ fine-tune experiment lacks an exact from-scratch baseline trained for 20 epochs on 10,000 molecules, preventing full disentanglement of pretraining effects from training duration.
-    \item \textbf{Randomized-SMILES Utility Evaluation:} Validation NLL and generative chemical validity of randomized-SMILES-trained models were not evaluated.
+    \item \textbf{Randomized-SMILES Utility Evaluation:} Validation NLL and generative chemical validity of randomized-SMILES-trained models were not assessed.
 \end{enumerate}
 
 \section{Conclusion}

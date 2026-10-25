@@ -162,12 +162,12 @@ tot_m = 0
 tot_o = 0
 vals, uniqs, novs = [], [], []
 
-from scipy.stats import binomtest, fisher_exact
+from scipy.stats import binomtest
 
 for _, r in df_e6.iterrows():
     m = int(r["model"])
-    mc = int(round(r["exact_member_copy_fraction_all_samples"] * 5000))
-    oc = int(round(r["exact_out_copy_fraction_all_samples"] * 5000))
+    mc = int(round(r["exact_member_copy_fraction_all_samples"] * int(r["samples"])))
+    oc = int(round(r["exact_out_copy_fraction_all_samples"] * int(r["samples"])))
     pval = float(binomtest(mc, mc + oc, 0.5, alternative="greater").pvalue)
     tot_m += mc
     tot_o += oc
@@ -188,7 +188,6 @@ for _, r in df_e6.iterrows():
     })
 
 pooled_pval = float(binomtest(tot_m, tot_m + tot_o, 0.5, alternative="greater").pvalue)
-fisher_pval = float(fisher_exact([[tot_m, 15000 - tot_m], [tot_o, 15000 - tot_o]], alternative="two-sided")[1])
 
 claims.append({
     "id": "e6_pooled",
@@ -201,7 +200,6 @@ claims.append({
     "member_copies": tot_m,
     "out_copies": tot_o,
     "binomial_pvalue": pooled_pval,
-    "fisher_pvalue": fisher_pval
 })
 
 registry = {

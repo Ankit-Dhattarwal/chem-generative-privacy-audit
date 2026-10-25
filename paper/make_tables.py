@@ -274,7 +274,7 @@ def make_table3():
     tex = [
         "\\begin{table*}[t]",
         "\\centering",
-        "\\caption{Comparison of privacy defenses at epoch 60 under standard and calibrated attacks. All values use \\texttt{nll\\_sum} (except randomized variants scoring which evaluates mean NLL across up to 10 distinct SMILES strings per molecule). The strongest attack per defense is bolded. *Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense.}",
+        "\\caption{Comparison of privacy defenses at epoch 60 under standard and calibrated attacks. All values use \\texttt{nll\\_sum} (except randomized variants scoring which evaluates mean NLL across up to 10 distinct SMILES strings per molecule). The strongest attack per defense is bolded. *Note: preliminary, utility not measured.}",
         "\\label{tab:defenses}",
         "\\small",
         "\\setlength{\\tabcolsep}{3.5pt}",
@@ -290,7 +290,7 @@ def make_table3():
     md = [
         "# Table 4: Defense Comparison at Epoch 60",
         "",
-        "*Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense.*",
+        "*Note: preliminary, utility not measured.*",
         "",
         "### Panel (a): Calibrated Likelihood-Ratio Attacks (LiRA)",
         "",
@@ -448,7 +448,7 @@ def make_table5():
     tex = [
         "\\begin{table*}[t]",
         "\\centering",
-        "\\caption{Generative memorization audit (Experiment E6; 5,000 samples per model evaluated against 10,000 training members and 10,000 non-members). Replication counts denote verbatim matches: $\\text{Count} = \\text{Fraction} \\times 5,000$. One-sided binomial tests ($p=0.5$) evaluate whether member replications exceed non-member replications. All $p$-values exceed $0.05$, and tests do not show a statistically significant replication difference at the current sample size.}",
+        "\\caption{Generative memorization audit (E6), with 5,000 samples per model. Counts are canonicalized structure matches. Among 19 pooled matches (12 training, 7 holdout), exact binomial tests under $\\mathrm{H}_0: p = 0.5$ give one-sided $p = 0.1796$ and two-sided $p = 0.3593$; neither is significant at $0.05$.}",
         "\\label{tab:e6_generation}",
         "\\small",
         "\\resizebox{\\textwidth}{!}{%",

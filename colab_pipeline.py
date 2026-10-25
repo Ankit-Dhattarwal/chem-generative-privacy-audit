@@ -395,7 +395,7 @@ def run_e6(pool,tok):
         state=torch.load(d/'epoch60.pt',map_location=dev,weights_only=False)
         model=GPT(len(tok.itos),n_layer=2,d_model=128).to(dev); model.load_state_dict(state['model']); model.eval()
         mask=np.load(d/'membership_mask.npy'); member={pool[i] for i in np.flatnonzero(mask)}; out={pool[i] for i in np.flatnonzero(~mask)}
-        generations=_generate(model,tok,50000,temperature=1.0,checkpoint_dir=ROOT/'runs'/'cuda_arm'/stage/f'model_{k}_generated.pt')
+        generations=_generate(model,tok,5000,temperature=1.0,checkpoint_dir=ROOT/'runs'/'cuda_arm'/stage/f'model_{k}_generated.pt')
         canonical=[]; valid=[]
         for s in generations:
             m=Chem.MolFromSmiles(s)
@@ -412,7 +412,7 @@ def run_e6(pool,tok):
         del model
         if dev == 'cuda': torch.cuda.empty_cache()
     pd.DataFrame(summaries).to_csv(root/'summary.csv',index=False)
-    _stage_status(stage,'complete',models=[0,15,31],samples_per_model=50000)
+    _stage_status(stage,'complete',models=[0,15,31],samples_per_model=5000)
 
 def preflight():
     """Check GPU, data preparation, and Opacus compatibility without training."""

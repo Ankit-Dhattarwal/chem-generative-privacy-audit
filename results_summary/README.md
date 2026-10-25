@@ -57,7 +57,7 @@ Summary metrics for models trained with Differentially Private SGD (Opacus 1.6.0
 - **`tpr1_mean`**: Mean TPR at 1.0% FPR across 8 shadow models.
 - **`tpr1_std`**: Sample standard deviation of TPR at 1.0% FPR across 8 shadow models.
 
-*Note: Results are preliminary; accounting logs and downstream generative chemical utility have not been independently verified.*
+*Note: Results are preliminary. Serialized Opacus accountant states from all 16 latest DP-SGD checkpoints were reloaded and their ε values recomputed at δ=10⁻⁵; the recomputed values agree closely with per-model logs, with small numeric differences. This does not independently establish end-to-end correctness of the training implementation or its assumptions; downstream generative chemical utility was not measured.*
 
 ---
 
@@ -77,7 +77,7 @@ Per-target attack results for the transfer learning experiment (public pretraini
 ---
 
 ## 6. `E6_generative_audit_summary.csv`
-Downstream generative sampling metrics auditing verbatim memorization across 5,000 samples per baseline model (Models 0, 15, 31; total 15,000 samples).
+Downstream generative sampling metrics auditing canonicalized structure matches across 5,000 samples per baseline model (Models 0, 15, 31; total 15,000 samples).
 
 - **`arm`**: Execution hardware (`MPS` on Apple Silicon).
 - **`model`**: Evaluated baseline model index (`0`, `15`, `31`).
@@ -85,8 +85,8 @@ Downstream generative sampling metrics auditing verbatim memorization across 5,0
 - **`validity`**: Fraction of samples that are chemically valid molecules parsable by RDKit.
 - **`uniqueness_valid`**: Fraction of valid samples that are structurally unique.
 - **`novelty_vs_members`**: Fraction of valid samples that do not match any training member compound.
-- **`exact_member_copy_fraction_all_samples`**: Fraction of all samples that exactly replicate a training member molecule ($Count = \text{Fraction} \times 5,000$).
-- **`exact_out_copy_fraction_all_samples`**: Fraction of all samples that exactly replicate an unseen holdout molecule ($Count = \text{Fraction} \times 5,000$).
+- **`exact_member_copy_fraction_all_samples`**: Fraction of all samples whose canonicalized structure matches a training member molecule ($Count = \text{Fraction} \times 5,000$).
+- **`exact_out_copy_fraction_all_samples`**: Fraction of all samples whose canonicalized structure matches an unseen holdout molecule ($Count = \text{Fraction} \times 5,000$).
 
 ---
 

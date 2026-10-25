@@ -1,6 +1,6 @@
 # Table 4: Defense Comparison at Epoch 60
 
-*Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense.*
+*Note: preliminary, utility not measured.*
 
 ### Panel (a): Calibrated Likelihood-Ratio Attacks (LiRA)
 

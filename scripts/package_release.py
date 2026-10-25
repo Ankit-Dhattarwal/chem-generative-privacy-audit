@@ -42,6 +42,7 @@ EXCLUDE_PATTERNS = [
     "paper_revised",
     "VERIFICATION_REPORT",
     "REVIEW_ROUND_",
+    "scratch",
 ]
 
 EXCLUDE_EXTENSIONS = {
@@ -51,10 +52,19 @@ EXCLUDE_EXTENSIONS = {
     ".pyo",
     ".partial",
     ".tmp",
+    ".log",
+    ".aux",
+    ".blg",
+    ".fls",
+    ".fdb_latexmk",
 }
+
+EXCLUDE_EXACT_PATHS = {"paper/main.txt"}
 
 def should_exclude(rel_path_str: str) -> bool:
     path = Path(rel_path_str)
+    if rel_path_str in EXCLUDE_EXACT_PATHS:
+        return True
     if path.name in EXCLUDE_EXACT_NAMES:
         return True
     for p in path.parts:
@@ -76,6 +86,7 @@ def package():
         ZIP_PATH.unlink()
 
     included_count = 0
+    seen_arc_names = set()
     with zipfile.ZipFile(ZIP_PATH, "w", zipfile.ZIP_DEFLATED) as zipf:
         for root, dirs, files in os.walk(REPO_ROOT):
             # prune excluded dirs in place
@@ -86,7 +97,13 @@ def package():
                 rel_path_str = str(rel_path)
                 if should_exclude(rel_path_str):
                     continue
-                zipf.write(full_path, arcname=rel_path_str)
+                arc_name = rel_path.as_posix()
+                if arc_name.count("runs/cuda_arm") > 1:
+                    raise ValueError(f"Nested duplicate run root in source path: {arc_name}")
+                if arc_name in seen_arc_names:
+                    raise ValueError(f"Duplicate archive path: {arc_name}")
+                seen_arc_names.add(arc_name)
+                zipf.write(full_path, arcname=arc_name)
                 included_count += 1
 
     print(f"Packaged {included_count} files into {ZIP_PATH} ({ZIP_PATH.stat().st_size / (1024*1024):.2f} MB)")

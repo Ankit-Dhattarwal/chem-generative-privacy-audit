@@ -6,7 +6,7 @@
 [![Cheminformatics](https://img.shields.io/badge/Cheminformatics-RDKit-orange.svg)](https://www.rdkit.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-An empirical audit of membership inference vulnerability, randomized-SMILES scoring sensitivity, and defensive interventions in small autoregressive molecular language models (2 layers, $d=128$, $\sim 0.4\text{M}$ parameters) trained on the MOSES molecular benchmark.
+An empirical audit of membership inference vulnerability, randomized-SMILES scoring sensitivity, and defensive interventions in small autoregressive molecular language models (2 layers, $d = 128$, with 419,584 parameters) trained on the MOSES molecular benchmark.
 
 ---
 
@@ -17,7 +17,7 @@ In computer-aided drug design, language models are frequently trained on chemica
 2. **Private Dataset Scaling**: Exposure scaling across cohort sizes $N \in \{1\text{k}, 2.5\text{k}, 5\text{k}, 10\text{k}\}$ (8 shadow models per size).
 3. **String-Form Sensitivity**: Evaluating canonical-trained models with up to 10 distinct SMILES strings per molecule (the canonical form plus randomized forms, with mean NLL) to assess whether memorization is syntax-dependent.
 4. **Defensive Interventions**: Randomized-SMILES data augmentation and Differentially Private SGD (`DP-SGD`, targeting $\epsilon \in \{8.0, 3.0\}$, $\delta = 10^{-5}$).
-5. **Generative Sampling Audit**: Evaluating verbatim replication across 15,000 generated samples (5,000 per model) against member versus non-member holdout sets.
+5. **Generative Sampling Audit**: Evaluating canonicalized structure matches across 15,000 generated samples (5,000 per model) against training and holdout sets.
 
 ---
 
@@ -31,8 +31,8 @@ All metrics are evaluated using negative log-likelihood sum (`nll_sum`) and trac
 - **Transfer Learning**: Private fine-tuning on 10,000 molecules after public pretraining leaks private membership at offline LiRA AUC **0.801 ± 0.003** (TPR@1% **4.36 ± 0.51%**).
 - **Defenses**:
   - *Randomized-SMILES Training*: Suppresses canonical attack AUC to **0.528 ± 0.004** (TPR@1% **1.38 ± 0.21%**).
-  - *DP-SGD*: Suppresses attack AUC to **0.500 – 0.528**, but preliminary runs exhibited possible loss of generative utility (not evaluated); an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense.
-- **Generative Replication**: In a 15,000-sample audit, models produced 12 exact member copies vs. 7 holdout copies; a one-sided binomial test ($p = 0.1796 > 0.05$) and Fisher exact test ($p = 0.359 > 0.05$) indicate that this difference is **not statistically significant** under the evaluated sample size.
+  - *DP-SGD*: Suppresses attack AUC to **0.500 – 0.528**, but preliminary runs exhibited possible loss of generative utility; an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense.
+- **Generative Replication**: Of 15,000 generated samples, 12 canonicalized outputs matched molecules in the training set and 7 matched molecules in the holdout set. Conditioning on these 19 matches and assuming equal match probability for the two equally sized reference sets (H0: p = 0.5), the one-sided exact binomial p-value is 0.1796 and the two-sided exact binomial p-value is 0.3593. Neither result is significant at the 0.05 level.
 
 ---
 
@@ -63,7 +63,7 @@ Evaluated over 32 shadow models on 20,000 candidate targets (10,000 members, 10,
 
 ### Table 4: Defense Comparison at Epoch 60
 
-*Note on DP rows: preliminary run with possible loss of generative utility (not evaluated); an attack AUC near 0.5 may reflect an under-trained model and is not evidence of a useful defense.*
+*Note: preliminary, utility not measured.*
 
 #### Panel (a): Calibrated Likelihood-Ratio Attacks (LiRA)
 
@@ -103,7 +103,7 @@ Evaluated over 32 shadow models on 20,000 candidate targets (10,000 members, 10,
 ├── requirements.txt               # Pinned dependencies
 ├── colab_pipeline.py              # End-to-end experiment pipeline
 ├── scripts/
-│   ├── verify_claims.py           # Independent pandas-based claims verifier
+│   ├── verify_claims.py           # CSV claim re-derivation and numeric-token audit
 │   └── mutation_test.py           # Mutation testing suite for claims verifier
 ├── results_summary/               # Primary CSV summaries (canonical truth)
 │   ├── README.md                  # Column definitions and data dictionary
@@ -150,8 +150,8 @@ tectonic paper/main.tex --outdir paper/
 ```
 
 ### Claims Verification Architecture
-- **Semantic Traceability:** Every numerical claim in the abstract, main text, tables, captions, and compiled PDF is formally registered in `claims.yaml`.
-- **Independent Derivation:** `scripts/verify_claims.py` re-derives each expected value from the ground-truth CSVs using `pandas` exclusively, ensuring complete independence from table generation scripts.
-- **Strict Whitelist & Mutation Resistance:** The verifier checks that every numerical token in the paper files is accounted for by the registry or a designated constant whitelist, and `scripts/mutation_test.py` proves that any synthetic deviation or corrupted value immediately triggers verifier failure.
+- **CSV derivation:** `scripts/verify_claims.py` checks registered metrics against `results_summary/*.csv`, recomputes the E6 binomial tests, checks the pooled E6 p-values in the abstract sources, and audits numerical tokens against registered values or a constants whitelist.
+- **Table generation:** `paper/make_tables.py` regenerates the published table sources directly from the CSV summaries.
+- **Mutation coverage:** `scripts/mutation_test.py` checks ten specified CSV and abstract mutations; it is a targeted regression suite, not a proof that every possible text error is detected.
 
 See [REPRODUCE.md](REPRODUCE.md) for full training and execution details.

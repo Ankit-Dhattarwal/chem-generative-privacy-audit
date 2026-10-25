@@ -57,6 +57,36 @@ class MutationRunner:
         finally:
             csv_path.write_bytes(original_content)
 
+    def test_text_mutation(self, name, relative_path, old, new):
+        print(f"\n[MUTATION TEST] {name} ...")
+        path = REPO_ROOT / relative_path
+        original_content = path.read_bytes()
+        original_text = original_content.decode("utf-8")
+        if original_text.count(old) < 1:
+            print(f"  -> MISSED! Expected a target occurrence in {relative_path}; found {original_text.count(old)}")
+            self.failed_mutations += 1
+            return
+        try:
+            path.write_text(original_text.replace(old, new, 1), encoding="utf-8")
+            code, stdout, stderr = run_verifier()
+            mutation_token = new.split()[-1]
+            detected = (
+                code != 0 and relative_path in stdout and
+                (mutation_token in stdout or f"missing from {relative_path}" in stdout)
+            )
+            if detected:
+                print(f"  -> DETECTED (Exit code {code}; verifier rejected the text mutation in {relative_path})")
+                self.passed_mutations += 1
+            else:
+                print(f"  -> MISSED! verifier exit code {code}; expected unmatched token {new} in {relative_path}")
+                if stdout:
+                    print(stdout)
+                if stderr:
+                    print(stderr)
+                self.failed_mutations += 1
+        finally:
+            path.write_bytes(original_content)
+
 
 def main():
     print("=" * 70)
@@ -152,6 +182,12 @@ def main():
         df.loc[m, "auc_mean"] = 0.750  # was 0.552
         return df
     runner.test_mutation("9. Corrupt E5a variants scoring offline LiRA AUC", "E5a_augmentation_summary.csv", m9)
+
+    # Mutation 10: perturb the abstract exact-binomial p-value.
+    runner.test_text_mutation(
+        "10. Change abstract exact-binomial p-value 0.1796 to 0.1797",
+        "paper/main.tex", "one-sided exact binomial p-value is 0.1796", "one-sided exact binomial p-value is 0.1797"
+    )
 
     print("\n" + "=" * 70)
     print(f"Mutation Testing Results: {runner.passed_mutations} detected, {runner.failed_mutations} missed.")

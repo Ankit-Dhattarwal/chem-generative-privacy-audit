@@ -244,7 +244,7 @@ ax2.bar(x - width/2, mem_counts, width, label='Member Copies (Count)', color='#d
 ax2.bar(x + width/2, out_counts, width, label='Non-Member Copies (Count)', color='#7f7f7f', alpha=0.85, edgecolor='black')
 ax2.set_xticks(x)
 ax2.set_xticklabels(models)
-ax2.set_ylabel('Exact Verbatim Replications (out of 5,000)')
+ax2.set_ylabel('Exact Canonicalized Matches (out of 5,000)')
 ax2.set_title('(b) Generative Replications: Member vs Out (p > 0.05)')
 ax2.set_ylim(0, 10)
 ax2.legend(loc='upper left', frameon=True)
