@@ -56,6 +56,8 @@ WHITELIST = {
     # Citation years & volume/page metadata in bibliography
     "1988", "1996", "2016", "2017", "2019", "2020", "2021", "2022", "2024", "2025", "2026",
     "2887", "2893", "2684", "2696", "31", "36", "38", "39", "40", "71", "565644",
+    # Verified venue page ranges, article identifiers, and literature corpus size
+    "649", "657", "650", "1145", "3807503", "3819470", "10.1145", "3807503.3819470",
     # arXiv identifiers
     "2409.19798", "2502.06567", "2603.08913", "1703.07076", "2109.12298",
     # Python badges
@@ -70,6 +72,7 @@ def load_csvs():
         "scaling": pd.read_csv(RESULTS_DIR / "E3_scaling_summary.csv"),
         "augmentation": pd.read_csv(RESULTS_DIR / "E5a_augmentation_summary.csv"),
         "dp_sgd": pd.read_csv(RESULTS_DIR / "DP_SGD_summary.csv"),
+        "dp_accounting": pd.read_csv(REPO_ROOT / "results/cuda_arm/DP_SGD/privacy_accounting_by_model.csv"),
         "pretrain_ft": pd.read_csv(RESULTS_DIR / "pretrain_ft_summary.csv"),
         "generative": pd.read_csv(RESULTS_DIR / "E6_generative_audit_summary.csv"),
         "ci": pd.read_csv(RESULTS_DIR / "bootstrap_ci.csv")
@@ -119,6 +122,20 @@ def main():
             valid_number_strings.add(f"{v_pct:.{p}f}")
             valid_number_strings.add(f"{v_pct:.{p}f}%")
         valid_number_strings.add(str(val))
+
+    # Verify and register the realized accountant values shown alongside the
+    # requested DP-SGD targets in the Methods section.
+    dp_accounting = csvs["dp_accounting"]
+    for target, expected_models in ((8, 8), (3, 8)):
+        rows = dp_accounting[dp_accounting["epsilon_target"] == target]
+        if len(rows) != expected_models or rows["model"].nunique() != expected_models:
+            raise ValueError(f"Expected {expected_models} DP accountant records for target epsilon {target}")
+        spent = rows["epsilon_spent_last_epoch"].astype(float)
+        if not np.allclose(spent, spent.iloc[0], rtol=0, atol=1e-9):
+            raise ValueError(f"DP accountant values differ across models for target epsilon {target}")
+        register_num(round(float(spent.iloc[0]), 3))
+        register_num(round(float(spent.iloc[0]), 4))
+        print(f"Derived DP accountant epsilon from CSV: target={target}, spent={spent.iloc[0]:.3f} across {len(rows)} models.")
 
     # Register the E6 values printed in the generative-audit prose/table from
     # the CSV, including pooled hit counts and the conditional match total.

@@ -56,7 +56,7 @@
     "DP_SGD": {
       "state": "complete",
       "updated_utc": "2026-10-13T18:49:26Z",
-      "error": "ImportError(\"cannot import name 'DPCausalGPT' from 'src.dp_model' (/content/drive/MyDrive/smiles_mia_colab/src/dp_model.py)\")",
+      "prior_attempt_error": "ImportError: DPCausalGPT was unavailable during an earlier initialization attempt; the completed DP-SGD run is represented by the saved checkpoints, attack summaries, and accountant records.",
       "epsilon_targets": [
         8,
         3

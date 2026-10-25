@@ -22,7 +22,7 @@ cd chem-generative-privacy-audit
 python3 -m venv .venv
 source .venv/bin/activate
 
-# Install pinned dependencies
+# Install dependencies
 pip install -r requirements.txt
 ```
 
@@ -114,5 +114,5 @@ tectonic paper/main.tex --outdir paper/
 ```
 
 ### 4.1 Independent Claims Verification
-- **What it verifies:** `scripts/verify_claims.py` re-derives registered metrics from `results_summary/*.csv`, recomputes E6 binomial tests, validates the pooled E6 p-values in the abstract sources, and checks numerical tokens in the paper and PDF against registered values or a constants whitelist. It does not establish that every registered claim is present at every expected body-text location. `paper/make_tables.py` regenerates table files from the source CSVs.
+- **What it verifies:** `scripts/verify_claims.py` re-derives registered metrics from `results_summary/*.csv`, checks the realized DP-SGD accountant values from `results/cuda_arm/DP_SGD/privacy_accounting_by_model.csv`, recomputes E6 binomial tests, validates pooled E6 p-values in the abstract sources, and checks numerical tokens in the paper and PDF against registered values or a constants whitelist. It does not establish that every registered claim is present at every expected body-text location. `paper/make_tables.py` regenerates table files from the source CSVs.
 - **Mutation coverage:** `scripts/mutation_test.py` runs ten targeted corruptions, including data changes and an incorrect E6 abstract p-value. These checks exercise specific failure paths rather than proving detection of all possible edits.

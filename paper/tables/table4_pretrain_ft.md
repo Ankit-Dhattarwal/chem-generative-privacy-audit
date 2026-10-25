@@ -1,4 +1,4 @@
-# Table 4: Transfer Learning Membership Leakage (Pretrain -> Fine-tune)
+# Table 3: Transfer Learning Membership Leakage (Pretrain -> Fine-tune)
 
 Public pretraining (10,000 compounds for 60 epochs) followed by private fine-tuning (10,000 compounds for 20 epochs). Evaluated on 8 leave-one-out shadow targets using `nll_sum`.
 

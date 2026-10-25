@@ -1,18 +1,18 @@
 \begin{table*}[t]
 \centering
-\caption{Generative memorization audit (E6), with 5,000 samples per model. Counts are canonicalized structure matches. Among 19 pooled matches (12 training, 7 holdout), exact binomial tests under $\mathrm{H}_0: p = 0.5$ give one-sided $p = 0.1796$ and two-sided $p = 0.3593$; neither is significant at $0.05$.}
+\caption{Generative memorization audit (E6), with 5,000 samples per model. Counts are canonicalized structure matches. Quality metrics are unweighted means of per-model rates; match counts are pooled. Conditional on 19 matches (12 training, 7 holdout), exact binomial tests under $\mathrm{H}_0: p = 0.5$ give one-sided $p = 0.1796$ and two-sided $p = 0.3593$; neither is significant at $0.05$.}
 \label{tab:e6_generation}
 \small
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lccccccc}
 \toprule
-\textbf{Model ID} & \textbf{Validity (\%)} & \textbf{Uniqueness (\%)} & \textbf{Novelty (\%)} & \textbf{Member Copies} & \textbf{Out Copies} & \textbf{Binomial $p$-value} & \textbf{Statistically Significant?} \\
+\textbf{Model ID} & \textbf{Validity (\%)} & \textbf{Uniqueness (\%)} & \textbf{Novelty (\%)} & \textbf{Training Matches} & \textbf{Holdout Matches} & \textbf{Binomial $p$-value} & \textbf{Statistically Significant?} \\
 \midrule
 Model 0 & $60.24\%$ & $99.97\%$ & $99.97\%$ & 1 & 1 & $0.7500$ & No ($p > 0.05$) \\
 Model 15 & $62.26\%$ & $99.87\%$ & $99.90\%$ & 3 & 2 & $0.5000$ & No ($p > 0.05$) \\
 Model 31 & $59.10\%$ & $99.90\%$ & $99.73\%$ & 8 & 4 & $0.1938$ & No ($p > 0.05$) \\
 \midrule
-\textbf{Pooled (15k)} & \textbf{$60.53\%$} & \textbf{$99.91\%$} & \textbf{$99.87\%$} & \textbf{12} & \textbf{7} & \textbf{$0.1796$} & \textbf{No ($p > 0.05$)} \\
+\textbf{Mean rates; pooled hits} & \textbf{$60.53\%$} & \textbf{$99.91\%$} & \textbf{$99.87\%$} & \textbf{12} & \textbf{7} & \textbf{$0.1796$} & \textbf{No ($p > 0.05$)} \\
 \bottomrule
 \end{tabular}%
 }

@@ -179,8 +179,8 @@ categories = [
     'Baseline\n[Online LiRA]',
     'Rand-SMILES\n(Canonical)\n[Offline LiRA]',
     'Rand-SMILES\n(Variants)\n[Offline LiRA]',
-    'DP-SGD (ε=8)*\n[Offline LiRA]',
-    'DP-SGD (ε=3)*\n[Offline LiRA]'
+    'DP-SGD (target ε=8)*\n[Offline LiRA]',
+    'DP-SGD (target ε=3)*\n[Offline LiRA]'
 ]
 auc_vals = [base_row['auc_mean'], e5a_canon_row['auc_mean'], e5a_var_row['auc_mean'], dp_8_row['auc_mean'], dp_3_row['auc_mean']]
 auc_errs = [base_row['auc_std'], e5a_canon_row['auc_std'], e5a_var_row['auc_std'], dp_8_row['auc_std'], dp_3_row['auc_std']]
@@ -236,16 +236,16 @@ ax1.set_title('(a) Chemical Quality of Generated Library')
 ax1.legend(loc='lower right', frameon=True)
 ax1.grid(True, linestyle=':', alpha=0.5, axis='y')
 
-# Subplot 2: Exact Copy Counts (Fraction * 5000)
-mem_counts = [int(round(f * 5000)) for f in df_e6['exact_member_copy_fraction_all_samples']]
-out_counts = [int(round(f * 5000)) for f in df_e6['exact_out_copy_fraction_all_samples']]
+# Subplot 2: Canonicalized training/holdout structure matches
+mem_counts = [int(round(f * n)) for f, n in zip(df_e6['exact_member_copy_fraction_all_samples'], df_e6['samples'])]
+out_counts = [int(round(f * n)) for f, n in zip(df_e6['exact_out_copy_fraction_all_samples'], df_e6['samples'])]
 
-ax2.bar(x - width/2, mem_counts, width, label='Member Copies (Count)', color='#d62728', alpha=0.85, edgecolor='black')
-ax2.bar(x + width/2, out_counts, width, label='Non-Member Copies (Count)', color='#7f7f7f', alpha=0.85, edgecolor='black')
+ax2.bar(x - width/2, mem_counts, width, label='Training Matches (Count)', color='#d62728', alpha=0.85, edgecolor='black')
+ax2.bar(x + width/2, out_counts, width, label='Holdout Matches (Count)', color='#7f7f7f', alpha=0.85, edgecolor='black')
 ax2.set_xticks(x)
 ax2.set_xticklabels(models)
-ax2.set_ylabel('Exact Canonicalized Matches (out of 5,000)')
-ax2.set_title('(b) Generative Replications: Member vs Out (p > 0.05)')
+ax2.set_ylabel('Canonicalized Structure Matches (per 5,000 samples)')
+ax2.set_title('(b) Training vs Holdout Matches')
 ax2.set_ylim(0, 10)
 ax2.legend(loc='upper left', frameon=True)
 ax2.grid(True, linestyle=':', alpha=0.5, axis='y')

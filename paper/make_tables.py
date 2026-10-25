@@ -267,8 +267,8 @@ def make_table3():
         ("Baseline (Unmitigated)", "Baseline (Unmitigated)", b_60, "32", "32 shadows"),
         ("Rand-SMILES (Canonical)", "Randomized-SMILES Training (Canonical Scoring)", e5a_canon, "32", "32 shadows"),
         ("Rand-SMILES (Variants, $\\le 10$ strings)", "Randomized-SMILES Training (Variants Scoring, up to 10 strings, mean NLL)", e5a_var, "32", "32 shadows"),
-        ("DP-SGD ($\\epsilon=8.0, \\delta=10^{-5}$)*", "DP-SGD (ε=8.0, δ=1e-5)*", dp_8, "8; prelim.", "8 shadows; prelim."),
-        ("DP-SGD ($\\epsilon=3.0, \\delta=10^{-5}$)*", "DP-SGD (ε=3.0, δ=1e-5)*", dp_3, "8; prelim.", "8 shadows; prelim."),
+        ("DP-SGD (target $\\epsilon=8.0$, $\\delta=10^{-5}$)*", "DP-SGD (target ε=8.0, δ=1e-5)*", dp_8, "8; prelim.", "8 shadows; prelim."),
+        ("DP-SGD (target $\\epsilon=3.0$, $\\delta=10^{-5}$)*", "DP-SGD (target ε=3.0, δ=1e-5)*", dp_3, "8; prelim.", "8 shadows; prelim."),
     ]
 
     tex = [
@@ -405,7 +405,7 @@ def make_table4():
     ]
 
     md = [
-        "# Table 4: Transfer Learning Membership Leakage (Pretrain -> Fine-tune)",
+        "# Table 3: Transfer Learning Membership Leakage (Pretrain -> Fine-tune)",
         "",
         "Public pretraining (10,000 compounds for 60 epochs) followed by private fine-tuning (10,000 compounds for 20 epochs). Evaluated on 8 leave-one-out shadow targets using `nll_sum`.",
         "",
@@ -448,22 +448,22 @@ def make_table5():
     tex = [
         "\\begin{table*}[t]",
         "\\centering",
-        "\\caption{Generative memorization audit (E6), with 5,000 samples per model. Counts are canonicalized structure matches. Among 19 pooled matches (12 training, 7 holdout), exact binomial tests under $\\mathrm{H}_0: p = 0.5$ give one-sided $p = 0.1796$ and two-sided $p = 0.3593$; neither is significant at $0.05$.}",
+        "\\caption{Generative memorization audit (E6), with 5,000 samples per model. Counts are canonicalized structure matches. Quality metrics are unweighted means of per-model rates; match counts are pooled. Conditional on 19 matches (12 training, 7 holdout), exact binomial tests under $\\mathrm{H}_0: p = 0.5$ give one-sided $p = 0.1796$ and two-sided $p = 0.3593$; neither is significant at $0.05$.}",
         "\\label{tab:e6_generation}",
         "\\small",
         "\\resizebox{\\textwidth}{!}{%",
         "\\begin{tabular}{lccccccc}",
         "\\toprule",
-        "\\textbf{Model ID} & \\textbf{Validity (\\%)} & \\textbf{Uniqueness (\\%)} & \\textbf{Novelty (\\%)} & \\textbf{Member Copies} & \\textbf{Out Copies} & \\textbf{Binomial $p$-value} & \\textbf{Statistically Significant?} \\\\",
+        "\\textbf{Model ID} & \\textbf{Validity (\\%)} & \\textbf{Uniqueness (\\%)} & \\textbf{Novelty (\\%)} & \\textbf{Training Matches} & \\textbf{Holdout Matches} & \\textbf{Binomial $p$-value} & \\textbf{Statistically Significant?} \\\\",
         "\\midrule"
     ]
 
     md = [
         "# Table 5: Generative Memorization Audit (E6)",
         "",
-        "Evaluated on 5,000 generated molecules per model on Apple Silicon (MPS). Exact counts are derived as $Count = \\text{Fraction} \\times 5,000$. One-sided binomial tests ($p=0.5$ null hypothesis) assess if member copies exceed out copies.",
+        "Evaluated on 5,000 generated molecules per model on Apple Silicon (MPS). Exact counts are derived from each model's sample count. Validity, uniqueness, and novelty are reported as the unweighted mean of the three per-model rates; hit counts and the binomial test use pooled counts. One-sided binomial tests ($p=0.5$ null hypothesis) assess whether member matches exceed holdout matches, conditional on a match.",
         "",
-        "| Model ID | Validity (%) | Uniqueness (%) | Novelty vs Members (%) | Exact Member Copies (Count) | Exact Out Copies (Count) | Binomial p-value ($p=0.5$) | Significant at α=0.05? |",
+        "| Model ID | Validity (%) | Uniqueness (%) | Novelty vs Members (%) | Training Matches (Count) | Holdout Matches (Count) | Binomial p-value ($p=0.5$) | Significant at α=0.05? |",
         "|---|---|---|---|---|---|---|---|"
     ]
 
@@ -482,8 +482,9 @@ def make_table5():
         uniq_list.append(uniq)
         nov_list.append(nov)
 
-        mem_cnt = int(round(r['exact_member_copy_fraction_all_samples'] * 5000))
-        out_cnt = int(round(r['exact_out_copy_fraction_all_samples'] * 5000))
+        model_samples = int(r['samples'])
+        mem_cnt = int(round(r['exact_member_copy_fraction_all_samples'] * model_samples))
+        out_cnt = int(round(r['exact_out_copy_fraction_all_samples'] * model_samples))
         tot_mem += mem_cnt
         tot_out += out_cnt
         tot_copies = mem_cnt + out_cnt
@@ -509,11 +510,11 @@ def make_table5():
 
     tex.append("\\midrule")
     tex.append(
-        f"\\textbf{{Pooled (15k)}} & \\textbf{{${mean_val:.2f}\\%$}} & \\textbf{{${mean_uniq:.2f}\\%$}} & \\textbf{{${mean_nov:.2f}\\%$}} & "
+        f"\\textbf{{Mean rates; pooled hits}} & \\textbf{{${mean_val:.2f}\\%$}} & \\textbf{{${mean_uniq:.2f}\\%$}} & \\textbf{{${mean_nov:.2f}\\%$}} & "
         f"\\textbf{{{tot_mem}}} & \\textbf{{{tot_out}}} & \\textbf{{${p_pool:.4f}$}} & \\textbf{{No ($p > 0.05$)}} \\\\"
     )
     md.append(
-        f"| **Pooled (15,000 samples)** | **{mean_val:.2f}%** | **{mean_uniq:.2f}%** | **{mean_nov:.2f}%** | **{tot_mem}** | **{tot_out}** | **{p_pool:.4f}** | **No ($p > 0.05$)** |"
+        f"| **Mean rates; pooled hits (15,000 samples)** | **{mean_val:.2f}%** | **{mean_uniq:.2f}%** | **{mean_nov:.2f}%** | **{tot_mem}** | **{tot_out}** | **{p_pool:.4f}** | **No ($p > 0.05$)** |"
     )
 
     tex.extend([
