@@ -1,4 +1,4 @@
-# Auditing Membership Leakage in Small SMILES Language Models: LiRA, Randomized-SMILES Training and DP-SGD (Preliminary Study)
+# Membership Inference Auditing of Small SMILES Language Models on MOSES: LiRA, Randomized-SMILES Training, and Preliminary DP-SGD Results
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![PyTorch 2.x](https://img.shields.io/badge/PyTorch-2.x-EE4C2C.svg)](https://pytorch.org/)

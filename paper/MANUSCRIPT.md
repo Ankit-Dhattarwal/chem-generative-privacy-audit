@@ -1,4 +1,4 @@
-# Auditing Membership Leakage in Small SMILES Language Models: LiRA, Randomized-SMILES Training and DP-SGD (Preliminary Study)
+# Membership Inference Auditing of Small SMILES Language Models on MOSES: LiRA, Randomized-SMILES Training, and Preliminary DP-SGD Results
 
 **Author:** Ankit Dhattarwal  
 **Affiliation:** Independent Research, Machine Learning and Computational Chemistry  
